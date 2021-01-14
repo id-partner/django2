@@ -14,7 +14,7 @@ def detail(request, question_id):
 
 def blog_hedler(request):
     context = {}
-    return  render(request, 'news/classic-full-width.html', context)
+    return  render(request, 'listing/classic-full-width.html', context)
 
 
 
