@@ -12,9 +12,6 @@ def index(request):
 def detail(request, question_id):
     return HttpResponse("You're looking at question %s." % question_id)
 
-def blog_hedler(request):
-    context = {}
-    return  render(request, 'listing/classic-full-width.html', context)
 
 
 

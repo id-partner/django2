@@ -17,21 +17,27 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
+import debug_toolbar
 
-from polls.views import index, detail, blog_hedler
-
-
+from polls.views import detail
+from listing.views import *  # импортируем вьюхи из приложения листинга
+from blog import views  # импортируем вьюхи из приложения блога
 
 urlpatterns = [
-    path('', index),
-    path('polls/<int:question_id>/', detail),
-    path('blog/', blog_hedler),
-    path('admin/', admin.site.urls),
+                  path('', index_handler),
+                  path('polls/<int:question_id>/', detail),
+                  path('blog/', views.blog_handler),
+                  path('single_blog/', views.single_blog_handler),
+                  path('about/', about_handler),
+                  path('contact/', contact_handler),
+                  path('course_list/', course_list_handler),
+                  path('course_detail/', course_detail_handler),
+                  path('robots.txt', robots_handler),
+                  path('admin/', admin.site.urls),
+                  path('__debug__/', include(debug_toolbar.urls)),
+              ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
-
-# urlpatterns = [
-#     path('polls/', include('polls.urls')),
-#     path('admin/', admin.site.urls),
-# ]
+# if settings.DEBUG:
+#     urlpatterns = [
+#                       path('__debug__/', include(debug_toolbar.urls)),
+#                   ] + urlpatterns
