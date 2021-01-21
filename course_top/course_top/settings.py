@@ -26,7 +26,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
 
-INTERNAL_IPS = ['127.0.0.1',]
+INTERNAL_IPS = ['127.0.0.1', ]
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # Application definition
 

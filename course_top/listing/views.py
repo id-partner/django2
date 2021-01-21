@@ -26,6 +26,16 @@ def course_detail_handler(request):
     return render(request, 'listing/course-detail.html', context)
 
 
+def school_list_handler(request):
+    context = {}
+    return render(request, 'listing/teachers.html', context)
+
+
+def school_detail_handler(request):
+    context = {}
+    return render(request, 'listing/teacher-detail.html', context)
+
+
 def robots_handler(request):
     context = {}
     return render(request, 'listing/robots.txt', context, content_type='text/plain')

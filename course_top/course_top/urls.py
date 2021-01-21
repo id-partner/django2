@@ -31,7 +31,9 @@ urlpatterns = [
                   path('about/', about_handler),
                   path('contact/', contact_handler),
                   path('course_list/', course_list_handler),
+                  path('school/', school_list_handler),
                   path('course_detail/', course_detail_handler),
+                  path('school_detail/', school_detail_handler),
                   path('robots.txt', robots_handler),
                   path('admin/', admin.site.urls),
                   path('summernote/', include('django_summernote.urls')),
@@ -39,5 +41,5 @@ urlpatterns = [
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
-    urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]
+    urlpatterns += [path('__debug__/', include(debug_toolbar.urls)),]
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
