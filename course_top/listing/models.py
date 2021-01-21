@@ -113,5 +113,5 @@ class Review(models.Model):
         return self.comment[:20]
 
     class Meta:
-        verbose_name = 'Комментарий'
-        verbose_name_plural = 'Комментарии'
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
