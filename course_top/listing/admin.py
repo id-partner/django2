@@ -8,7 +8,6 @@ class CategoryAdmin(SummernoteModelAdmin):  # Класс для HTML редак�
 
 
 admin.site.register(Category, CategoryAdmin)
-admin.site.register(SubCategory, CategoryAdmin)
 admin.site.register(School)
 admin.site.register(Features)
 admin.site.register(Course)
