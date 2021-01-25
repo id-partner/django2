@@ -3,7 +3,7 @@ from django.db import models
 
 class Category(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название категории')
-    slug = models.SlugField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True)
     in_menu = models.BooleanField(default=True, verbose_name='Добавляем в меню?')
     order = models.IntegerField(default=1)
 
@@ -17,7 +17,7 @@ class Category(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название тега')
-    slug = models.SlugField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True)
 
     def __str__(self):
         return self.name
@@ -29,7 +29,7 @@ class Tag(models.Model):
 
 class Post(models.Model):
     name = models.CharField(max_length=255, verbose_name='Тайтл поста')
-    slug = models.SlugField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True)
     content = models.TextField(verbose_name='Контент поста')
     short_description = models.TextField(verbose_name='Короткое описание')
     main_image = models.ImageField(upload_to='images/%Y/%m/%d/')
@@ -48,7 +48,7 @@ class Post(models.Model):
 
 class Comment(models.Model):
     name = models.CharField(max_length=100, verbose_name='Имя')
-    email = models.EmailField(verbose_name='Почта')
+    email = models.EmailField(verbose_name='Почта', unique=True)
     comment = models.TextField(verbose_name='Комментарий')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='Запись')
 
@@ -61,7 +61,7 @@ class Comment(models.Model):
 
 
 class Newsletter(models.Model):
-    email = models.EmailField(verbose_name='Почта')
+    email = models.EmailField(verbose_name='Почта', unique=True)
     is_active = models.BooleanField(default=True, verbose_name='Активна подписка?')
     subscription_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата подписки')
     unsubscribe_date = models.DateTimeField(null=True, blank=True, verbose_name='Дата отписки')

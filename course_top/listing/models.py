@@ -3,7 +3,7 @@ from django.db import models
 
 class Category(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название категории')
-    slug = models.SlugField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True)
     in_menu = models.BooleanField(default=True, verbose_name='Добавляем ли в меню?')
     order = models.IntegerField(default=1)
     description = models.CharField(max_length=255, blank=True, verbose_name='Описание')
@@ -25,7 +25,7 @@ class Category(models.Model):
 
 class School(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название школы')
-    slug = models.SlugField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True)
     description = models.CharField(max_length=255, verbose_name='Описание')
     categories = models.ManyToManyField(Category, verbose_name='Категория')
     logo = models.ImageField(upload_to='images/%Y/%m/%d/', verbose_name='Логотип')
@@ -89,7 +89,7 @@ class Course(models.Model):
 
 class Review(models.Model):
     name = models.CharField(max_length=100)
-    email = models.EmailField(verbose_name='Почта')
+    email = models.EmailField(verbose_name='Почта', unique=True)
     comment = models.TextField(verbose_name='Комментарий')
     rating = models.FloatField(verbose_name='Рейтинг')
     school = models.ForeignKey(School, on_delete=models.CASCADE, verbose_name='Школа')

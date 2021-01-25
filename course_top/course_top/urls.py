@@ -19,13 +19,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 import debug_toolbar
 
-from polls.views import detail
+
 from listing.views import *  # импортируем вьюхи из приложения листинга
 from blog import views  # импортируем вьюхи из приложения блога
 
 urlpatterns = [
                   path('', index_handler),
-                  path('polls/<int:question_id>/', detail),
                   path('blog/', views.blog_handler),
                   path('single_blog/', views.single_blog_handler),
                   path('about/', about_handler),
