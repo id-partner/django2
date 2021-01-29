@@ -29,7 +29,7 @@ def crawl_one(url):
     image_name = slugify(name)
     img_type = image_url.split('.')[-1]
 
-    img_path = f'images/{image_name}.{img_type}'
+    img_path = f'images/post/{image_name}.{img_type}'
 
     with open(f'media/{img_path}', 'wb') as f:
         with HTMLSession() as session:
@@ -52,21 +52,7 @@ def crawl_one(url):
     post = Post(**post)
     posts.append(post)
 
-
-    # post = Post(
-    #     name=name,
-    #     slug=slugify(name),
-    #     content=my_content,
-    #     short_description=short_description.strip(),
-    #     main_image=img_path,
-    #     pub_date=pub_date,
-    # )
-    #
-    # post.save()
-
     print(post)
-
-
 
 
 def get_urls():
@@ -87,7 +73,7 @@ def run():
 
     urls_news = get_urls()
 
-    with ThreadPoolExecutor(max_workers=5) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
         executor.map(crawl_one, urls_news)
 
     Post.objects.bulk_create(posts)

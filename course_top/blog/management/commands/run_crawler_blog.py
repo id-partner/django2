@@ -3,7 +3,7 @@ from blog.crawlers.dnews_crawler import run
 
 
 class Command(BaseCommand):
-    help = 'Запуск парсинга новостей с 3dnews.ru'
+    help = 'Запуск парсинга новостей.ru'
 
     def handle(self, *args, **options):
         run()
