@@ -24,21 +24,23 @@ from listing.views import *  # импортируем вьюхи из прило
 from blog import views  # импортируем вьюхи из приложения блога
 
 urlpatterns = [
-                  path('', index_handler),
-                  path('blog/', views.blog_handler),
-                  path('single_blog/', views.single_blog_handler),
-                  path('about/', about_handler),
-                  path('contact/', contact_handler),
-                  path('course_list/', course_list_handler),
-                  path('school/', school_list_handler),
-                  path('course_detail/', course_detail_handler),
-                  path('school_detail/', school_detail_handler),
-                  path('robots.txt', robots_handler),
+                  path('', index_handler, name='homepage'),
+                  path('blog/', views.blog_handler, name='blog'),
+                  path('blog/<slug>', views.blog_category_handler, name='blog_category'),
+                  path('single_blog/<slug>', views.single_blog_handler, name='single_blog'),
+                  path('course_list/<slug>', course_list_handler, name='course_list'),
+                  path('school/', school_list_handler, name='school'),
+                  path('school_detail/<slug>', school_detail_handler, name='school_detail'),
+                  path('course_detail/', course_detail_handler, name='course_detail'),
+                  path('about/', about_handler, name='about'),
+                  path('contact/', contact_handler, name='contact'),
+                  path('robots.txt', robots_handler, name='robots'),
                   path('admin/', admin.site.urls),
                   path('summernote/', include('django_summernote.urls')),
-                  # path('__debug__/', include(debug_toolbar.urls)),
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
     urlpatterns += [path('__debug__/', include(debug_toolbar.urls)),]
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+

@@ -6,16 +6,17 @@ from .models import *
 
 def set_discount_status(modeladmin, request, queryset):
     for object in queryset:
-        object.discount=True
+        object.discount = True
         object.save()
 
-set_discount_status.short_description= 'Проставить статус скидки всем курсам'
+
+set_discount_status.short_description = 'Проставить статус скидки всем курсам'
 
 
 class CategoryAdmin(SummernoteModelAdmin):
     summernote_fields = ('content', 'description',)
-    list_display = ('name', 'in_menu', 'order', 'parent', 'course_count')
-    list_editable = ('in_menu', 'order',)
+    list_display = ('name', 'in_menu', 'order', 'parent', 'flaticon', 'course_count',)
+    list_editable = ('in_menu', 'order', 'parent', 'flaticon',)
     search_fields = ('name',)
 
     def get_queryset(self, request):

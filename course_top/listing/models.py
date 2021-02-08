@@ -9,6 +9,7 @@ class Category(models.Model):
     description = models.CharField(max_length=255, blank=True, verbose_name='Описание')
     content = models.TextField(blank=True)
     icon = models.ImageField(upload_to='images/category/%Y/%m/%d/', blank=True, verbose_name='Иконка категории')
+    flaticon = models.CharField(max_length=255, blank=True, null=True, verbose_name='Флэт-иконка')
     parent = models.ForeignKey(
         'self', on_delete=models.DO_NOTHING, null=True,
         blank=True, related_name='parent_category',

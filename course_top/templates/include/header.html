@@ -1,40 +1,28 @@
+{% load static %}
+
 <!--=================================
 Header -->
-<header class="header header-style-02 header-sticky">
+<header class="header header-style-02">
   <nav class="navbar navbar-static-top navbar-expand-lg px-3 px-md-5">
     <div class="container-fluid position-relative px-0">
       <button type="button" class="navbar-toggler" data-toggle="collapse" data-target=".navbar-collapse"><i class="fas fa-align-left"></i></button>
       <a class="navbar-brand" href="/">
-        <img class="img-fluid" src="/static/images/logo-dark.svg" alt="logo">
+        <img class="img-fluid" src="{% static 'images/logo-dark.svg' %}" alt="logo">
       </a>
-      <a class="navbar-brand navbar-brand-sticky" href="index.html">
-        <img class="img-fluid" src="/static/images/logo.svg" alt="logo">
+      <a class="navbar-brand navbar-brand-sticky" href="{% url 'homepage' %}">
+        <img class="img-fluid" src="{% static 'images/logo.svg' %}" alt="logo">
       </a>
       <div class="search-category ml-auto">
-        <div class="form-group select-border course-category">
-          <i class="fa fa-th text-primary mr-2" aria-hidden="true"></i>
-          <select class=" basic-select">
-            <option selected="selected">Category</option>
-            <option>Design</option>
-            <option>Development</option>
-            <option>Marketing</option>
-            <option>IT & software</option>
-            <option>Photography</option>
-            <option>Music</option>
-            <option>Personal Development</option>
-            <option>Business</option>
-          </select>
-        </div>
         <input type="text" class="form-control" placeholder="Search Courses...">
         <button class="search-button" type="submit"> <i class="fa fa-search"></i></button>
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li><a class="nav-link" href="/">Главная страница</a></li>
-          <li><a class="nav-link" href="/course_list/">Курсы</a></li>
-          <li><a class="nav-link" href="/about/">О нас</a></li>
-          <li><a class="nav-link" href="/blog/">Блог</a></li>
-          <li><a class="nav-link" href="/contact/">Наши контакты</a></li>
+          <li><a class="nav-link" href="{% url 'homepage' %}">Главная страница</a></li>
+          <li><a class="nav-link" href="/">Курсы</a></li>
+          <li><a class="nav-link" href="{% url 'about' %}">О нас</a></li>
+          <li><a class="nav-link" href="{% url 'blog' %}">Блог</a></li>
+          <li><a class="nav-link" href="{% url 'contact' %}">Наши контакты</a></li>
         </ul>
       </div>
     </div>

@@ -24,9 +24,9 @@ SECRET_KEY = 'z(f%cwe2+q1!egjqmj1*7*@3ont_l3c7a_#&c00jzt5k^26xpz'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1',]
+ALLOWED_HOSTS = ['127.0.0.1', ]
 
-INTERNAL_IPS = ['127.0.0.1',]
+INTERNAL_IPS = ['127.0.0.1', ]
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
@@ -130,19 +130,11 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-"""не показывает DebugToolbar"""
+
+def show_toolbar(request):
+    return True
 
 
-# def show_toolbar(request):
-#     return True
-#
-#
-# SHOW_TOOLBAR_CALLBACK = show_toolbar
-
-# def show_toolbar(request):
-#     return True
-#
-#
-# DEBUG_TOOLBAR_CONFIG = {
-#     "SHOW_TOOLBAR_CALLBACK": show_toolbar,
-# }
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": show_toolbar,
+}
