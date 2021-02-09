@@ -5,11 +5,9 @@ from .models import *
 def index_handler(request):
     categories = Category.objects.filter(order=1)
     schools = School.objects.all()
-    courses = Course.objects.all()
     context = {
         'categories': categories,
         'schools': schools,
-        'courses': courses,
     }
     return render(request, 'listing/index.html', context)
 
@@ -24,8 +22,19 @@ def contact_handler(request):
     return render(request, 'listing/contact.html', context)
 
 
-def course_list_handler(request, slug):
-    context = {}
+def course_list_handler(request, **kwargs):
+    cat_slug = kwargs.get('cat_slug')
+    if cat_slug:
+        courses = Course.objects.filter(categories__slug=cat_slug).prefetch_related('categories', 'school')
+        category = Category.objects.get(slug=cat_slug)
+    else:
+        courses = Course.objects.all().prefetch_related('categories', 'school')
+        category = None
+
+    context = {
+        'courses': courses,
+        'category': category,
+    }
     return render(request, 'listing/course-list.html', context)
 
 

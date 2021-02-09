@@ -4,12 +4,17 @@ from django.utils.html import format_html
 from .models import *
 
 
+class CommentPostInLine(admin.TabularInline):
+    model = Comment
+
+
 class PostAdmin(SummernoteModelAdmin):
     summernote_fields = ('content', 'short_description')
     list_display = ('name', 'is_published', 'pub_date', 'image_code',)
     list_filter = ('is_published', 'pub_date', 'categories',)
     list_editable = ('is_published',)
     search_fields = ('name',)
+    inlines = (CommentPostInLine,)
 
     def image_code(self, object):
         return format_html('<img src="{}" style="max-width: 50px" />',

@@ -73,7 +73,7 @@ Category -->
               <div class="categories-icon">
                 <i class="{{ cat.flaticon }} fa-1x mt-3"></i>
               </div>
-              <a href="{% url 'course_list' cat.slug %}" class="categories-title">{{ cat.name }}</a>
+              <a href="{% url 'course_list_category' cat.slug %}" class="categories-title">{{ cat.name }}</a>
             </div>
             {% endfor %}
           </div>
