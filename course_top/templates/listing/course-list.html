@@ -2,204 +2,111 @@
 {% load static %}
 {% block content %}
 
-<!--=================================
-Inner Header -->
-<section class="space-ptb bg-holder bg-overlay-black-90" style="background-image: url('images/bg/03.jpg');">
-    <div class="container">
-        <div class="find-Course">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    {% if category %}
-                    <h1 class="breadcrumb-title mb-0 text-white">{{courses.count}} онлайн курса в категории — {{ category.name }}</h1>
-                    {% else %}
-                    <h1 class="breadcrumb-title mb-0 text-white">{{courses.count}} онлайн курсов во всех категориях</h1>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
+<section class="space-pb">
+  <div class="container">
+    <div class="section-title">
+      <ol class="breadcrumb d-flex justify-content-center justify-content-md-start ml-auto bg-white">
+        <li class="breadcrumb-item"><a href="{% url 'homepage' %}"><i class="fas fa-home mr-1"></i>Главная</a></li>
+        <li class="breadcrumb-item active"><span>{{ category.name }}</span></li>
+      </ol>
+        {% if category %}
+            <h2 class="mb-3">{{courses.count}} онлайн курса в категории — {{ category.name }}</h2>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque, dolores. Quidem deserunt distinctio
+                mollitia dolorem possimus inventore earum laboriosam eum!</p>
+        {% else %}
+            <h2 class="mb-3">{{courses.count}} онлайн курсов во всех категориях</h2>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque, dolores. Quidem deserunt distinctio
+                mollitia dolorem possimus inventore earum laboriosam eum!</p>
+        {% endif %}
     </div>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Название курса</th>
+            <th scope="col">Школа курса</th>
+            <th scope="col">Стоимость</th>
+            <th scope="col">Мин. платёж в расрочку</th>
+            <th scope="col">Дата начала</th>
+            <th scope="col">Длительность</th>
+            <th scope="col">Ссылка на курс</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for course in courses %}
+              <tr >
+                  <th><a href="{{ course.link }}" target="_blank">{{ course.name }}</a></th>
+                <td>
+                  <b>{{ course.school.name }}</b>
+                  <div class="rating"><span>4.1</span></div>
+                  <a href="{% url 'school_detail' course.school.slug %}">Отзывы о школе</a>
+                </td>
+                <td>{{ course.price}} рублей</td>
+                <td>От 4900</td>
+                <td>{{ course.start_date }}</td>
+                <td>{{ course.duration }} мес</td>
+                <td style="width: 175px;"><a href="{{ course.link }}" class="btn btn-primary btn-sm"
+                                             target="_blank">Ссылка на курс</a></td>
+              </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </section>
-<!--=================================
-Inner Header -->
 
-<!--=================================
-Course Details -->
-<section class="space-ptb course-list">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="widgets">
-                    <div class="widget widget-serach">
-                        <h6 class="widget-title">Search</h6>
-                        <div class="widget-content">
-                            <form class="fill-form">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Search">
-                                </div>
-                                <button type="button" class="btn btn-primary">Search</button>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="widget widget-Categories">
-                        <h6 class="widget-title">Categories</h6>
-                        <div class="widget-content">
-                            <div class="custom-control custom-checkbox mb-3">
-                                <input type="checkbox" class="custom-control-input" id="checkbox1">
-                                <label class="custom-control-label" for="checkbox1">Design</label>
-                            </div>
-                            <div class="custom-control custom-checkbox mb-3">
-                                <input type="checkbox" class="custom-control-input" id="checkbox2">
-                                <label class="custom-control-label" for="checkbox2">Development</label>
-                            </div>
-                            <div class="custom-control custom-checkbox mb-3">
-                                <input type="checkbox" class="custom-control-input" id="checkbox3">
-                                <label class="custom-control-label" for="checkbox3">Marketing</label>
-                            </div>
-                            <div class="custom-control custom-checkbox mb-3">
-                                <input type="checkbox" class="custom-control-input" id="checkbox4">
-                                <label class="custom-control-label" for="checkbox4">IT & software</label>
-                            </div>
-                            <div class="custom-control custom-checkbox mb-3">
-                                <input type="checkbox" class="custom-control-input" id="checkbox5">
-                                <label class="custom-control-label" for="checkbox5">Photography</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="checkbox6">
-                                <label class="custom-control-label" for="checkbox6">Music</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="widget">
-                        <div class="widget-title">
-                            <h6>Filter by price</h6>
-                        </div>
-                        <div class="widget-content">
-                            <div class="form-group">
-                                <div class="collapse show" id="price">
-                                    <div class="property-price-slider">
-                                        <input type="text" id="property-price-slider" name="example_name" value=""/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="price-filter d-flex">
-                                <div class="price_label">
-                                    Price: <span class="from">$10 — $382</span>
-                                </div>
-                                <a class="ml-auto" href="#"><i class="fas fa-filter"></i>Filter</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="widget">
-                        <div class="widget-title">
-                            <h6>Levels</h6>
-                        </div>
-                        <div class="widget-content">
-                            <div class="custom-control custom-checkbox mb-3">
-                                <input type="checkbox" class="custom-control-input" id="checkbox12">
-                                <label class="custom-control-label" for="checkbox12">Beginner</label>
-                            </div>
-                            <div class="custom-control custom-checkbox mb-3">
-                                <input type="checkbox" class="custom-control-input" id="checkbox7">
-                                <label class="custom-control-label" for="checkbox7">Intermediate</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="checkbox8">
-                                <label class="custom-control-label" for="checkbox8">Advanced</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="widget">
-                        <div class="widget-title">
-                            <h6>Type</h6>
-                        </div>
-                        <div class="widget-content">
-                            <div class="custom-control custom-checkbox mb-3">
-                                <input type="checkbox" class="custom-control-input" id="checkbox9">
-                                <label class="custom-control-label" for="checkbox9">Free Course</label>
-                            </div>
-                            <div class="custom-control custom-checkbox mb-3">
-                                <input type="checkbox" class="custom-control-input" id="checkbox10">
-                                <label class="custom-control-label" for="checkbox10">Paid Course</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="checkbox11">
-                                <label class="custom-control-label" for="checkbox11">Offline Course</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-8 mt-5 mt-lg-0">
-                <div class="course">
-                    {% for course in courses %}
-                    <div class="row no-gutters box-shadow mb-4">
-                        <div class="col-sm-5">
-                            <div class="course-img h-100">
-                                <img class="img-fluid" src="{% static 'images/course/01.jpg' %}" alt="">
-                                <a href="{% url 'course_list_category' course.categories.all.0.slug %}"
-                                   class="course-category"><i
-                                        class="far fa-bookmark"></i>{{course.categories.all.0}}</a>
-                            </div>
-                        </div>
-                        <div class="col-sm-7">
-                            <div class="course-info p-0 h-100">
-                                <div class="px-4 pt-4">
-                                    <div class="course-title">
-                                        <a href="#">{{ course.name }}</a>
-                                    </div>
-                                    <div class="course-instructor mb-2">by
-                                        <a href="{% url 'school_detail' course.school.slug %}">{{ course.school.name }}</a>
-                                    </div>
-                                    <p class="mb-0">{{ course.description }}</p>
-                                </div>
-                                <div class="course-rate-price px-4 pb-3">
-                                    <div class="rating">
-                                        <span>4.1</span>
-                                        <a href="#">101 Ratings</a>
-                                    </div>
-                                    <div class="price">{{ course.price}} ₽</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                <div class="row">
-                    <div class="col-12 text-center mt-4 mt-md-5">
-                        <nav>
-                            <ul class="pagination justify-content-center mb-0">
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                </li>
-                                <li class="page-item active">
-                    <span class="page-link">
-                      1
-                      <span class="sr-only">(current)</span>
-                    </span>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                <li class="page-item"><a class="page-link" href="#">6</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-        </div>
+<section class="space-pb">
+  <div class="container">
+    <div class="section-title">
+    {% if category %}
+      <h2 class="mb-6">Те же курсы в категории {{ category.name|lower }} с подробным описанием</h2>
+      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque, dolores. Quidem deserunt distinctio mollitia
+          dolorem possimus inventore earum laboriosam eum!</p>
+    {% else %}
+        <h2 class="mb-6">Те же курсы с подробным описанием</h2>
+    {% endif%}
     </div>
+    <div class="row d-flex justify-content-between">
+        {% for course in courses %}
+            <div class="col-md-4">
+        <div class="card bg-light mb-4" style="width: 20rem;">
+          <div class="card-body">
+            <h5 class="card-title text-xl-center">{{ course.name}}</h5>
+            <div class="card-desc text-center mb-2">
+              <b>{{ course.school.name }}</b>
+              <span class="rating"><span>4.1</span></span>
+              <a href="{% url 'school_detail' course.school.slug %}">Отзывы о школе</a>
+            </div>
+            <div class="card-price d-flex justify-content-between border-bottom mb-2 pb-2">
+              <div><span class="text-primary">{{ course.price}} ₽</span>/курс</div>
+              <div><span class="text-primary">4900</span>/месяц <i
+                      class="flaticon-idea cursor" role="button" data-toggle="tooltip"
+                      data-placement="top" title="Lorem ipsum dolor sit amet"></i></div>
+            </div>
+            <div class="card-text mb-4">
+              <b>Начало:</b> {{ course.start_date }}, <b>длительность:</b> {{ course.duration }} мес.
+            </div>
+            <div class="card-text mb-4">
+              <b>Формат:</b>
+                {% for format in course.course_format.all %}
+                {{ format }}.
+                {% endfor %}
+            </div>
+            <div class="card-text mb-4">
+              <b>Особенности:</b>
+                {% for feature in course.features.all %}
+                {{ feature }}.
+                {% endfor %}
+            </div>
+            <a href="{{ course.link }}" class="btn btn-primary w-100" target="_blank">Ссылка на курс</a>
+          </div>
+        </div>
+      </div>
+        {% endfor %}
+  </div>
+
+
+  </div>
 </section>
-<!--=================================
-Course Details -->
 
 {% endblock content %}

@@ -4,85 +4,91 @@
 {% block content %}
 <!--=================================
 Search Course -->
-<section class="space-ptb bg-overlay-black-50 search-course bg-holder" style="background-image: ('{% static '/images/bg/02.jpg' %}');">
-<div class="container">
-  <div class="row">
-    <div class="col-sm-8 col-md-6 col-lg-5 space-pb">
-      <h2 class="text-primary mb-3">Не переставайте узнавать новое </h2>
-      <h6 class="text-white">Введите название курса или область в которой хотите освоить новые навыки</h6>
-      <form class="form-inline mt-4 mt-sm-5">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Чему хотите научиться?">
-        </div>
-        <button type="submit" class="btn btn-primary">Поиск</button>
-      </form>
+<section class="space-ptb bg-overlay-black-50 search-course bg-holder" style="background-image: url('{% static 'images/bg/02.jpg' %}');">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-8 col-md-6 col-lg-5 space-pb">
+        <h2 class="text-primary mb-3">Никогда не переставайте обучаться </h2>
+        <h6 class="text-white">Мы подобрали лучшие курсы для вашего обучения онлайн</h6>
+        <form class="form-inline mt-4 mt-sm-5">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="What do you want to study?">
+          </div>
+          <button type="submit" class="btn btn-primary">Поиск</button>
+        </form>
+      </div>
     </div>
   </div>
-</div>
 </section>
 <!--=================================
 Search Course -->
 
 <!--=================================
 Feature Info -->
-<section class="mt-n5 e-mt-sm-n4 e-mt-md-n5 e-mt-lg-n6 z-index-1 position-relative">
-<div class="container">
-  <div class="box-shadow rounded-sm feature-info-03 bg-white">
-    <div class="row no-gutters">
-      <div class="col-md-4 px-5 py-4 py-md-5">
-        <div class="d-flex align-items-center mb-4">
-          <i class="flaticon-online-learning-1 fa-3x text-primary mr-4"></i>
-          <h5 class="font-weight-bold mb-0 mt-0 text-dark">Более {{ courses.count }} курсов</h5>
+<section class="bg-primary">
+    <div class="container">
+          <div class="row feature-info-02">
+            <div class="col-sm-4 py-4 text-center">
+              <i class="flaticon-online-learning-1 fa-3x text-white"></i>
+              <h4 class="fw-5 mt-3 mb-0 text-white">Более {{course.count}} курсов онлайн</h4>
+              <p class="mb-0 text-white">Focus is having the unwavering attention.</p>
+            </div>
+            <div class="col-sm-4 py-4 text-center">
+              <i class="flaticon-lock fa-3x text-white"></i>
+              <h4 class="fw-5 mt-3 mb-0 text-white">Только проверенные отзывы</h4>
+              <p class="mb-0 text-white">The best way is to develop and follow.</p>
+            </div>
+            <div class="col-sm-4 py-4 text-center">
+              <i class="flaticon-strategy fa-3x mt-2 text-white"></i>
+              <h4 class="fw-5 mt-3 mb-0 text-white">Live learning</h4>
+              <p class="mb-0 text-white">Start with your goals in mind and then work.</p>
+            </div>
+          </div>
         </div>
-        <p class="mb-0">Lots of people come here to Japan, but never quite find out how to stay. Many, many foreigners who come.</p>
-      </div>
-      <div class="col-md-4 px-5 py-4 py-md-5">
-        <div class="d-flex align-items-center mb-4">
-          <i class="flaticon-strategy fa-3x text-primary mr-4"></i>
-          <h5 class="font-weight-bold mb-0 mt-0 text-dark">Lifetime entrance</h5>
-        </div>
-        <p class="mb-0">I’ve even said it myself, although I added the qualifier that the powerful desire is not so much for the Universe.</p>
-      </div>
-      <div class="col-md-4 px-5 py-4 py-md-5">
-        <div class="d-flex align-items-center mb-4">
-          <i class="flaticon-lock fa-3x text-primary mr-4"></i>
-          <h5 class="font-weight-bold mb-0 mt-0 text-dark">Реальные отзывы</h5>
-        </div>
-        <p class="mb-0">On the other hand, the ones who do stay are often not especially hard working, dedicated sensible or qualified.</p>
-      </div>
-    </div>
-  </div>
-</div>
 </section>
 <!--=================================
 Feature Info -->
 
 <!--=================================
-Category -->
-<section class="space-pt">
-  <div class="section-title text-center">
-    <h2>Выбирайте область в которой хотите найти курс</h2>
-    <p>This is perhaps the single biggest obstacle that all of us must overcome in order to be successful.</p>
-  </div>
-  <div class="container">
-      <div class="row mb-3">
-        <div class="col-sm-12">
-          <div class="categories categories-style-02">
-            {% for cat in categories %}
-            <div class="categories-item">
-              <div class="categories-icon">
-                <i class="{{ cat.flaticon }} fa-1x mt-3"></i>
-              </div>
-              <a href="{% url 'course_list_category' cat.slug %}" class="categories-title">{{ cat.name }}</a>
-            </div>
-            {% endfor %}
+Сategories block -->
+<section class="space-ptb">
+      <div class="container">
+          <div class="section-title text-center">
+              <h2>Сourse categories</h2>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt culpa sequi delectus laboriosam incidunt repellendus?</p>
           </div>
-        </div>
+          <div class="row no-gutters">
+                {% for cat in categories %}
+                <div class="col-md-4 px-5 py-4 py-md-5">
+                  <div class="d-flex align-items-center mb-4">
+                    <i class="{{ cat.flaticon }} fa-3x text-primary mr-4"></i>
+                    <h5 class="font-weight-bold mb-0 mt-0 text-dark">{{ cat.name }}</h5>
+                  </div>
+                  <div class="load-more-container{{ forloop.counter }}">
+                      <input type="checkbox" id="load-more{{ forloop.counter }}"/>
+                      <ul class="category__list">
+                        <li class="category__list-item"><a href="{% url 'course_list_category' cat.slug %}">Все курсы в {{ cat.name }}</a></li>
+                        {% if cat.parent_category.all %}
+                          {% for subcat in cat.parent_category.all %}
+                            <li class="category__list-item"><a href="{% url 'course_list_category' subcat.slug %}">{{ subcat.name }}</a></li>
+                          {% endfor %}
+                        {% endif %}
+                      </ul>
+                    {% if cat.parent_category.count > 3 %}
+                      <label class="load-more-btn" for="load-more{{ forloop.counter }}">
+                        <span class="unloaded">Показать все</span>
+                        <span class="loaded">Свернуть</span>
+                      </label>
+                    {% endif %}
+                  </div>
+                </div>
+                {% endfor %}
+          </div>
+
       </div>
-  </div>
-</section>
+  </section>
 <!--=================================
-Category -->
+Сategories block -->
 
 <!--=  Client Logo -->
 <section class="space-ptb bg-light">

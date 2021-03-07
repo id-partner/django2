@@ -57,7 +57,7 @@ NOTE: This is main stylesheet of template, This file contains the styling for th
   Typography
 *****************************/
 body {
-  font-family: "Quicksand", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-weight: 500;
   font-style: normal;
   font-size: 14px;
@@ -87,13 +87,97 @@ input {
   outline: medium none !important;
   color: #21c87a; }
 
+
+  .load-more-container {
+    position: relative;
+  }
+  .load-more-container ul,
+  .load-more-container1 ul,
+  .load-more-container2 ul,
+  .load-more-container3 ul,
+  .load-more-container4 ul,
+  .load-more-container5 ul,
+  .load-more-container6 ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  .load-more-container ul:after,
+  .load-more-container1 ul:after,
+  .load-more-container2 ul:after ,
+  .load-more-container3 ul:after ,
+  .load-more-container4 ul:after ,
+  .load-more-container5 ul:after ,
+  .load-more-container6 ul:after  {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  .load-more-container ul li:nth-child(1n + 5),
+  .load-more-container1 ul li:nth-child(1n + 5),
+  .load-more-container2 ul li:nth-child(1n + 5),
+  .load-more-container3 ul li:nth-child(1n + 5),
+  .load-more-container4 ul li:nth-child(1n + 5),
+  .load-more-container5 ul li:nth-child(1n + 5),
+  .load-more-container6 ul li:nth-child(1n + 5) {
+    max-height: 0;
+    opacity: 0;
+    transition: 0.1s ease-in;
+  }
+  .load-more-container .load-more-btn .loaded,
+  .load-more-container1 .load-more-btn .loaded,
+  .load-more-container2 .load-more-btn .loaded,
+  .load-more-container3 .load-more-btn .loaded,
+  .load-more-container4 .load-more-btn .loaded,
+  .load-more-container5 .load-more-btn .loaded,
+  .load-more-container6 .load-more-btn .loaded {
+    display: none;
+  }
+  .load-more-container #load-more,
+  .load-more-container1 #load-more1,
+  .load-more-container2 #load-more2,
+  .load-more-container3 #load-more3,
+  .load-more-container4 #load-more4,
+  .load-more-container5 #load-more5,
+  .load-more-container6 #load-more6 {
+    display: none;
+  }
+  .load-more-container #load-more:checked ~ ul li:nth-child(1n + 5),
+  .load-more-container1 #load-more1:checked ~ ul li:nth-child(1n + 5),
+  .load-more-container2 #load-more2:checked ~ ul li:nth-child(1n + 5),
+  .load-more-container3 #load-more3:checked ~ ul li:nth-child(1n + 5),
+  .load-more-container4 #load-more4:checked ~ ul li:nth-child(1n + 5),
+  .load-more-container5 #load-more5:checked ~ ul li:nth-child(1n + 5),
+  .load-more-container6 #load-more6:checked ~ ul li:nth-child(1n + 5) {
+    max-height: 999px;
+    opacity: 1;
+    transition: 0.2s ease-in;
+  }
+  .load-more-container #load-more:checked ~ .load-more-btn .loaded,
+  .load-more-container1 #load-more1:checked ~ .load-more-btn .loaded,
+  .load-more-container2 #load-more2:checked ~ .load-more-btn .loaded,
+  .load-more-container3 #load-more3:checked ~ .load-more-btn .loaded,
+  .load-more-container4 #load-more4:checked ~ .load-more-btn .loaded,
+  .load-more-container5 #load-more5:checked ~ .load-more-btn .loaded,
+  .load-more-container6 #load-more6:checked ~ .load-more-btn .loaded {
+    display: block;
+  }
+  .load-more-container #load-more:checked ~ .load-more-btn .unloaded,
+  .load-more-container1 #load-more1:checked ~ .load-more-btn .unloaded,
+  .load-more-container2 #load-more2:checked ~ .load-more-btn .unloaded,
+  .load-more-container3 #load-more3:checked ~ .load-more-btn .unloaded,
+  .load-more-container4 #load-more4:checked ~ .load-more-btn .unloaded,
+  .load-more-container5 #load-more5:checked ~ .load-more-btn .unloaded,
+  .load-more-container6 #load-more6:checked ~ .load-more-btn .unloaded {
+    display: none;
+  }
+
 .h1, h1,
 .h2, h2,
 .h3, h3,
 .h4, h4,
 .h5, h5,
 .h6, h6 {
-  font-family: "Quicksand", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-weight: 600;
   color: #1c1a1f;
   margin-top: 0px;
@@ -2342,7 +2426,24 @@ ul.list {
     right: 0; }
   .owl-carousel .owl-nav .owl-prev {
     left: 0; } }
+    
+    
+/*****************************
+  Catigories
+*****************************/
+.category__title {
+  margin-top: 30px;
+}
+.category__list {
+  padding: 0;
+  margin-top: 20px;
+  list-style: none;
+}
 
+.category__list-item {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
 /*****************************
   Course
 *****************************/
@@ -2418,12 +2519,14 @@ ul.list {
           color: #666666; }
           .course .course-info .course-rate-price .rating a:hover {
             color: #21c87a; }
-        .course .course-info .course-rate-price .rating span {
+        .course .course-info .course-rate-price .rating span,
+        .rating span {
           background-color: #ffc107;
           color: #ffffff;
           padding: 2px 7px;
           margin-right: 8px;
-          border-radius: 3px; }
+          border-radius: 3px;
+          font-size: 12px; }
       .course .course-info .course-rate-price .price {
         font-size: 18px;
         color: #1c1a1f;
@@ -2432,6 +2535,15 @@ ul.list {
     -webkit-transform: scale(1.1);
             transform: scale(1.1); }
 
+.school-link,
+.school-review-title {
+  font-size: 18px;
+}
+
+.bg-grey {
+  background-color: #ecebeb;
+  border-radius: 7px;
+}
 /* Course Filter */
 .course-filter {
   position: relative;
