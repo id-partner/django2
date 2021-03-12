@@ -26,7 +26,7 @@ from blog import views  # импортируем вьюхи из приложе�
 urlpatterns = [
                   path('', index_handler, name='homepage'),
                   path('blog/', views.blog_handler, name='blog'),
-                  path('blog/<cat_slug>', views.blog_category_handler, name='blog_category'),
+                  path('blog/<cat_slug>', views.blog_handler, name='blog_category'),
                   path('single_blog/<slug>', views.single_blog_handler, name='single_blog'),
                   path('course_list/', course_list_handler, name='course_list'),
                   path('course_list/<cat_slug>', course_list_handler, name='course_list_category'),
