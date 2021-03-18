@@ -227,40 +227,37 @@
     <div class="border">
       <h6 class="text-dark px-4 py-2 bg-light mb-0">Add a Review</h6>
       <div class="p-4 border-top">
-        <form class="form-flat-style">
+        <form class="form-flat-style" action="" method="post">
+          {% csrf_token %}
           <div class="form-row">
             <div class="form-group col-md-12">
               <div class="ratings">
                 <input type="radio" id="star5" name="ratings" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
-                <input type="radio" id="star4half" name="ratings" value="4 and a half" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+                <input type="radio" id="star4half" name="ratings" value="4.5" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
                 <input type="radio" id="star4" name="ratings" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
-                <input type="radio" id="star3half" name="ratings" value="3 and a half" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+                <input type="radio" id="star3half" name="ratings" value="3.5" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
                 <input type="radio" id="star3" name="ratings" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
-                <input type="radio" id="star2half" name="ratings" value="2 and a half" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+                <input type="radio" id="star2half" name="ratings" value="2.5" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
                 <input type="radio" id="star2" name="ratings" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
-                <input type="radio" id="star1half" name="ratings" value="1 and a half" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+                <input type="radio" id="star1half" name="ratings" value="1.5" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
                 <input type="radio" id="star1" name="ratings" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-                <input type="radio" id="starhalf" name="ratings" value="half" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                <input type="radio" id="starhalf" name="ratings" value="0.5" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
               </div>
             </div>
             <div class="form-group col-lg-4">
-              <label>Your name</label>
-              <input type="text" class="form-control" placeholder="Your name">
+              <label>Имя</label>
+              <input type="text" name = "name" class="form-control" placeholder="Введите ваше имя">
             </div>
             <div class="form-group col-lg-4">
-              <label>Your email</label>
-              <input type="email" class="form-control" placeholder="Your email">
-            </div>
-            <div class="form-group col-lg-4">
-              <label>Subject</label>
-              <input type="text" class="form-control" id="phone" placeholder="Subject">
+              <label>Ваш email</label>
+              <input type="email" name ="email" class="form-control" placeholder="Введите ваш email">
             </div>
             <div class="form-group col-lg-12">
-              <label>Your message</label>
-              <textarea class="form-control" rows="4" placeholder="Your message"></textarea>
+              <label>Ваш отзыв</label>
+              <input class="form-control" name ="review" rows="4" placeholder="Опишите коротко впечатления от школы">
             </div>
             <div class="col-md-12">
-              <a class="btn btn-primary" href="#">Submit review</a>
+              <button type="submit" class="btn btn btn-primary">Оставить отзыв</button>
             </div>
           </div>
         </form>

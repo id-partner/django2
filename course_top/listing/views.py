@@ -55,13 +55,20 @@ def school_list_handler(request):
 
 
 def school_detail_handler(request, slug):
-    school = School.objects.get(slug=slug)
-    schools = School.objects.all()
-    context = {
-        'school': school,
-        'schools': schools,
-    }
-    return render(request, 'listing/school-detail.html', context)
+
+    if request.method == 'GET':
+
+        school = School.objects.get(slug=slug)
+        schools = School.objects.all()
+        context = {
+            'school': school,
+            'schools': schools,
+        }
+        return render(request, 'listing/school-detail.html', context)
+    elif request.method == 'POST':
+        data = {x[0]: x[1] for x in request.POST.items()}
+        data.pop('csrfmiddlewaretoken')
+        breakpoint()
 
 
 def robots_handler(request):

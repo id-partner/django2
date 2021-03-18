@@ -39,7 +39,8 @@ Classic Left Sidebar -->
           <div class="blog-post-content">
             <div class="blog-post-info">
               <div class="blog-post-author">
-                <a href="{% url 'blog_category' post.categories.all.0.slug %}" class="btn btn-link"><i class="far fa-folder-open"></i>{{ post.categories.all.0 }}</a>
+                <a href="{% url 'blog_category' post.categories.all.0.slug %}" class="btn btn-link">
+                  <i class="far fa-folder-open"></i>{{ post.categories.all.0 }}</a>
               </div>
               <div class="blog-post-date"><a href="#"><i class="far fa-calendar"></i>{{ post.pub_date }} </a></div>
             </div>
