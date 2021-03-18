@@ -9,7 +9,7 @@ def index_handler(request):
     context = {
         'categories': categories,
         'schools': schools,
-        'course':course
+        'course': course
     }
     return render(request, 'listing/index.html', context)
 
@@ -55,20 +55,23 @@ def school_list_handler(request):
 
 
 def school_detail_handler(request, slug):
+    main_school = School.objects.get(slug=slug)
 
-    if request.method == 'GET':
-
-        school = School.objects.get(slug=slug)
-        schools = School.objects.all()
-        context = {
-            'school': school,
-            'schools': schools,
-        }
-        return render(request, 'listing/school-detail.html', context)
-    elif request.method == 'POST':
+    if request.method == 'POST':
         data = {x[0]: x[1] for x in request.POST.items()}
         data.pop('csrfmiddlewaretoken')
-        breakpoint()
+        data['school'] = main_school
+        Review.objects.create(**data)
+
+
+    school = School.objects.get(slug=slug)
+    schools = School.objects.all()
+    context = {
+        'school': school,
+        'schools': schools,
+    }
+    return render(request, 'listing/school-detail.html', context)
+
 
 
 def robots_handler(request):
