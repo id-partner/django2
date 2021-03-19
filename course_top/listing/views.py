@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from .models import *
+from .forms import ReviewForm
+from django.contrib import messages
 
 
 def index_handler(request):
@@ -56,22 +58,28 @@ def school_list_handler(request):
 
 def school_detail_handler(request, slug):
     main_school = School.objects.get(slug=slug)
-
-    if request.method == 'POST':
-        data = {x[0]: x[1] for x in request.POST.items()}
-        data.pop('csrfmiddlewaretoken')
-        data['school'] = main_school
-        Review.objects.create(**data)
-
-
     school = School.objects.get(slug=slug)
     schools = School.objects.all()
     context = {
         'school': school,
         'schools': schools,
     }
-    return render(request, 'listing/school-detail.html', context)
 
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            data['school'] = main_school
+            Review.objects.create(**data)
+        else:
+            messages.add_message(
+                request, messages.INFO, 'Форма заполнена не корректно')
+    else:
+        form = ReviewForm()
+
+    context['form'] = form
+
+    return render(request, 'listing/school-detail.html', context)
 
 
 def robots_handler(request):
