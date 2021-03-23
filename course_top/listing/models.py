@@ -91,7 +91,7 @@ class Course(models.Model):
 
 class Review(models.Model):
     name = models.CharField(max_length=100)
-    email = models.EmailField(verbose_name='Почта', unique=True)
+    email = models.EmailField(verbose_name='Почта')
     comment = models.TextField(verbose_name='Комментарий')
     rating = models.FloatField(verbose_name='Рейтинг')
     school = models.ForeignKey(School, on_delete=models.CASCADE, verbose_name='Школа')

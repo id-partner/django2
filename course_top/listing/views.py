@@ -49,7 +49,7 @@ def course_detail_handler(request):
 
 
 def school_list_handler(request):
-    schools = School.objects.all()
+    schools = School.objects.all().prefetch_related('review_set',)
     context = {
         'schools': schools,
     }

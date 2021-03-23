@@ -2,7 +2,7 @@ from django import forms
 
 
 class ReviewForm(forms.Form):
-    name = forms.CharField()
+    name = forms.CharField(min_length=4, max_length=20)
     email = forms.EmailField()
-    comment = forms.CharField(widget=forms.Textarea)
+    comment = forms.CharField(widget=forms.Textarea, max_length=1000, min_length=20)
     rating = forms.FloatField()

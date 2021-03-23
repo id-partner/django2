@@ -44,16 +44,22 @@ class SchoolAdmin(admin.ModelAdmin):
                            )
 
 
-class CourselAdmin(admin.ModelAdmin):
+class CourseAdmin(admin.ModelAdmin):
     list_display = ('name', 'school', 'start_date', 'price', 'discount',)
     list_filter = ('categories', 'school',)
     search_fields = ('name', 'school',)
     actions = (set_discount_status,)
 
 
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('name', 'school', 'comment')
+    list_filter = ('school',)
+    search_fields = ('school',)
+
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(School, SchoolAdmin)
 admin.site.register(Features)
-admin.site.register(Course, CourselAdmin)
-admin.site.register(Review)
+admin.site.register(Course, CourseAdmin)
+admin.site.register(Review, ReviewAdmin)
 admin.site.register(CourseFormat)
