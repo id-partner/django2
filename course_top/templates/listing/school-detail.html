@@ -12,12 +12,19 @@
                 <li class="breadcrumb-item active"><span>{{ school.name }}</span></li>
             </ol>
         </div>
+        {% if messages %}
+        {% for message in messages %}
+        <p class="alert alert-warning" role="alert">
+            {{ message }}
+        </p>
+        {% endfor %}
+        {% endif %}
         <h2 class="mb-6 text-secondary">{{ school.name }}</h2>
         <div class="school-info d-flex justify-content-between align-items-center">
             <div>
                 <a href="#"><img class="img-fluid w100 h100" src="images/client/01.svg" alt=""></a>
-                <p class="mt-4"><b>Школа: </b> <span class="text-muted mr-4">{{ school.name }}</span> Ошибка {{
-                    school.course }}</p>
+                <p class="mt-4"><b>Школа: </b> <span class="text-muted mr-4">{{ school.name }}
+                </span>{{ school.school_courses.all.count }} курсов</p>
                 <p><span class="text-muted">100 преподавателей</span></p>
                 <p><span class="text-muted">Средняя стоимость курса <b>21 000 рублей</b></span></p>
                 <p><b>Рейтинг школы: </b><span class="rating"><span>4.1</span></span></p>
@@ -52,8 +59,7 @@
                             {{ cat.name }}</a></li>
                         {% if cat.parent_category.all %}
                         {% for subcat in cat.parent_category.all %}
-                        <li class="category__list-item"><a href="{% url 'course_list_category' subcat.slug %}">{{
-                            subcat.name }}</a></li>
+                        <li class="category__list-item"><a href="{% url 'course_list_category' subcat.slug %}">{{ subcat.name }}</a></li>
                         {% endfor %}
                         {% endif %}
                     </ul>
@@ -245,13 +251,6 @@
                         </div>
 
                         <div class="form-group col-lg-4">
-                            {% if messages %}
-                            {% for message in messages %}
-                            <p class="alert alert-warning" role="alert">
-                                {{ message }}
-                            </p>
-                            {% endfor %}
-                            {% endif %}
                             <button type="submit" class="btn btn btn-primary">Оставить отзыв</button>
                         </div>
                     </div>
