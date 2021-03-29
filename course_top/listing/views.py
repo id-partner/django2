@@ -27,38 +27,38 @@ class ContactView(TemplateView):
 class CourseListView(ListView):
     template_name = 'listing/course-list.html'
     model = Course
+    context_object_name = 'courses'
 
     def get_queryset(self):
+        qs = super().get_queryset().prefetch_related('categories', 'school', 'features', 'course_format')
         self.cat_slug = self.kwargs.get('cat_slug')
-        qs = super().get_queryset()
+        if self.cat_slug:
+            qs =qs.filter(categories__slug=self.cat_slug).prefetch_related('categories', 'school',
+                                                                           'features','course_format')
         return qs
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.cat_slug:
-            context['courses'] = Course.objects.filter(categories__slug=self.cat_slug)
             context['categories'] = Category.objects.get(slug=self.cat_slug)
-        else:
-            context['courses'] = Course.objects.all().prefetch_related(
-                'categories', 'school', 'features', 'course_format')
-            context['categories'] = None
+        return context
 
 
-def course_list_handler(request, **kwargs):
-    cat_slug = kwargs.get('cat_slug')
-    if cat_slug:
-        courses = Course.objects.filter(categories__slug=cat_slug).prefetch_related('categories', 'school', 'features',
-                                                                                    'course_format')
-        category = Category.objects.get(slug=cat_slug)
-    else:
-        courses = Course.objects.all().prefetch_related('categories', 'school', 'features', 'course_format')
-        category = None
-
-    context = {
-        'courses': courses,
-        'category': category,
-    }
-    return render(request, 'listing/course-list.html', context)
+# def course_list_handler(request, **kwargs):
+#     cat_slug = kwargs.get('cat_slug')
+#     if cat_slug:
+#         courses = Course.objects.filter(categories__slug=cat_slug).prefetch_related('categories', 'school', 'features',
+#                                                                                     'course_format')
+#         category = Category.objects.get(slug=cat_slug)
+#     else:
+#         courses = Course.objects.all().prefetch_related('categories', 'school', 'features', 'course_format')
+#         category = None
+#
+#     context = {
+#         'courses': courses,
+#         'category': category,
+#     }
+#     return render(request, 'listing/course-list.html', context)
 
 
 def course_detail_handler(request):
@@ -68,20 +68,18 @@ def course_detail_handler(request):
 
 class SchoolListView(ListView):
     template_name = 'listing/schools.html'
-    model = School
+    context_object_name = 'schools'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['schools'] = School.objects.all().prefetch_related('review_set',)
-        return context
+    def get_queryset(self):
+        return School.objects.all().prefetch_related('review_set',)
 
 
-def school_list_handler(request):
-    schools = School.objects.all().prefetch_related('review_set',)
-    context = {
-        'schools': schools,
-    }
-    return render(request, 'listing/schools.html', context)
+# def school_list_handler(request):
+#     schools = School.objects.all().prefetch_related('review_set',)
+#     context = {
+#         'schools': schools,
+#     }
+#     return render(request, 'listing/schools.html', context)
 
 
 def school_detail_handler(request, slug):
