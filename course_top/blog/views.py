@@ -1,30 +1,27 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from .models import *
+from django.views.generic import ListView
 
 
-def blog_handler(request, **kwargs):
-    cat_slug = kwargs.get('cat_slug')
-    current_page = request.GET.get('page')
-    posts_on_page = 5
-    if cat_slug:
-        category = Category.objects.get(slug=cat_slug)
-        posts = Post.objects.filter(categories__slug=cat_slug).prefetch_related('categories')
-        paginator = Paginator(posts, posts_on_page)
-        page_obj = paginator.get_page(current_page)
-    else:
-        posts = Post.objects.all().prefetch_related('categories')
-        category = None
-        paginator = Paginator(posts, posts_on_page)
-        page_obj = paginator.get_page(current_page)
+class BlogListView(ListView):
+    template_name = 'blog/classic-full-width.html'
+    model = Post
+    ordering = '-pub_date'
+    paginate_by = 3
 
-    context = {
-        # 'posts': posts,
-        'category': category,
-        'page_obj': page_obj,
-        'paginator': paginator,
-    }
-    return render(request, 'blog/classic-full-width.html', context)
+    def get_queryset(self):
+        self.cat_slug = self.kwargs.get('cat_slug')
+        qs = super().get_queryset()
+        if self.cat_slug:
+            qs = qs.filter(categories__slug=self.cat_slug)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.cat_slug:
+            context['category'] = Category.objects.get(slug=self.cat_slug)
+        return context
 
 
 def single_blog_handler(request, slug):

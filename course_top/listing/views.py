@@ -2,28 +2,46 @@ from django.shortcuts import render
 from .models import *
 from .forms import ReviewForm
 from django.contrib import messages
+from django.views.generic import TemplateView, ListView
 
 
-def index_handler(request):
-    categories = Category.objects.prefetch_related('parent_category').filter(order=1)
-    schools = School.objects.all()
-    course = Course.objects.all()
-    context = {
-        'categories': categories,
-        'schools': schools,
-        'course': course
-    }
-    return render(request, 'listing/index.html', context)
+class IndexView(TemplateView):
+    template_name = 'listing/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.prefetch_related('parent_category').filter(order=1)
+        context['schools'] = School.objects.all()
+        context['course'] = Course.objects.all()
+        return context
 
 
-def about_handler(request):
-    context = {}
-    return render(request, 'listing/about-us.html', context)
+class AboutView(TemplateView):
+    template_name = 'listing/about-us.html'
 
 
-def contact_handler(request):
-    context = {}
-    return render(request, 'listing/contact.html', context)
+class ContactView(TemplateView):
+    template_name = 'listing/contact.html'
+
+
+class CourseListView(ListView):
+    template_name = 'listing/course-list.html'
+    model = Course
+
+    def get_queryset(self):
+        self.cat_slug = self.kwargs.get('cat_slug')
+        qs = super().get_queryset()
+        return qs
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.cat_slug:
+            context['courses'] = Course.objects.filter(categories__slug=self.cat_slug)
+            context['categories'] = Category.objects.get(slug=self.cat_slug)
+        else:
+            context['courses'] = Course.objects.all().prefetch_related(
+                'categories', 'school', 'features', 'course_format')
+            context['categories'] = None
 
 
 def course_list_handler(request, **kwargs):
@@ -46,6 +64,16 @@ def course_list_handler(request, **kwargs):
 def course_detail_handler(request):
     context = {}
     return render(request, 'listing/course-detail.html', context)
+
+
+class SchoolListView(ListView):
+    template_name = 'listing/schools.html'
+    model = School
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['schools'] = School.objects.all().prefetch_related('review_set',)
+        return context
 
 
 def school_list_handler(request):
@@ -83,6 +111,6 @@ def school_detail_handler(request, slug):
     return render(request, 'listing/school-detail.html', context)
 
 
-def robots_handler(request):
-    context = {}
-    return render(request, 'listing/robots.txt', context, content_type='text/plain')
+class RobotsView(TemplateView):
+    template_name = 'listing/robots.txt'
+    content_type = 'text/plain'

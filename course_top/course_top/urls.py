@@ -24,18 +24,18 @@ from listing.views import *  # импортируем вьюхи из прило
 from blog import views  # импортируем вьюхи из приложения блога
 
 urlpatterns = [
-                  path('', index_handler, name='homepage'),
-                  path('blog/', views.blog_handler, name='blog'),
-                  path('blog/<cat_slug>', views.blog_handler, name='blog_category'),
+                  path('', IndexView.as_view(), name='homepage'),
+                  path('blog/', views.BlogListView.as_view(), name='blog'),
+                  path('blog/<cat_slug>', views.BlogListView.as_view(), name='blog_category'),
                   path('single_blog/<slug>', views.single_blog_handler, name='single_blog'),
                   path('course_list/', course_list_handler, name='course_list'),
                   path('course_list/<cat_slug>', course_list_handler, name='course_list_category'),
-                  path('schools/', school_list_handler, name='school'),
+                  path('schools/', SchoolListView.as_view(), name='school'),
                   path('school_detail/<slug>', school_detail_handler, name='school_detail'),
                   path('course_detail/', course_detail_handler, name='course_detail'),
-                  path('about/', about_handler, name='about'),
-                  path('contact/', contact_handler, name='contact'),
-                  path('robots.txt', robots_handler, name='robots'),
+                  path('about/', AboutView.as_view(), name='about'),
+                  path('contact/', ContactView.as_view(), name='contact'),
+                  path('robots.txt', RobotsView.as_view(), name='robots'),
                   path('admin/', admin.site.urls),
                   path('summernote/', include('django_summernote.urls')),
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
