@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from .models import *
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 
 class BlogListView(ListView):
@@ -24,6 +24,18 @@ class BlogListView(ListView):
         return context
 
 
+class SinglePost(DetailView):
+    template_name = 'blog/blog-single.html'
+    model = Post
+    slug_url_kwarg = 'slug'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['prev_post']=Post.objects.filter(id=self.object.id - 1).first()
+        context['next_post'] = Post.objects.filter(id=self.object.id + 1).first()
+        return context
+
+
 def single_blog_handler(request, slug):
     post = Post.objects.get(slug=slug)
     prev_post = Post.objects.filter(id=post.id - 1).first()
@@ -34,3 +46,5 @@ def single_blog_handler(request, slug):
         'next_post': next_post,
     }
     return render(request, 'blog/blog-single.html', context)
+
+
