@@ -1,7 +1,11 @@
 from django.shortcuts import render
 from .models import *
+
 from .forms import ReviewForm
 from django.contrib import messages
+from django.views.generic.edit import FormMixin
+
+from django.urls import reverse
 from django.views.generic import TemplateView, ListView, DetailView
 
 
@@ -57,62 +61,39 @@ class SchoolListView(ListView):
         return School.objects.all().prefetch_related('review_set',)
 
 
-class SchoolDetailView(DetailView):
+class SchoolDetailView(FormMixin, DetailView):
     template_name = 'listing/school-detail.html'
     model = School
     slug_url_kwarg = 'slug'
+    form_class = ReviewForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['schools'] = School.objects.all()
         return context
 
+    def get_success_url(self):
+        return reverse('homepage')
+
     def post(self, request, *args, **kwargs):
-        """
-        Обработчик формы с отзывом
-        """
         self.object = self.get_object()
 
-        form = ReviewForm(request.POST)
+        form = self.get_form()
         if form.is_valid():
-            data = form.cleaned_data
-            data['school'] = self.object
-            Review.objects.create(**data)
-            form = ReviewForm()
+            return self.form_valid(form)
         else:
-            messages.add_message(request, messages.INFO, 'Форма заполнена не корректно')
+            return self.form_invalid(form)
 
-        context = self.get_context_data()
-        context['form'] = form
+    def form_valid(self, form):
+        data = form.cleaned_data
+        data['school'] = self.object
+        Review.objects.create(**data)
+        return super().form_valid(form)
 
-        return self.render_to_response(context)
-
-
-def school_detail_handler(request, slug):
-    main_school = School.objects.get(slug=slug)
-    school = School.objects.get(slug=slug)
-    schools = School.objects.all()
-    context = {
-        'school': school,
-        'schools': schools,
-    }
-
-    if request.method == 'POST':
-        form = ReviewForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            data['school'] = main_school
-            Review.objects.create(**data)
-            form = ReviewForm()
-        else:
-            messages.add_message(
-                request, messages.INFO, 'Форма заполнена не корректно')
-    else:
-        form = ReviewForm()
-
-    context['form'] = form
-
-    return render(request, 'listing/school-detail.html', context)
+    def form_invalid(self, form):
+        messages.add_message(
+            self.request, messages.INFO, 'Форма заполнена не корректно')
+        return super().form_invalid(form)
 
 
 class RobotsView(TemplateView):
