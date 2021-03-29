@@ -71,6 +71,7 @@ def school_detail_handler(request, slug):
             data = form.cleaned_data
             data['school'] = main_school
             Review.objects.create(**data)
+            form = ReviewForm()
         else:
             messages.add_message(
                 request, messages.INFO, 'Форма заполнена не корректно')
