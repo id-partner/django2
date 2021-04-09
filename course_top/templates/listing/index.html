@@ -69,7 +69,7 @@ Feature Info -->
                       <ul class="category__list">
                           {% comment %}
                         <li class="category__list-item"><a href="{% url 'course_list_category' cat.slug %}">Все курсы в {{ cat.name }}</a></li>
-<!--                          Посмотреть дальше как это нужно реазизовывать-->
+<!--  Посмотреть дальше как это нужно реазизовывать-->
                           {% endcomment %}
                         {% if cat.child_category.all %}
                           {% for subcat in cat.child_category.all %}

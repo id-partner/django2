@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
+from mptt.admin import MPTTModelAdmin
 from django.utils.html import format_html
 from .models import *
 
@@ -13,10 +14,10 @@ def set_discount_status(modeladmin, request, queryset):
 set_discount_status.short_description = 'Проставить статус скидки всем курсам'
 
 
-class CategoryAdmin(SummernoteModelAdmin):
+class CategoryAdmin(MPTTModelAdmin, SummernoteModelAdmin):
     summernote_fields = ('content', 'description',)
-    list_display = ('name', 'in_menu', 'order', 'parent', 'flaticon', 'course_count',)
-    list_editable = ('in_menu', 'order', 'parent', 'flaticon',)
+    list_display = ('name', 'in_menu', 'order', 'flaticon', 'course_count',)
+    list_editable = ('in_menu', 'order', 'flaticon',)
     search_fields = ('name',)
 
     def get_queryset(self, request):

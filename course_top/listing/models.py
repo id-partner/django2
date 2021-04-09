@@ -1,7 +1,8 @@
 from django.db import models
+from mptt.models import MPTTModel, TreeForeignKey
 
 
-class Category(models.Model):
+class Category(MPTTModel):
     name = models.CharField(max_length=255, verbose_name='Название категории')
     slug = models.SlugField(max_length=255, unique=True)
     in_menu = models.BooleanField(default=True, verbose_name='Добавляем ли в меню?')
@@ -10,7 +11,7 @@ class Category(models.Model):
     content = models.TextField(blank=True)
     icon = models.ImageField(upload_to='images/category/%Y/%m/%d/', blank=True, verbose_name='Иконка категории')
     flaticon = models.CharField(max_length=255, blank=True, null=True, verbose_name='Флэт-иконка')
-    parent = models.ForeignKey(
+    parent = TreeForeignKey(
         'self', on_delete=models.DO_NOTHING, null=True,
         blank=True, related_name='child_category',
         verbose_name='Родительская категория'

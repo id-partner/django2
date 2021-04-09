@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     'debug_toolbar',
     'django_summernote',
+    'mptt',
 
     'listing.apps.ListingConfig',
     'blog.apps.BlogConfig',
@@ -143,3 +144,5 @@ def show_toolbar(request):
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": show_toolbar,
 }
+
+MPTT_ADMIN_LEVEL_INDENT = 20
