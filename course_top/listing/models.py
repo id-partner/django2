@@ -12,7 +12,7 @@ class Category(models.Model):
     flaticon = models.CharField(max_length=255, blank=True, null=True, verbose_name='Флэт-иконка')
     parent = models.ForeignKey(
         'self', on_delete=models.DO_NOTHING, null=True,
-        blank=True, related_name='parent_category',
+        blank=True, related_name='child_category',
         verbose_name='Родительская категория'
     )
 

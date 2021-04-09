@@ -20,8 +20,8 @@ Header -->
         <ul class="nav navbar-nav">
           <li><a class="nav-link" href="{% url 'homepage' %}">Главная страница</a></li>
           <li class="dropdown nav-item">
-            <a class="nav-link" href="{% url 'course_list' %}" data-toggle="dropdown">Курсы<i class="fas fa-chevron-down fa-xs"></i></a>
-            <ul class="dropdown-menu megamenu dropdown-menu-md">
+            <a class="nav-link" href="{% url 'course_list' %}" data-toggle="dropdown">Курсы по категориям<i class="fas fa-chevron-down fa-xs"></i></a>
+            <ul class="dropdown-menu megamenu dropdown-menu-lg">
               <li>
                 <div class="row no-gutters">
                   {% for cat in categories_menu %}
@@ -29,9 +29,11 @@ Header -->
                     <h6 class="nav-title">{{ cat }}</h6>
                     <ul class="list-unstyled mt-lg-1">
                       <li><a class="dropdown-item" href="{% url 'course_list_category' cat.slug %}"><span>Все курсы в {{ cat.name }}</span></a></li>
-                      {% if cat.parent_category.all %}
-                        {% for subcat in cat.parent_category.all %}
-                        <li><a class="dropdown-item" href="{% url 'course_list_category' subcat.slug %}"><span> {{ subcat.name }}</span></a></li>
+                      {% if cat.child_category.all %}
+                        {% for subcat in cat.child_category.all %}
+                          {% if  subcat.course_set.exists %}
+                            <li><a class="dropdown-item" href="{% url 'course_list_category' subcat.slug %}"><span> {{ subcat.name }}</span></a></li>
+                          {% endif %}
                         {% endfor %}
                       {% endif %}
                     </ul>
@@ -41,9 +43,7 @@ Header -->
               </li>
             </ul>
           </li>
-          <li><a class="nav-link" href="{% url 'about' %}">О нас</a></li>
-          <li><a class="nav-link" href="{% url 'blog' %}">Блог</a></li>
-          <li><a class="nav-link" href="{% url 'contact' %}">Наши контакты</a></li>
+          <li><a class="nav-link" href="{% url 'school' %}">Школы</a></li>
         </ul>
       </div>
     </div>

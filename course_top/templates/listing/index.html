@@ -58,23 +58,28 @@ Feature Info -->
               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt culpa sequi delectus laboriosam incidunt repellendus?</p>
           </div>
           <div class="row no-gutters">
-                {% for cat in categories %}
+                {% for cat in categories_menu %}
                 <div class="col-md-4 px-5 py-4 py-md-5">
                   <div class="d-flex align-items-center mb-4">
                     <i class="{{ cat.flaticon }} fa-3x text-primary mr-4"></i>
-                    <h5 class="font-weight-bold mb-0 mt-0 text-dark">{{ cat.name }}</h5>
+                    <h5 class="font-weight-bold mb-0 mt-0 text-red"><a href="{% url 'course_list_category' cat.slug %}">{{ cat.name }}</a></h5>
                   </div>
                   <div class="load-more-container{{ forloop.counter }}">
                       <input type="checkbox" id="load-more{{ forloop.counter }}"/>
                       <ul class="category__list">
+                          {% comment %}
                         <li class="category__list-item"><a href="{% url 'course_list_category' cat.slug %}">Все курсы в {{ cat.name }}</a></li>
-                        {% if cat.parent_category.all %}
-                          {% for subcat in cat.parent_category.all %}
+<!--                          Посмотреть дальше как это нужно реазизовывать-->
+                          {% endcomment %}
+                        {% if cat.child_category.all %}
+                          {% for subcat in cat.child_category.all %}
+                            {% if  subcat.course_set.exists %}
                             <li class="category__list-item"><a href="{% url 'course_list_category' subcat.slug %}">{{ subcat.name }}</a></li>
+                            {% endif %}
                           {% endfor %}
                         {% endif %}
                       </ul>
-                    {% if cat.parent_category.count > 3 %}
+                    {% if cat.child_category.count > 3 %}
                       <label class="load-more-btn" for="load-more{{ forloop.counter }}">
                         <span class="unloaded">Показать все</span>
                         <span class="loaded">Свернуть</span>

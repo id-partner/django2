@@ -7,6 +7,7 @@ from django.views.generic.edit import FormMixin
 
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView, DetailView
+from django.db.models import Q
 
 
 class IndexView(TemplateView):
@@ -14,7 +15,7 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.prefetch_related('parent_category').filter(order=1)
+        context['categories'] = Category.objects.prefetch_related('course_set', 'child_category').filter(order=1)
         context['schools'] = School.objects.all()
         context['course'] = Course.objects.all()
         return context
@@ -34,17 +35,29 @@ class CourseListView(ListView):
     context_object_name = 'courses'
 
     def get_queryset(self):
-        qs = super().get_queryset().prefetch_related('categories', 'school', 'features', 'course_format')
+        qs1 = super().get_queryset().prefetch_related('categories',
+                                                     'features',
+                                                     'course_format',
+                                                     ).select_related('school')
         self.cat_slug = self.kwargs.get('cat_slug')
+
         if self.cat_slug:
-            qs =qs.filter(categories__slug=self.cat_slug).prefetch_related('categories', 'school',
-                                                                           'features','course_format')
+            qs = qs1.filter(categories__slug=self.cat_slug).prefetch_related('categories',
+                                                                            'features',
+                                                                            'course_format',
+                                                                            ).select_related('school')
+            # if qs.count() < 1:
+            #     category = Category.objects.filter(Q(parent=Category.objects.get(slug=self.cat_slug)))
+            #     print(category)
+            #     qs = qs1.filter(Q(categories=category[0])|Q(categories=category[1])|Q(categories=category[2]))
+            #     print(qs)
+
         return qs
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.cat_slug:
-            context['categories'] = Category.objects.get(slug=self.cat_slug)
+            context['category'] = Category.objects.get(slug=self.cat_slug)
         return context
 
 
@@ -58,7 +71,7 @@ class SchoolListView(ListView):
     context_object_name = 'schools'
 
     def get_queryset(self):
-        return School.objects.all().prefetch_related('review_set',)
+        return School.objects.all().prefetch_related('review_set', )
 
 
 class SchoolDetailView(FormMixin, DetailView):
