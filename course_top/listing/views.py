@@ -46,6 +46,7 @@ class CourseListView(ListView):
                                                                             'features',
                                                                             'course_format',
                                                                             ).select_related('school')
+            """вывод всех курсов дочерних категорий"""
             # if qs.count() < 1:
             #     category = Category.objects.filter(Q(parent=Category.objects.get(slug=self.cat_slug)))
             #     print(category)

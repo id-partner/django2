@@ -67,10 +67,8 @@ Feature Info -->
                   <div class="load-more-container{{ forloop.counter }}">
                       <input type="checkbox" id="load-more{{ forloop.counter }}"/>
                       <ul class="category__list">
-                          {% comment %}
                         <li class="category__list-item"><a href="{% url 'course_list_category' cat.slug %}">Все курсы в {{ cat.name }}</a></li>
 <!--  Посмотреть дальше как это нужно реазизовывать-->
-                          {% endcomment %}
                         {% if cat.child_category.all %}
                           {% for subcat in cat.child_category.all %}
                             {% if  subcat.course_set.exists %}
@@ -89,12 +87,10 @@ Feature Info -->
                 </div>
                 {% endfor %}
           </div>
-
       </div>
   </section>
 <!--=================================
 Сategories block -->
-
 <!--=  Client Logo -->
 <section class="space-ptb bg-light">
   <div class="container">
