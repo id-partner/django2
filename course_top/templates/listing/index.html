@@ -62,7 +62,7 @@ Feature Info -->
                 <div class="col-md-4 px-5 py-4 py-md-5">
                   <div class="d-flex align-items-center mb-4">
                     <i class="{{ cat.flaticon }} fa-3x text-primary mr-4"></i>
-                    <h5 class="font-weight-bold mb-0 mt-0 text-red"><a href="{% url 'course_list_category' cat.slug %}">{{ cat.name }}</a></h5>
+                    <h5 class="font-weight-bold mb-0 mt-0 text-red">{{ cat.name }}</h5>
                   </div>
                   <div class="load-more-container{{ forloop.counter }}">
                       <input type="checkbox" id="load-more{{ forloop.counter }}"/>

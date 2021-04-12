@@ -7,7 +7,9 @@ from django.views.generic.edit import FormMixin
 
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView, DetailView
-from django.db.models import Q
+
+from django.db.models import Avg, Sum, Min, Max, Count
+from django.db.models import Func
 
 
 class IndexView(TemplateView):
@@ -35,23 +37,25 @@ class CourseListView(ListView):
     context_object_name = 'courses'
 
     def get_queryset(self):
-        qs1 = super().get_queryset().prefetch_related('categories',
+        qs = super().get_queryset().prefetch_related('categories',
                                                      'features',
                                                      'course_format',
                                                      ).select_related('school')
         self.cat_slug = self.kwargs.get('cat_slug')
 
         if self.cat_slug:
-            qs = qs1.filter(categories__slug=self.cat_slug).prefetch_related('categories',
-                                                                            'features',
-                                                                            'course_format',
-                                                                            ).select_related('school')
-            """вывод всех курсов дочерних категорий"""
-            # if qs.count() < 1:
-            #     category = Category.objects.filter(Q(parent=Category.objects.get(slug=self.cat_slug)))
-            #     print(category)
-            #     qs = qs1.filter(Q(categories=category[0])|Q(categories=category[1])|Q(categories=category[2]))
-            #     print(qs)
+            category = Category.objects.get(slug=self.cat_slug)
+            if category.child_category.all().count() > 0:
+                slug_list = category.child_category.all().values_list('slug')
+                qs = qs.filter(categories__slug__in=slug_list).prefetch_related('categories',
+                                                                                'features',
+                                                                                'course_format',
+                                                                                ).select_related('school')
+            else:
+                qs = qs.filter(categories__slug=self.cat_slug).prefetch_related('categories',
+                                                                                'features',
+                                                                                'course_format',
+                                                                                ).select_related('school')
 
         return qs
 
@@ -84,6 +88,9 @@ class SchoolDetailView(FormMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['schools'] = School.objects.all()
+        context['rating'] = Review.objects.all().filter(
+            school__slug=self.kwargs.get('slug')).aggregate(
+            Avg=Avg('rating'), Min=Min('rating'), Max=Max('rating'))
         return context
 
     def get_success_url(self):
@@ -106,7 +113,8 @@ class SchoolDetailView(FormMixin, DetailView):
 
     def form_invalid(self, form):
         messages.add_message(
-            self.request, messages.INFO, 'Форма заполнена не корректно')
+            self.request, messages.INFO,
+            'Форма заполнена не корректно')
         return super().form_invalid(form)
 
 

@@ -27,7 +27,9 @@
                 </span>{{ school.school_courses.all.count }} курсов</p>
                 <p><span class="text-muted">100 преподавателей</span></p>
                 <p><span class="text-muted">Средняя стоимость курса <b>21 000 рублей</b></span></p>
-                <p><b>Рейтинг школы: </b><span class="rating"><span>4.1</span></span></p>
+                <p><b>Средняя оценка школы: </b><span class="p-1 mb-3 bg-primary text-white">{{rating.Avg|floatformat}}</span></p>
+                <p><b>Лучшая оценка школы: </b><span class="p-1 mb-3 bg-primary text-white">{{rating.Max}}</span></p>
+                <p><b>Худшая оценка школы: </b><span class="p-1 mb-3 bg-danger text-white">{{rating.Min}}</span></span></p>
             </div>
             <div class="w-50 bg-light p-4 rounded-sm">
                 <p class="w50">{{ school.description }}</p>
@@ -59,7 +61,8 @@
                             {{ cat.name }}</a></li>
                         {% if cat.parent_category.all %}
                         {% for subcat in cat.parent_category.all %}
-                        <li class="category__list-item"><a href="{% url 'course_list_category' subcat.slug %}">{{ subcat.name }}</a></li>
+                        <li class="category__list-item"><a href="{% url 'course_list_category' subcat.slug %}">{{
+                            subcat.name }}</a></li>
                         {% endfor %}
                         {% endif %}
                     </ul>
@@ -82,24 +85,68 @@
 <section class="space-pb">
     <div class="container">
         <div class="border mb-4">
-            <h6 class="text-dark px-4 py-2 bg-light mb-0">Student feedback </h6>
+            <h6 class="text-dark px-4 py-2 bg-light mb-0">Отзывы о школе {{ school.name }}</h6>
             <div class="p-4 border-top">
                 <div class="d-flex align-items-center mb-2">
                     <div class="mr-auto">
-                        <span>40 Reviews</span>
-                        <ul class="list-unstyled d-flex mb-0">
-                            <li><i class="fas fa-star text-warning"></i></li>
-                            <li><i class="fas fa-star text-warning"></i></li>
-                            <li><i class="fas fa-star text-warning"></i></li>
-                            <li><i class="fas fa-star-half-alt text-warning"></i></li>
-                            <li><i class="far fa-star text-warning"></i></li>
-                        </ul>
+                        <span>Количество отзывов: {{ school.review_set.count}}</span>
+                        <ul class="list-unstyled d-flex">
+                                    <li><i class=
+                                        {% if rating.Avg < 0 %}
+                                            "far fa-star text-warning"
+                                        {% elif rating.Avg >= 1 %}
+                                            "fa fa-star text-warning"
+                                        {% else %}
+                                            "fa fa-star-half-alt text-warning"
+                                        {% endif %}>
+                                    </i></li>
+                                    <li><i class=
+                                        {% if rating.Avg < 1 %}
+                                            "far fa-star text-warning"
+                                        {% elif rating.Avg >= 2 %}
+                                            "fa fa-star text-warning"
+                                        {% else %}
+                                            "fa fa-star-half-alt text-warning"
+                                        {% endif %}>
+                                    </i></li>
+                                    <li><i class=
+                                        {% if rating.Avg < 2 %}
+                                            "far fa-star text-warning"
+                                        {% elif rating.Avg >= 3 %}
+                                            "fa fa-star text-warning"
+                                        {% else %}
+                                            "fa fa-star-half-alt text-warning"
+                                        {% endif %}>
+                                    </i></li>
+                                    <li><i class=
+                                        {% if rating.Avg < 3 %}
+                                            "far fa-star text-warning"
+                                        {% elif rating.Avg >= 4 %}
+                                            "fa fa-star text-warning"
+                                        {% else %}
+                                            "fa fa-star-half-alt text-warning"
+                                        {% endif %}>
+                                    </i></li>
+                                    <li><i class=
+                                        {% if rating.Avg < 4 %}
+                                            "far fa-star text-warning"
+                                        {% elif rating.Avg >= 5 %}
+                                            "fa fa-star text-warning"
+                                        {% else %}
+                                            "fa fa-star-half-alt text-warning"
+                                        {% endif %}>
+                                    </i></li>
+                                </ul>
                     </div>
-                    <b class="display-4 text-warning font-weight-bold">3.5</b>
+                    {% if rating.Avg > 3.5 %}
+                    <b class="display-3 text-success font-weight-bold">{{rating.Avg|floatformat}}</b>
+                    {% else %}
+                     <b class="display-3 text-warning font-weight-bold">{{rating.Avg|floatformat}}</b>
+                    {% endif %}
                 </div>
                 <div class="progress-item mb-2">
                     <div class="d-flex">
-                        <div class="progress-title mb-1 mr-auto">5 Stars</div>
+                        <div class="progress-title mb-1 mr-auto">5 звезд</div>
                         <span>14</span>
                     </div>
                     <div class="progress rounded" style="height: 6px;">
@@ -109,7 +156,7 @@
                 </div>
                 <div class="progress-item mb-2">
                     <div class="d-flex">
-                        <div class="progress-title mb-1 mr-auto">4 Stars</div>
+                        <div class="progress-title mb-1 mr-auto">4 звезд</div>
                         <span>12</span>
                     </div>
                     <div class="progress rounded" style="height: 6px;">
@@ -119,7 +166,7 @@
                 </div>
                 <div class="progress-item mb-2">
                     <div class="d-flex">
-                        <div class="progress-title mb-1 mr-auto">3 Stars</div>
+                        <div class="progress-title mb-1 mr-auto">3 звезд</div>
                         <span>3</span>
                     </div>
                     <div class="progress rounded" style="height: 6px;">
@@ -129,7 +176,7 @@
                 </div>
                 <div class="progress-item mb-2">
                     <div class="d-flex">
-                        <div class="progress-title mb-1 mr-auto">2 Stars</div>
+                        <div class="progress-title mb-1 mr-auto">2 звезд</div>
                         <span>4</span>
                     </div>
                     <div class="progress rounded" style="height: 6px;">
@@ -139,7 +186,7 @@
                 </div>
                 <div class="progress-item">
                     <div class="d-flex">
-                        <div class="progress-title mb-1 mr-auto">1 Stars</div>
+                        <div class="progress-title mb-1 mr-auto">1 звезд</div>
                         <span>7</span>
                     </div>
                     <div class="progress rounded" style="height: 6px;">
@@ -150,38 +197,75 @@
             </div>
         </div>
         <div class="border mb-4">
-            <h6 class="text-dark px-4 py-2 bg-light mb-0">О школе {{ school.name }} оставили {{ school.review_set.count }} отзывов </h6>
-
-
             <div class="p-4 border-top">
                 {% for review in school.review_set.all %}
                 <div class="mb-5">
-                        <div class="px-xl-4 mt-3 mt-xl-0">
-                            <div class="d-flex flex-row">
-                                <h6 class="mt-0 mr-4">{{ review.name }}</h6>
-                                <div class="mb-2 mr-4">otzovik.com</div>
-                                <div class="mb-2 text-primary mr-4" >Проверенный</div>
-                                <div class="d-flex ml mb-5">
-                                    <span class="px-2 border text-success border-radius d-inline-block mr-2">{{ review.rating }}</span>
-                                    <ul class="list-unstyled d-flex mb-0">
-                                        <li><i class="fas fa-star text-warning"></i></li>
-                                        <li><i class="fas fa-star text-warning"></i></li>
-                                        <li><i class="fas fa-star text-warning"></i></li>
-                                        <li><i class="far fa-star text-warning"></i></li>
-                                        <li><i class="far fa-star text-warning"></i></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <p>{{ review.comment }}</p>
-                            <div class="d-sm-flex">
-                                <a class="bg-light text-dark rounded-sm px-3 py-1 mr-2 mr-xl-4 font-sm d-inline-block mb-2 mb-sm-0"
-                                   href="#"> <i class="fas fa-reply pr-1"></i> Reply Review </a>
-                                <a class="bg-success-soft text-success rounded-sm px-3 py-1 mr-2 mr-xl-4 font-sm d-inline-block"
-                                   href="#"> <i class="far fa-thumbs-up pr-1"></i> 67 Votes</a>
-                                <a class="bg-danger-soft text-danger rounded-sm px-3 py-1 font-sm d-inline-block"
-                                   href="#"> <i class="far fa-thumbs-down pr-1"></i> 04</a>
+                    <div class="px-xl-4 mt-3 mt-xl-0">
+                        <div class="d-flex flex-row">
+                            <h6 class="mt-0 mr-4">{{ review.name|title }}</h6>
+                            <div class="mb-2 mr-4">otzovik.com</div>
+                            <div class="mb-2 text-primary mr-3">Проверенный</div>
+                            <div class="d-flex ml mb-5">
+                                <span class="px-2 border text-success border-radius d-inline-block mr-2">{{ review.rating }}</span>
+                                <ul class="list-unstyled d-flex mb-0">
+                                    <li><i class=
+                                        {% if review.rating < 0 %}
+                                            "far fa-star text-warning"
+                                        {% elif review.rating >= 1 %}
+                                            "fa fa-star text-warning"
+                                        {% else %}
+                                            "fa fa-star-half-alt text-warning"
+                                        {% endif %}>
+                                    </i></li>
+                                    <li><i class=
+                                        {% if review.rating < 1 %}
+                                            "far fa-star text-warning"
+                                        {% elif review.rating >= 2 %}
+                                            "fa fa-star text-warning"
+                                        {% else %}
+                                            "fa fa-star-half-alt text-warning"
+                                        {% endif %}>
+                                    </i></li>
+                                    <li><i class=
+                                        {% if review.rating < 2 %}
+                                            "far fa-star text-warning"
+                                        {% elif review.rating >= 3 %}
+                                            "fa fa-star text-warning"
+                                        {% else %}
+                                            "fa fa-star-half-alt text-warning"
+                                        {% endif %}>
+                                    </i></li>
+                                    <li><i class=
+                                        {% if review.rating < 3 %}
+                                            "far fa-star text-warning"
+                                        {% elif review.rating >= 4 %}
+                                            "fa fa-star text-warning"
+                                        {% else %}
+                                            "fa fa-star-half-alt text-warning"
+                                        {% endif %}>
+                                    </i></li>
+                                    <li><i class=
+                                        {% if review.rating < 4 %}
+                                            "far fa-star text-warning"
+                                        {% elif review.rating >= 5 %}
+                                            "fa fa-star text-warning"
+                                        {% else %}
+                                            "fa fa-star-half-alt text-warning"
+                                        {% endif %}>
+                                    </i></li>
+                                </ul>
                             </div>
                         </div>
+                        <p>{{ review.comment|linebreaksbr }}</p>
+                        <div class="d-sm-flex">
+                            <a class="bg-light text-dark rounded-sm px-3 py-1 mr-2 mr-xl-4 font-sm d-inline-block mb-2 mb-sm-0"
+                               href="#"> <i class="fas fa-reply pr-1"></i>Ответить</a>
+                            <a class="bg-success-soft text-success rounded-sm px-3 py-1 mr-2 mr-xl-4 font-sm d-inline-block"
+                               href="#"> <i class="far fa-thumbs-up pr-1"></i> 67 </a>
+                            <a class="bg-danger-soft text-danger rounded-sm px-3 py-1 font-sm d-inline-block"
+                               href="#"> <i class="far fa-thumbs-down pr-1"></i> 04 </a>
+                        </div>
+                    </div>
                 </div>
                 <hr>
                 {% endfor %}

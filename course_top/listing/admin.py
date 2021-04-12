@@ -48,7 +48,7 @@ class SchoolAdmin(admin.ModelAdmin):
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('name', 'school', 'start_date', 'price', 'discount',)
     list_filter = ('categories', 'school',)
-    search_fields = ('name', 'school',)
+    search_fields = ('name', 'school__name',)
     actions = (set_discount_status,)
 
 

@@ -7,6 +7,9 @@
     <div class="section-title">
       <ol class="breadcrumb d-flex justify-content-center justify-content-md-start ml-auto bg-white">
         <li class="breadcrumb-item"><a href="{% url 'homepage' %}"><i class="fas fa-home mr-1"></i>Главная</a></li>
+        {% if category.parent %}
+        <li class="breadcrumb-item"><a href="{% url 'course_list_category' category.parent.slug %}"></i>{{ category.parent.name }}</a></li>
+        {% endif %}
         <li class="breadcrumb-item active"><span>{{ category.name }}</span></li>
       </ol>
         {% if category %}
