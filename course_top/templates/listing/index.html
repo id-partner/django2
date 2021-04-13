@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load pluralize %}
 
 {% block content %}
 <!--=================================
@@ -30,7 +31,7 @@ Feature Info -->
           <div class="row feature-info-02">
             <div class="col-sm-4 py-4 text-center">
               <i class="flaticon-online-learning-1 fa-3x text-white"></i>
-              <h4 class="fw-5 mt-3 mb-0 text-white">Более {{course.count}} курсов онлайн</h4>
+              <h4 class="fw-5 mt-3 mb-0 text-white">Более {{course.count}} {{course.count|rupluralize:"курс,курса,курсов"}} онлайн</h4>
               <p class="mb-0 text-white">Focus is having the unwavering attention.</p>
             </div>
             <div class="col-sm-4 py-4 text-center">
@@ -68,7 +69,6 @@ Feature Info -->
                       <input type="checkbox" id="load-more{{ forloop.counter }}"/>
                       <ul class="category__list">
                         <li class="category__list-item"><a href="{% url 'course_list_category' cat.slug %}">Все курсы в {{ cat.name }}</a></li>
-<!--  Посмотреть дальше как это нужно реазизовывать-->
                         {% if cat.child_category.all %}
                           {% for subcat in cat.child_category.all %}
                             {% if  subcat.course_set.exists %}
@@ -97,7 +97,7 @@ Feature Info -->
     <div class="row justify-content-center text-center">
       <div class="col-lg-12 mb-4">
         <div class="section-title">
-          <h2>Курсы от {{ schools.count }} онлайн школ</h2>
+          <h2>Курсы от {{ schools.count }} онлайн {{ schools.count|rupluralize:"школа,школы,школ" }}</h2>
         </div>
       </div>
     </div>

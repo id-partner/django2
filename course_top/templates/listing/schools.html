@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load pluralize %}
 {% block content %}
 
 <section class="space-pb">
@@ -25,7 +26,7 @@
             </div>
             <div>
               <span class="rating mr-4"><span>4.1</span></span>
-               <a href="{% url 'school_detail' school.slug %}" class="btn btn-primary">{{ school.review_set.count }} отзывов</a>
+               <a href="{% url 'school_detail' school.slug %}" class="btn btn-primary">{{ school.review_set.count }} {{ school.review_set.count|rupluralize:"отзыв,отзыва,отзывов"}}</a>
             </div>
             </div>
 

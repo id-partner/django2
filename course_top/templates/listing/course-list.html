@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load pluralize %}
 {% block content %}
 
 <section class="space-pb">
@@ -13,7 +14,7 @@
         <li class="breadcrumb-item active"><span>{{ category.name }}</span></li>
       </ol>
         {% if category %}
-            <h2 class="mb-3">{{courses.count}} онлайн курса в категории — {{ category.name }}</h2>
+            <h2 class="mb-3">{{courses.count}} онлайн {{courses.count|rupluralize:"курс,курса,курсов"}} в категории {{ category.name }}</h2>
             <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque, dolores. Quidem deserunt distinctio
                 mollitia dolorem possimus inventore earum laboriosam eum!</p>
         {% else %}
