@@ -20,3 +20,16 @@ def rupluralize(value, arg="дурак,дурака,дураков"):
         return args[1]
     else:
         return args[2]
+
+
+@register.filter
+def rating_percentages(value, cnt_rating):
+    """
+    Отдает процент, который используется для отрисовки прогресс бара
+
+    :param value: общее количесвто отзывов
+    :param cnt_rating: количество отзывов по конкретному кол-ву звезд
+    :return: округленный процент
+    """
+    a = cnt_rating / value * 100
+    return round(a)

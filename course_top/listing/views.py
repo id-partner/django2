@@ -8,8 +8,7 @@ from django.views.generic.edit import FormMixin
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView, DetailView
 
-from django.db.models import Avg, Sum, Min, Max, Count
-from django.db.models import Func
+from django.db.models import Avg, Sum, Min, Max, Count, Q
 
 
 class IndexView(TemplateView):
@@ -37,10 +36,11 @@ class CourseListView(ListView):
     context_object_name = 'courses'
 
     def get_queryset(self):
-        qs = super().get_queryset().prefetch_related('categories',
-                                                     'features',
-                                                     'course_format',
-                                                     ).select_related('school')
+        qs = super().get_queryset().annotate(Avg_rating=Avg(
+            'school__review__rating')).prefetch_related('categories',
+                                                        'features',
+                                                        'course_format',
+                                                        ).select_related('school')
         self.cat_slug = self.kwargs.get('cat_slug')
 
         if self.cat_slug:
@@ -50,13 +50,12 @@ class CourseListView(ListView):
                 qs = qs.filter(categories__slug__in=slug_list).prefetch_related('categories',
                                                                                 'features',
                                                                                 'course_format',
-                                                                                ).select_related('school')
+                                                                                ).select_related('school').order_by('-name')
             else:
                 qs = qs.filter(categories__slug=self.cat_slug).prefetch_related('categories',
                                                                                 'features',
                                                                                 'course_format',
-                                                                                ).select_related('school')
-
+                                                                                ).select_related('school').order_by('-name')
         return qs
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -76,7 +75,8 @@ class SchoolListView(ListView):
     context_object_name = 'schools'
 
     def get_queryset(self):
-        return School.objects.all().prefetch_related('review_set', )
+        return School.objects.annotate(Avg_rating=Avg('review__rating')).prefetch_related(
+            'review_set', ).order_by('-name')
 
 
 class SchoolDetailView(FormMixin, DetailView):
@@ -86,11 +86,23 @@ class SchoolDetailView(FormMixin, DetailView):
     form_class = ReviewForm
 
     def get_context_data(self, **kwargs):
+        review = Review.objects.filter(
+            school__slug=self.kwargs.get('slug')).values('rating')
+
         context = super().get_context_data(**kwargs)
         context['schools'] = School.objects.all()
-        context['rating'] = Review.objects.all().filter(
-            school__slug=self.kwargs.get('slug')).aggregate(
-            Avg=Avg('rating'), Min=Min('rating'), Max=Max('rating'))
+
+        context['rating'] = review.aggregate(
+            Cnt=Count('rating'),
+            Avg=Avg('rating'),
+            Min=Min('rating'),
+            Max=Max('rating'),
+            Cnt_star1=Count('rating', filter=Q(rating__lt=1.5)),
+            Cnt_star2=Count('rating', filter=Q(rating__gte=1.5, rating__lt=2.5)),
+            Cnt_star3=Count('rating', filter=Q(rating__gte=2.5, rating__lt=3.5)),
+            Cnt_star4=Count('rating', filter=Q(rating__gte=3.5, rating__lt=4.5)),
+            Cnt_star5=Count('rating', filter=Q(rating__gte=4.5))
+        )
         return context
 
     def get_success_url(self):

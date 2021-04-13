@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load pluralize %}
+{% load custom_tags %}
 
 {% block content %}
 
@@ -20,20 +20,15 @@
         </p>
         {% endfor %}
         {% endif %}
-        <h2 class="mb-6 text-secondary">{{ school.name }}</h2>
+        <h1 class="mb-1 text-secondary">{{ school.name }}</h1>
         <div class="school-info d-flex justify-content-between align-items-center">
             <div>
-                <a href="#"><img class="img-fluid w100 h100" src="images/client/01.svg" alt=""></a>
                 <p class="mt-4"><b>Школа: </b> <span class="text-muted mr-4">{{ school.name }}
                 </span>{{ school.school_courses.all.count }} {{school.school_courses.all.count|rupluralize:"курс,курса,курсов"}}</p>
-                <p><span class="text-muted">100 преподавателей</span></p>
                 <p><span class="text-muted">Средняя стоимость курса <b>21 000 рублей</b></span></p>
-                <p><b>Средняя оценка школы: </b><span class="p-1 mb-3 bg-primary text-white">{{rating.Avg|floatformat}}</span></p>
-                <p><b>Лучшая оценка школы: </b><span class="p-1 mb-3 bg-primary text-white">{{rating.Max}}</span></p>
-                <p><b>Худшая оценка школы: </b><span class="p-1 mb-3 bg-danger text-white">{{rating.Min}}</span></span></p>
             </div>
             <div class="w-50 bg-light p-4 rounded-sm">
-                <p class="w50">{{ school.description }}</p>
+                <p>{{ school.description }}</p>
             </div>
         </div>
     </div>
@@ -87,10 +82,12 @@
     <div class="container">
         <div class="border mb-4">
             <h6 class="text-dark px-4 py-2 bg-light mb-0">Отзывы о школе {{ school.name }}</h6>
+            <span class="ml-3"><b>Лучшая оценка школы: </b><span class="p-1 mb-3 mr-3 bg-primary text-white">{{rating.Max}}</span></span>
+            <span><b>Худшая оценка школы: </b><span class="p-1 mb-3 bg-danger text-white">{{rating.Min}}</span></span>
             <div class="p-4 border-top">
                 <div class="d-flex align-items-center mb-2">
                     <div class="mr-auto">
-                        <span>Количество отзывов: {{ school.review_set.count}}</span>
+                        <span>Количество отзывов: {{ rating.Cnt }}</span>
                         <ul class="list-unstyled d-flex">
                                     <li><i class=
                                         {% if rating.Avg < 0 %}
@@ -148,50 +145,50 @@
                 <div class="progress-item mb-2">
                     <div class="d-flex">
                         <div class="progress-title mb-1 mr-auto">5 звезд</div>
-                        <span>14</span>
+                        <span>{{ rating.Cnt_star5 }}</span>
                     </div>
                     <div class="progress rounded" style="height: 6px;">
-                        <div class="progress-bar bg-warning rounded" role="progressbar" style="width: 75%"
+                        <div class="progress-bar bg-success rounded" role="progressbar" style="width: {{ rating.Cnt|rating_percentages:rating.Cnt_star5 }}%"
                              aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
                 <div class="progress-item mb-2">
                     <div class="d-flex">
                         <div class="progress-title mb-1 mr-auto">4 звезд</div>
-                        <span>12</span>
+                        <span>{{ rating.Cnt_star4 }}</span>
                     </div>
                     <div class="progress rounded" style="height: 6px;">
-                        <div class="progress-bar bg-warning rounded" role="progressbar" style="width: 55%"
+                        <div class="progress-bar bg-success rounded" role="progressbar" style="width: {{ rating.Cnt|rating_percentages:rating.Cnt_star4 }}%"
                              aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
                 <div class="progress-item mb-2">
                     <div class="d-flex">
                         <div class="progress-title mb-1 mr-auto">3 звезд</div>
-                        <span>3</span>
+                        <span>{{ rating.Cnt_star3 }}</span>
                     </div>
                     <div class="progress rounded" style="height: 6px;">
-                        <div class="progress-bar bg-warning rounded" role="progressbar" style="width: 67%"
+                        <div class="progress-bar bg-success rounded" role="progressbar" style="width: {{ rating.Cnt|rating_percentages:rating.Cnt_star3 }}%"
                              aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
                 <div class="progress-item mb-2">
                     <div class="d-flex">
                         <div class="progress-title mb-1 mr-auto">2 звезд</div>
-                        <span>4</span>
+                        <span>{{ rating.Cnt_star2 }}</span>
                     </div>
                     <div class="progress rounded" style="height: 6px;">
-                        <div class="progress-bar bg-warning rounded" role="progressbar" style="width: 32%"
+                        <div class="progress-bar bg-success rounded" role="progressbar" style="width: {{ rating.Cnt|rating_percentages:rating.Cnt_star2 }}%"
                              aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
                 <div class="progress-item">
                     <div class="d-flex">
                         <div class="progress-title mb-1 mr-auto">1 звезд</div>
-                        <span>7</span>
+                        <span>{{ rating.Cnt_star1 }}</span>
                     </div>
                     <div class="progress rounded" style="height: 6px;">
-                        <div class="progress-bar bg-warning rounded" role="progressbar" style="width: 10%"
+                        <div class="progress-bar bg-success rounded" role="progressbar" style="width: {{ rating.Cnt|rating_percentages:rating.Cnt_star1 }}%"
                              aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>

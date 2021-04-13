@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load pluralize %}
+{% load custom_tags %}
 {% block content %}
 
 <section class="space-pb">
@@ -42,8 +42,14 @@
                   <th><a href="{{ course.link }}" target="_blank">{{ course.name }}</a></th>
                 <td>
                   <b>{{ course.school.name }}</b>
-                  <div class="rating"><span>4.1</span></div>
-                  <a href="{% url 'school_detail' course.school.slug %}">Отзывы о школе</a>
+                  {% if course.Avg_rating %}
+                    {%  if course.Avg_rating > 3.7 %}
+                      <span class="p-1 mb-3 mr-3 bg-success text-white">{{course.Avg_rating|floatformat}}</span>
+                    {% else %}
+                      <span class="p-1 mb-3 mr-3 bg-warning text-white">{{course.Avg_rating|floatformat}}</span>
+                    {% endif %}
+                  {% endif %}
+                  <p><a href="{% url 'school_detail' course.school.slug %}">Отзывы о школе</a></p>
                 </td>
                 <td>{{ course.price}} рублей</td>
                 <td>От 4900</td>
