@@ -1185,9 +1185,9 @@ button {
   display: inline-block;
   font-size: 14px;
   line-height: 22px;
-  padding: 13px 36px;
+  padding: 13px 26px;
   font-weight: 600;
-  border-radius: 50px;
+  border-radius: 10px;
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out; }
   .btn:not(:disabled):not(.disabled).active:focus {

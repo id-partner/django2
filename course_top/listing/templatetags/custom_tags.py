@@ -1,4 +1,5 @@
 from django import template
+
 register = template.Library()
 
 
@@ -31,5 +32,9 @@ def rating_percentages(value, cnt_rating):
     :param cnt_rating: количество отзывов по конкретному кол-ву звезд
     :return: округленный процент
     """
-    a = cnt_rating / value * 100
+    if value < 1:
+        a = 0
+    else:
+        a = cnt_rating / value * 100
+
     return round(a)

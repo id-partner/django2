@@ -28,6 +28,9 @@ urlpatterns = [
                   path('blog/', views.BlogListView.as_view(), name='blog'),
                   path('blog/<cat_slug>', views.BlogListView.as_view(), name='blog_category'),
                   path('single_blog/<slug>', views.SinglePost.as_view(), name='single_blog'),
+
+                  # path('filter', FilterCourseListView.as_view(), name='filter'),
+
                   path('course_list/', CourseListView.as_view(), name='course_list'),
                   path('course_list/<cat_slug>', CourseListView.as_view(), name='course_list_category'),
                   path('schools/', SchoolListView.as_view(), name='school'),

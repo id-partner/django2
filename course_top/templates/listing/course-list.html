@@ -14,53 +14,147 @@
         <li class="breadcrumb-item active"><span>{{ category.name }}</span></li>
       </ol>
         {% if category %}
-            <h2 class="mb-3">{{courses.count}} онлайн {{courses.count|rupluralize:"курс,курса,курсов"}} в категории {{ category.name }}</h2>
+            <h1 class="mb-3">{{courses.count}} онлайн {{courses.count|rupluralize:"курс,курса,курсов"}} в категории {{ category.name }}</h1>
             <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque, dolores. Quidem deserunt distinctio
                 mollitia dolorem possimus inventore earum laboriosam eum!</p>
         {% else %}
-            <h2 class="mb-3">{{courses.count}} онлайн курсов во всех категориях</h2>
+            <h1 class="mb-3">{{courses.count}} онлайн курсов во всех категориях</h1>
             <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque, dolores. Quidem deserunt distinctio
                 mollitia dolorem possimus inventore earum laboriosam eum!</p>
         {% endif %}
     </div>
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Название курса</th>
-            <th scope="col">Школа курса</th>
-            <th scope="col">Стоимость</th>
-            <th scope="col">Мин. платёж в расрочку</th>
-            <th scope="col">Дата начала</th>
-            <th scope="col">Длительность</th>
-            <th scope="col">Ссылка на курс</th>
-          </tr>
-        </thead>
-        <tbody>
+    <div class="row">
+      <div class="col-sm-3">
+          <div class="widgets">
+            <div class="widget widget-Categories">
+              <h6 class="widget-title">Категории</h6>
+              <div class="widget-content">
+                <div class="custom-control custom-checkbox mb-3">
+                  <input type="checkbox" class="custom-control-input" id="checkbox1">
+                  <label class="custom-control-label" for="checkbox1">Design</label>
+                </div>
+                <div class="custom-control custom-checkbox mb-3">
+                  <input type="checkbox" class="custom-control-input" id="checkbox2">
+                  <label class="custom-control-label" for="checkbox2">Development</label>
+                </div>
+                <div class="custom-control custom-checkbox mb-3">
+                  <input type="checkbox" class="custom-control-input" id="checkbox3">
+                  <label class="custom-control-label" for="checkbox3">Marketing</label>
+                </div>
+                <div class="custom-control custom-checkbox mb-3">
+                  <input type="checkbox" class="custom-control-input" id="checkbox4">
+                  <label class="custom-control-label" for="checkbox4">IT & software</label>
+                </div>
+                <div class="custom-control custom-checkbox mb-3">
+                  <input type="checkbox" class="custom-control-input" id="checkbox5">
+                  <label class="custom-control-label" for="checkbox5">Photography</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="checkbox6">
+                  <label class="custom-control-label" for="checkbox6">Music</label>
+                </div>
+              </div>
+            </div>
+            <div class="widget">
+              <div class="widget-title">
+                <h6>Filter by price</h6>
+              </div>
+              <div class="widget-content">
+                <div class="form-group">
+                  <div class="collapse show" id="price">
+                    <div class="property-price-slider">
+                      <input type="text" id="property-price-slider" name="example_name" value="" />
+                    </div>
+                  </div>
+                </div>
+                <div class="price-filter d-flex">
+                  <div class="price_label">
+                    Price: <span class="from">$10 — $382</span>
+                  </div>
+                  <a class="ml-auto" href="#"><i class="fas fa-filter"></i>Filter</a>
+                </div>
+              </div>
+            </div>
+
+              <div class="widget">
+                <form action="" method="get">
+                  <div class="widget-title">
+                    <h6>Школы</h6>
+                  </div>
+                  <div class="widget-content">
+                    {% for school in schools_name %}
+                    <div class="custom-control custom-checkbox mb-3">
+                      <input type="checkbox" class="custom-control-input" id="checkbox{{school.id}}" name = "school" value="{{school.id}}">
+                      <label class="custom-control-label" for="checkbox{{school.id}}">{{school.name}}</label>
+                    </div>
+                    {% endfor %}
+                  </div>
+                  <button type="submit">Найти</button>
+                </form>
+            </div>
+            <div class="widget">
+              <div class="widget-title">
+                <h6>Type</h6>
+              </div>
+              <div class="widget-content">
+                <div class="custom-control custom-checkbox mb-3">
+                  <input type="checkbox" class="custom-control-input" id="checkbox12">
+                  <label class="custom-control-label" for="checkbox12">Free Course</label>
+                </div>
+                <div class="custom-control custom-checkbox mb-3">
+                  <input type="checkbox" class="custom-control-input" id="checkbox10">
+                  <label class="custom-control-label" for="checkbox10">Paid Course</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="checkbox11">
+                  <label class="custom-control-label" for="checkbox11">Offline Course</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      <div class="col-sm-9 mt-5 mt-lg-0">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Название курса</th>
+                <th scope="col">Школа курса</th>
+                <th scope="col">Стоимость</th>
+                <th scope="col">Рассрочка</th>
+                <th scope="col">Длительность</th>
+                <th scope="col">Ссылка на курс</th>
+              </tr>
+           </thead>
+            <tbody>
             {% for course in courses %}
               <tr >
                   <th><a href="{{ course.link }}" target="_blank">{{ course.name }}</a></th>
                 <td>
-                  <b>{{ course.school.name }}</b>
+                  <b class="text-nowrap">{{ course.school.name }}</b>
                   {% if course.Avg_rating %}
-                    {%  if course.Avg_rating > 3.7 %}
-                      <span class="p-1 mb-3 mr-3 bg-success text-white">{{course.Avg_rating|floatformat}}</span>
+                    {%  if course.Avg_rating >= 3.5 %}
+                     <p> Рейтинг: <span class="px-1 border text-success bg-white border-radius d-inline-block mr-2"><b>{{course.Avg_rating|floatformat:1}}</b></span>
+                    {% elif course.Avg_rating < 3.5 and course.Avg_rating > 2 %}
+                      <p> Рейтинг: <span class="px-1 border text-warning bg-white border-radius d-inline-block mr-2"><b>{{course.Avg_rating|floatformat:1}}</b></span>
                     {% else %}
-                      <span class="p-1 mb-3 mr-3 bg-warning text-white">{{course.Avg_rating|floatformat}}</span>
+                      <p> Рейтинг: <span class="px-1 border text-danger bg-white border-radius d-inline-block mr-2"><b>{{course.Avg_rating|floatformat:1}}</b></span>
                     {% endif %}
                   {% endif %}
                   <p><a href="{% url 'school_detail' course.school.slug %}">Отзывы о школе</a></p>
                 </td>
-                <td>{{ course.price}} рублей</td>
-                <td>От 4900</td>
-                <td>{{ course.start_date }}</td>
+                <td>{{ course.price|floatformat}} ₽</td>
+                <td>От 4900 ₽</td>
                 <td>{{ course.duration }} мес</td>
-                <td style="width: 175px;"><a href="{{ course.link }}" class="btn btn-primary btn-sm"
-                                             target="_blank">Ссылка на курс</a></td>
+                <td><a href="{{ course.link }}" class=" btn btn-outline-success " target="_blank">Подробнее</a></td>
+
               </tr>
             {% endfor %}
         </tbody>
-      </table>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -81,11 +175,21 @@
             <div class="col-md-4">
         <div class="card bg-light mb-4" style="width: 20rem;">
           <div class="card-body">
-            <h5 class="card-title text-xl-center">{{ course.name}}</h5>
+            <h5 class="card-title text-xl-center">{{ course.name }}</h5>
             <div class="card-desc text-center mb-2">
               <b>{{ course.school.name }}</b>
-              <span class="rating"><span>4.1</span></span>
-              <a href="{% url 'school_detail' course.school.slug %}">Отзывы о школе</a>
+              <span>
+                {% if course.Avg_rating %}
+                    {%  if course.Avg_rating >= 3.5 %}
+                     <span class="ml-2 px-1 border text-success bg-white border-radius d-inline-block mr-2"><b>{{course.Avg_rating|floatformat:1}}</b></span>
+                    {% elif course.Avg_rating < 3.5 and course.Avg_rating > 2 %}
+                      <span class="ml-2 px-1 border text-warning bg-white border-radius d-inline-block mr-2"><b>{{course.Avg_rating|floatformat:1}}</b></span>
+                    {% else %}
+                      <span class="ml-2 px-1 border text-danger bg-white border-radius d-inline-block mr-2"><b>{{course.Avg_rating|floatformat:1}}</b></span>
+                    {% endif %}
+                  {% endif %}
+              </span>
+              <p> <a href="{% url 'school_detail' course.school.slug %}">Отзывы о школе</a>
             </div>
             <div class="card-price d-flex justify-content-between border-bottom mb-2 pb-2">
               <div><span class="text-primary">{{ course.price}} ₽</span>/курс</div>

@@ -50,19 +50,34 @@ class CourseListView(ListView):
                 qs = qs.filter(categories__slug__in=slug_list).prefetch_related('categories',
                                                                                 'features',
                                                                                 'course_format',
-                                                                                ).select_related('school').order_by('-name')
+                                                                                ).select_related(
+                                                                                'school').order_by('-name')
+
             else:
                 qs = qs.filter(categories__slug=self.cat_slug).prefetch_related('categories',
                                                                                 'features',
                                                                                 'course_format',
-                                                                                ).select_related('school').order_by('-name')
+                                                                                ).select_related(
+                                                                                'school').order_by('-name')
+        # TODO: получение списка курсов по указанной школе в фильтре доработать
+        if self.request.GET.getlist('school'):
+            school = self.request.GET.getlist('school')
+            qs = qs.filter(school__id__in=school)
+
         return qs
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['schools_name'] = School.objects.all()
         if self.cat_slug:
             context['category'] = Category.objects.get(slug=self.cat_slug)
+            context['schools_name'] = School.objects.filter(
+                school_courses__in=self.object_list).values('name', 'id').distinct()
         return context
+
+    def get_schools_name(self):
+        school_name = School.objects.filter(school_courses__in=self.qs).values('name').distinct()
+        print(school_name)
 
 
 def course_detail_handler(request):
@@ -133,3 +148,10 @@ class SchoolDetailView(FormMixin, DetailView):
 class RobotsView(TemplateView):
     template_name = 'listing/robots.txt'
     content_type = 'text/plain'
+
+#
+# class FilterCourseListView(CourseListView, ListView):
+#     def get_queryset(self):
+#         queryset=Course.objects.filter(school__in=self.request.GET.getlist("school"))
+#         return queryset
+

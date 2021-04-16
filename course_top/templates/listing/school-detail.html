@@ -255,6 +255,8 @@
                             </div>
                         </div>
                         <p>{{ review.comment|linebreaksbr }}</p>
+                        {% comment %}
+                        <!--TODO: Возможность ответа. Лайк.Дизлайк комментарию-->
                         <div class="d-sm-flex">
                             <a class="bg-light text-dark rounded-sm px-3 py-1 mr-2 mr-xl-4 font-sm d-inline-block mb-2 mb-sm-0"
                                href="#"> <i class="fas fa-reply pr-1"></i>Ответить</a>
@@ -263,6 +265,7 @@
                             <a class="bg-danger-soft text-danger rounded-sm px-3 py-1 font-sm d-inline-block"
                                href="#"> <i class="far fa-thumbs-down pr-1"></i> 04 </a>
                         </div>
+                        {% endcomment %}
                     </div>
                 </div>
                 <hr>
