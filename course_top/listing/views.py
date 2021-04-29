@@ -105,8 +105,18 @@ class SchoolDetailView(FormMixin, DetailView):
         review = Review.objects.filter(
             school__slug=self.kwargs.get('slug')).values('rating')
 
+        course=Course.objects.filter(
+            school__slug=self.kwargs.get('slug'))
+
         context = super().get_context_data(**kwargs)
         context['schools'] = School.objects.all()
+
+        context['course'] = course.aggregate(
+            Avg_price=Avg('price'),
+            Max_price=Max('price'),
+            Min_price=Min('price'),
+
+        )
 
         context['rating'] = review.aggregate(
             Cnt=Count('rating'),

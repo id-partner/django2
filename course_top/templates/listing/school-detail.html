@@ -25,7 +25,9 @@
             <div>
                 <p class="mt-4"><b>Школа: </b> <span class="text-muted mr-4">{{ school.name }}
                 <a href="{% url 'course_list' %}?school={{ school.name }}"></span>{{ school.school_courses.all.count }} {{school.school_courses.all.count|rupluralize:"курс,курса,курсов"}}</a></p>
-                <p><span class="text-muted">Средняя стоимость курса <b>21 000 рублей</b></span></p>
+                <p><span class="text-muted">Средняя стоимость курса <b>{{ course.Avg_price|floatformat:0 }} рублей</b></span></p>
+                <p><span class="text-muted">Самый дорогой курс <b>{{ course.Max_price|floatformat:0 }} рублей</b></span></p>
+                <p><span class="text-muted">Самый дешевый курс <b>{{ course.Min_price|floatformat:0 }} рублей</b></span></p>
             </div>
             <div class="w-50 bg-light p-4 rounded-sm">
                 <p>{{ school.description }}</p>
