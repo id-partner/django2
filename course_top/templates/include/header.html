@@ -12,13 +12,8 @@ Header -->
       <a class="navbar-brand navbar-brand-sticky" href="{% url 'homepage' %}">
         <img class="img-fluid" src="{% static 'images/logo.svg' %}" alt="logo">
       </a>
-      <div class="search-category ml-auto">
-        <input type="text" class="form-control" placeholder="Search Courses...">
-        <button class="search-button" type="submit"> <i class="fa fa-search"></i></button>
-      </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li><a class="nav-link" href="{% url 'homepage' %}">Главная страница</a></li>
           <li class="dropdown nav-item">
             <a class="nav-link" href="{% url 'course_list' %}" data-toggle="dropdown">Курсы по категориям<i class="fas fa-chevron-down fa-xs"></i></a>
             <ul class="dropdown-menu megamenu dropdown-menu-lg">

@@ -14,106 +14,47 @@
         <li class="breadcrumb-item active"><span>{{ category.name }}</span></li>
       </ol>
         {% if category %}
-            <h1 class="mb-3">{{courses.count}} онлайн {{courses.count|rupluralize:"курс,курса,курсов"}} в категории {{ category.name }}</h1>
+            <h1 class="mb-3">{{courses.count}} онлайн {{courses.count|rupluralize:"курс,курса,курсов"}} в категории {{ category.name }}{% if schools_name.count == 1 %} от {{ schools_name.0.name }}{% endif %}</h1>
             <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque, dolores. Quidem deserunt distinctio
                 mollitia dolorem possimus inventore earum laboriosam eum!</p>
         {% else %}
-            <h1 class="mb-3">{{courses.count}} онлайн курсов во всех категориях</h1>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque, dolores. Quidem deserunt distinctio
+            <h1 class="mb-3">{{courses.count}} онлайн курсов во всех категориях{% if schools_name.count == 1 %} от {{ schools_name.0.name }}{% endif %}</h1>
+            <p> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque, dolores. Quidem deserunt distinctio
                 mollitia dolorem possimus inventore earum laboriosam eum!</p>
         {% endif %}
     </div>
     <div class="row">
       <div class="col-sm-3">
           <div class="widgets">
-            <div class="widget widget-Categories">
-              <h6 class="widget-title">Категории</h6>
-              <div class="widget-content">
-                <div class="custom-control custom-checkbox mb-3">
-                  <input type="checkbox" class="custom-control-input" id="checkbox1">
-                  <label class="custom-control-label" for="checkbox1">Design</label>
-                </div>
-                <div class="custom-control custom-checkbox mb-3">
-                  <input type="checkbox" class="custom-control-input" id="checkbox2">
-                  <label class="custom-control-label" for="checkbox2">Development</label>
-                </div>
-                <div class="custom-control custom-checkbox mb-3">
-                  <input type="checkbox" class="custom-control-input" id="checkbox3">
-                  <label class="custom-control-label" for="checkbox3">Marketing</label>
-                </div>
-                <div class="custom-control custom-checkbox mb-3">
-                  <input type="checkbox" class="custom-control-input" id="checkbox4">
-                  <label class="custom-control-label" for="checkbox4">IT & software</label>
-                </div>
-                <div class="custom-control custom-checkbox mb-3">
-                  <input type="checkbox" class="custom-control-input" id="checkbox5">
-                  <label class="custom-control-label" for="checkbox5">Photography</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="checkbox6">
-                  <label class="custom-control-label" for="checkbox6">Music</label>
-                </div>
-              </div>
-            </div>
             <div class="widget">
-              <div class="widget-title">
-                <h6>Filter by price</h6>
-              </div>
-              <div class="widget-content">
-                <div class="form-group">
-                  <div class="collapse show" id="price">
-                    <div class="property-price-slider">
-                      <input type="text" id="property-price-slider" name="example_name" value="" />
-                    </div>
-                  </div>
-                </div>
-                <div class="price-filter d-flex">
-                  <div class="price_label">
-                    Price: <span class="from">$10 — $382</span>
-                  </div>
-                  <a class="ml-auto" href="#"><i class="fas fa-filter"></i>Filter</a>
-                </div>
-              </div>
-            </div>
-
-              <div class="widget">
-                <form action="" method="get">
+                <form action="{{request.path}}" method="get">
                   <div class="widget-title">
                     <h6>Школы</h6>
                   </div>
                   <div class="widget-content">
                     {% for school in schools_name %}
                     <div class="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" class="custom-control-input" id="checkbox{{school.id}}" name = "school" value="{{school.id}}">
+                      <input type="checkbox" class="custom-control-input" id="checkbox{{school.id}}" name = "school" value="{{school.name}}">
                       <label class="custom-control-label" for="checkbox{{school.id}}">{{school.name}}</label>
                     </div>
                     {% endfor %}
                   </div>
-                  <button type="submit">Найти</button>
+                 {% comment %}
+<!--TODO: Доработать фильтрацию-->
+                  <div class="widget-title">
+                    <h6>Стоимость</h6>
+                  </div>
+                  <div class="widget-content">
+                    Тут контент
+                  </div>
+                  {% endcomment%}
+                  <div class="pl-3 pr-3 pb-2">
+                  <button type="submit" class="btn btn-primary w-100">Фильтровать</button>
+                  </div>
                 </form>
-            </div>
-            <div class="widget">
-              <div class="widget-title">
-                <h6>Type</h6>
-              </div>
-              <div class="widget-content">
-                <div class="custom-control custom-checkbox mb-3">
-                  <input type="checkbox" class="custom-control-input" id="checkbox12">
-                  <label class="custom-control-label" for="checkbox12">Free Course</label>
-                </div>
-                <div class="custom-control custom-checkbox mb-3">
-                  <input type="checkbox" class="custom-control-input" id="checkbox10">
-                  <label class="custom-control-label" for="checkbox10">Paid Course</label>
-                </div>
-                <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="checkbox11">
-                  <label class="custom-control-label" for="checkbox11">Offline Course</label>
-                </div>
-              </div>
             </div>
           </div>
         </div>
-
       <div class="col-sm-9 mt-5 mt-lg-0">
         <div class="table-responsive">
           <table class="table table-striped">
@@ -147,7 +88,7 @@
                 <td>{{ course.price|floatformat}} ₽</td>
                 <td>От 4900 ₽</td>
                 <td>{{ course.duration }} мес</td>
-                <td><a href="{{ course.link }}" class=" btn btn-outline-success " target="_blank">Подробнее</a></td>
+                <td><a href="{{ course.link }}" class="btn btn-outline-success" target="_blank">Подробнее</a></td>
 
               </tr>
             {% endfor %}
