@@ -15,8 +15,8 @@
     </div>
 
     <div class="row schools-list">
-      {%for school in schools %}
       <div class="col-md-12 pb-4">
+        {%for school in schools %}
         <div class="card bg-light mb-4">
           <div class="card-body d-flex justify-content-between border-bottom">
             <div class="school-info d-flex-column align-items-center ">
@@ -40,10 +40,10 @@
                 {{ school.description }}
               </div>
           </div>
+        {% endfor %}
+      {% include 'include/paginator.html' %}
       </div>
-      {% endfor %}
     </div>
-
   </div>
 </section>
 

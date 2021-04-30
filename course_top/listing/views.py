@@ -34,6 +34,7 @@ class CourseListView(ListView):
     template_name = 'listing/course-list.html'
     model = Course
     context_object_name = 'courses'
+    # paginate_by = 20
 
     def get_queryset(self):
         qs = super().get_queryset().annotate(Avg_rating=Avg(
@@ -89,6 +90,7 @@ def course_detail_handler(request):
 class SchoolListView(ListView):
     template_name = 'listing/schools.html'
     context_object_name = 'schools'
+    paginate_by = 10
 
     def get_queryset(self):
         return School.objects.annotate(Avg_rating=Avg('review__rating')).prefetch_related(

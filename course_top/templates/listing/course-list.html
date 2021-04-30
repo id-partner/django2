@@ -89,7 +89,6 @@
                 <td>От 4900 ₽</td>
                 <td>{{ course.duration }} мес</td>
                 <td><a href="{{ course.link }}" class="btn btn-outline-success" target="_blank">Подробнее</a></td>
-
               </tr>
             {% endfor %}
         </tbody>
@@ -97,6 +96,7 @@
         </div>
       </div>
     </div>
+  {% include 'include/paginator.html' %}
   </div>
 </section>
 
