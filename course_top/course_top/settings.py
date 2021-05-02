@@ -9,6 +9,10 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+
+import _locale
+_locale._getdefaultlocale = (lambda *args: ['en_US', 'utf8'])
+
 import os
 from pathlib import Path
 
@@ -24,10 +28,7 @@ SECRET_KEY = 'z(f%cwe2+q1!egjqmj1*7*@3ont_l3c7a_#&c00jzt5k^26xpz'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    '188.166.55.57'
-]
+ALLOWED_HOSTS = ['127.0.0.1',]
 
 INTERNAL_IPS = ['127.0.0.1', ]
 
@@ -93,6 +94,8 @@ DATABASES = {
     }
 }
 
+
+
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -149,3 +152,5 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 MPTT_ADMIN_LEVEL_INDENT = 20
+
+from .settings_local import *
