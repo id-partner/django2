@@ -10,9 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-import _locale
-_locale._getdefaultlocale = (lambda *args: ['en_US', 'utf8'])
-
 import os
 from pathlib import Path
 
@@ -143,14 +140,15 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-def show_toolbar(request):
-    return True
+from .settings_local import *
+
+if DEBUG:
+    def show_toolbar(request):
+        return True
 
 
-DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK": show_toolbar,
-}
+    DEBUG_TOOLBAR_CONFIG = {
+        "SHOW_TOOLBAR_CALLBACK": show_toolbar,
+    }
 
 MPTT_ADMIN_LEVEL_INDENT = 20
-
-from .settings_local import *
