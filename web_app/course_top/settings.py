@@ -47,6 +47,13 @@ INSTALLED_APPS = [
 
     'listing.apps.ListingConfig',
     'blog.apps.BlogConfig',
+
+    # 'reviews_author',
+    # 'userena',
+    # 'guardian',
+    # 'easy_thumbnails',
+
+
 ]
 
 MIDDLEWARE = [
@@ -80,6 +87,19 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'course_top.wsgi.application'
+
+# Аунтефикация. Пока не делаю.
+# AUTHENTICATION_BACKENDS = (
+#     'userena.backends.UserenaAuthenticationBackend',
+#     'guardian.backends.ObjectPermissionBackend',
+#     'django.contrib.auth.backends.ModelBackend',
+# )
+#
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'course4yu@gmail.com'
+# EMAIL_HOST_PASSWORD = 'Asdf4569'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
