@@ -98,8 +98,8 @@ WSGI_APPLICATION = 'course_top.wsgi.application'
 # EMAIL_USE_TLS = True
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'course4yu@gmail.com'
-# EMAIL_HOST_PASSWORD = 'Asdf4569'
+# EMAIL_HOST_USER = 'mail'
+# EMAIL_HOST_PASSWORD = 'password'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
