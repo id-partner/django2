@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.views.generic import TemplateView, ListView, DetailView
 
 from django.db.models import Avg, Sum, Min, Max, Count, Q
+from django.contrib.postgres.search import SearchVector
 
 
 class IndexView(TemplateView):
@@ -34,6 +35,7 @@ class CourseListView(ListView):
     template_name = 'listing/course-list.html'
     model = Course
     context_object_name = 'courses'
+
     # paginate_by = 20
 
     def get_queryset(self):
@@ -52,14 +54,14 @@ class CourseListView(ListView):
                                                                                 'features',
                                                                                 'course_format',
                                                                                 ).select_related(
-                                                                                'school').order_by('-name')
+                    'school').order_by('-name')
 
             else:
                 qs = qs.filter(categories__slug=self.cat_slug).prefetch_related('categories',
                                                                                 'features',
                                                                                 'course_format',
                                                                                 ).select_related(
-                                                                                'school').order_by('-name')
+                    'school').order_by('-name')
 
         # TODO: получение списка курсов по указанной школе в фильтре доработать
         if self.request.GET.getlist('school'):
@@ -107,7 +109,7 @@ class SchoolDetailView(FormMixin, DetailView):
         review = Review.objects.filter(
             school__slug=self.kwargs.get('slug')).values('rating')
 
-        course=Course.objects.filter(
+        course = Course.objects.filter(
             school__slug=self.kwargs.get('slug'))
 
         context = super().get_context_data(**kwargs)
@@ -162,3 +164,24 @@ class RobotsView(TemplateView):
     template_name = 'listing/robots.txt'
     content_type = 'text/plain'
 
+
+class SearchView(TemplateView):
+    template_name = 'listing/search.html'
+
+    def get_context_data(self, **kwargs):
+        query = self.request.GET.get('q')
+
+        results = Course.objects.annotate(
+            search=SearchVector('name', 'description'),
+            Avg_rating=Avg('school__review__rating'),
+        ).prefetch_related('categories',
+                           'features',
+                           'course_format',
+                           ).select_related('school').filter(search=query)
+
+        context = {
+            'query': query,
+            'courses': results
+        }
+
+        return context

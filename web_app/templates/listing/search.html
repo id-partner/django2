@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
+{% block content %}
+
+<section class="space-pb">
+  <div class="container">
+    <div class="section-title">
+      <ol class="breadcrumb d-flex justify-content-center justify-content-md-start ml-auto bg-white">
+        <li class="breadcrumb-item"><a href="{% url 'homepage' %}"><i class="fas fa-home mr-1"></i>Главная</a></li>
+        <li class="breadcrumb-item active"><span>Результат по поиску</span></li>
+      </ol>
+        <h1 class="mb-3">Найдено {{courses.count}} онлайн {{courses.count|rupluralize:"курс,курса,курсов"}} по запросу <font class="text-success">{{query}}</font></h1>
+    </div>
+{% if courses %}
+    <div class="row">
+      <div class="col-sm-12 mt-5 mt-lg-0">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Название курса</th>
+                <th scope="col">Школа курса</th>
+                <th scope="col">Стоимость</th>
+                <th scope="col">Рассрочка</th>
+                <th scope="col">Длительность</th>
+                <th scope="col">Ссылка на курс</th>
+              </tr>
+           </thead>
+            <tbody>
+            {% for course in courses %}
+              <tr >
+                  <th><a href="{{ course.link }}" target="_blank">{{ course.name }}</a></th>
+                <td>
+                  <b class="text-nowrap">{{ course.school.name }}</b>
+                  {% if course.Avg_rating %}
+                    {%  if course.Avg_rating >= 3.5 %}
+                     <p> Рейтинг: <span class="px-1 border text-success bg-white border-radius d-inline-block mr-2"><b>{{course.Avg_rating|floatformat:1}}</b></span>
+                    {% elif course.Avg_rating < 3.5 and course.Avg_rating > 2 %}
+                      <p> Рейтинг: <span class="px-1 border text-warning bg-white border-radius d-inline-block mr-2"><b>{{course.Avg_rating|floatformat:1}}</b></span>
+                    {% else %}
+                      <p> Рейтинг: <span class="px-1 border text-danger bg-white border-radius d-inline-block mr-2"><b>{{course.Avg_rating|floatformat:1}}</b></span>
+                    {% endif %}
+                  {% endif %}
+                  <p><a href="{% url 'school_detail' course.school.slug %}">Отзывы о школе</a></p>
+                </td>
+                <td>{{ course.price|floatformat}} ₽</td>
+                <td>От 4900 ₽</td>
+                <td>{{ course.duration }} мес</td>
+                <td><a href="{{ course.link }}" class="btn btn-outline-success" target="_blank">Подробнее</a></td>
+              </tr>
+            {% endfor %}
+        </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+{% endif %}
+  {% include 'include/paginator.html' %}
+  </div>
+</section>
+{% if courses %}
+<section class="space-pb">
+  <div class="container">
+    <div class="section-title">
+        <h2 class="mb-6">Те же курсы с подробным описанием</h2>
+    </div>
+        <div class="row d-flex justify-content-between">
+            {% for course in courses %}
+                <div class="col-md-4">
+            <div class="card bg-light mb-4" style="width: 20rem;">
+              <div class="card-body">
+                <h5 class="card-title text-xl-center">{{ course.name }}</h5>
+                <div class="card-desc text-center mb-2">
+                  <b>{{ course.school.name }}</b>
+                  <span>
+                    {% if course.Avg_rating %}
+                        {%  if course.Avg_rating >= 3.5 %}
+                         <span class="ml-2 px-1 border text-success bg-white border-radius d-inline-block mr-2"><b>{{course.Avg_rating|floatformat:1}}</b></span>
+                        {% elif course.Avg_rating < 3.5 and course.Avg_rating > 2 %}
+                          <span class="ml-2 px-1 border text-warning bg-white border-radius d-inline-block mr-2"><b>{{course.Avg_rating|floatformat:1}}</b></span>
+                        {% else %}
+                          <span class="ml-2 px-1 border text-danger bg-white border-radius d-inline-block mr-2"><b>{{course.Avg_rating|floatformat:1}}</b></span>
+                        {% endif %}
+                      {% endif %}
+                  </span>
+                  <p> <a href="{% url 'school_detail' course.school.slug %}">Отзывы о школе</a>
+                </div>
+                <div class="card-price d-flex justify-content-between border-bottom mb-2 pb-2">
+                  <div><span class="text-primary">{{ course.price}} ₽</span>/курс</div>
+                  <div><span class="text-primary">4900</span>/месяц <i
+                          class="flaticon-idea cursor" role="button" data-toggle="tooltip"
+                          data-placement="top" title="Lorem ipsum dolor sit amet"></i></div>
+                </div>
+                <div class="card-text mb-4">
+                  <b>Начало:</b> {{ course.start_date }}, <b>длительность:</b> {{ course.duration }} мес.
+                </div>
+                <div class="card-text mb-4">
+                  <b>Формат:</b>
+                    {% for format in course.course_format.all %}
+                    {{ format }}.
+                    {% endfor %}
+                </div>
+                <div class="card-text mb-4">
+                  <b>Особенности:</b>
+                    {% for feature in course.features.all %}
+                    {{ feature }}.
+                    {% endfor %}
+                </div>
+                <a href="{{ course.link }}" class="btn btn-primary w-100" target="_blank">Ссылка на курс</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+</section>
+{% endif %}
+{% endblock content %}

@@ -28,11 +28,15 @@ urlpatterns = [
                   path('blog/', views.BlogListView.as_view(), name='blog'),
                   path('blog/<cat_slug>', views.BlogListView.as_view(), name='blog_category'),
                   path('single_blog/<slug>', views.SinglePost.as_view(), name='single_blog'),
+
                   path('course_list/', CourseListView.as_view(), name='course_list'),
                   path('course_list/<cat_slug>', CourseListView.as_view(), name='course_list_category'),
                   path('schools/', SchoolListView.as_view(), name='school'),
                   path('school_detail/<slug>', SchoolDetailView.as_view(), name='school_detail'),
                   path('course_detail/', course_detail_handler, name='course_detail'),
+
+                  path('search/', SearchView.as_view(), name='search'),
+
                   path('about/', AboutView.as_view(), name='about'),
                   path('contact/', ContactView.as_view(), name='contact'),
                   path('robots.txt', RobotsView.as_view(), name='robots'),

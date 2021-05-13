@@ -11,12 +11,14 @@ Search Course -->
       <div class="col-sm-8 col-md-6 col-lg-5 space-pb">
         <h2 class="text-primary mb-3">Никогда не переставайте обучаться </h2>
         <h6 class="text-white">Мы подобрали лучшие курсы для вашего обучения онлайн</h6>
-        <form class="form-inline mt-4 mt-sm-5">
+
+        <form class="form-inline mt-4 mt-sm-5" action="{% url 'search' %}" method="get">
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="What do you want to study?">
+            <input type="text" class="form-control" placeholder="Какой курс хотите найти?" name="q">
           </div>
-          <button type="submit" class="btn btn-primary">Поиск</button>
+          <button type="submit" class="btn btn-primary">Найти</button>
         </form>
+
       </div>
     </div>
   </div>
