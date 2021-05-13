@@ -169,7 +169,7 @@ class RobotsView(TemplateView):
 
 class SearchView(TemplateView):
     template_name = 'listing/search.html'
-    per_page = 3
+    per_page = 10
 
     def get(self, request, *args, **kwargs):
 
