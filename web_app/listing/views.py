@@ -6,10 +6,12 @@ from django.contrib import messages
 from django.views.generic.edit import FormMixin
 
 from django.urls import reverse
+from django.shortcuts import redirect
 from django.views.generic import TemplateView, ListView, DetailView
 
 from django.db.models import Avg, Sum, Min, Max, Count, Q
 from django.contrib.postgres.search import SearchVector
+from django.core.paginator import Paginator
 
 
 class IndexView(TemplateView):
@@ -167,21 +169,51 @@ class RobotsView(TemplateView):
 
 class SearchView(TemplateView):
     template_name = 'listing/search.html'
+    per_page = 3
 
-    def get_context_data(self, **kwargs):
-        query = self.request.GET.get('q')
+    def get(self, request, *args, **kwargs):
 
-        results = Course.objects.annotate(
+        self.query = self.request.GET.get('q')
+        self.current_page = self.request.GET.get('page')
+
+        self.results = Course.objects.annotate(
             search=SearchVector('name', 'description'),
             Avg_rating=Avg('school__review__rating'),
         ).prefetch_related('categories',
                            'features',
                            'course_format',
-                           ).select_related('school').filter(search=query)
+                           ).select_related('school').filter(search=self.query)
+
+        self.results_count = self.results.count()
+        max_page = self.results_count // self.per_page + 1
+
+        if not self.current_page:
+            self.current_page = 1
+        else:
+            self.current_page = int(self.current_page)
+
+        if self.current_page > max_page:
+            url = reverse('search')
+            url += f'?q={self.query}&page={max_page}'
+            return redirect(url)
+
+        context = self.get_context_data(**kwargs)
+
+        return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
 
         context = {
-            'query': query,
-            'courses': results
+            'query': self.query,
+            'courses': self.results,
+            'current_page': self.current_page,
         }
+
+        if self.results_count > self.per_page:
+            paginator = Paginator(self.results, self.per_page)
+            context['paginator'] = paginator
+            context['page_obj'] = paginator.page(self.current_page)
+        else:
+            context['page_obj'] = self.results
 
         return context

@@ -12,7 +12,7 @@
       </ol>
         <h1 class="mb-3">Найдено {{courses.count}} онлайн {{courses.count|rupluralize:"курс,курса,курсов"}} по запросу <font class="text-success">{{query}}</font></h1>
     </div>
-{% if courses %}
+    {% if courses %}
     <div class="row">
       <div class="col-sm-12 mt-5 mt-lg-0">
         <div class="table-responsive">
@@ -28,7 +28,7 @@
               </tr>
            </thead>
             <tbody>
-            {% for course in courses %}
+            {% for course in page_obj %}
               <tr >
                   <th><a href="{{ course.link }}" target="_blank">{{ course.name }}</a></th>
                 <td>
@@ -55,8 +55,43 @@
         </div>
       </div>
     </div>
-{% endif %}
-  {% include 'include/paginator.html' %}
+    {% endif %}
+    <div class="row">
+      <div class="col-12 text-center mt-4 mt-md-5">
+        <nav>
+          <ul class="pagination justify-content-center mb-0">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?q={{query}}&page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Предыдущая</span>
+              </a>
+            </li>
+            {% endif %}
+            {% for p in paginator.page_range %}
+            {% if page_obj.number == p %}
+             <li class="page-item active">
+              <span class="page-link">
+                {{ p }}
+                <span class="sr-only">(current)</span>
+              </span>
+            </li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="?q={{query}}&page={{ p }}">{{ p }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?q={{query}}&page={{ page_obj.next_page_number }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Следующая страница</span>
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+    </div>
   </div>
 </section>
 {% if courses %}
@@ -66,7 +101,7 @@
         <h2 class="mb-6">Те же курсы с подробным описанием</h2>
     </div>
         <div class="row d-flex justify-content-between">
-            {% for course in courses %}
+            {% for course in page_obj %}
                 <div class="col-md-4">
             <div class="card bg-light mb-4" style="width: 20rem;">
               <div class="card-body">
