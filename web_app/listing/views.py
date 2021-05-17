@@ -167,16 +167,17 @@ class RobotsView(TemplateView):
     content_type = 'text/plain'
 
 
-class SearchView(TemplateView):
+class SearchView(ListView):
     template_name = 'listing/search.html'
-    per_page = 10
+    context_object_name = 'courses'
+    paginate_by = 10
 
     def get(self, request, *args, **kwargs):
-
         self.query = self.request.GET.get('q')
-        self.current_page = self.request.GET.get('page')
+        return super().get(request, *args, **kwargs)
 
-        self.results = Course.objects.annotate(
+    def get_queryset(self):
+        return Course.objects.annotate(
             search=SearchVector('name', 'description'),
             Avg_rating=Avg('school__review__rating'),
         ).prefetch_related('categories',
@@ -184,36 +185,11 @@ class SearchView(TemplateView):
                            'course_format',
                            ).select_related('school').filter(search=self.query)
 
-        self.results_count = self.results.count()
-        max_page = self.results_count // self.per_page + 1
-
-        if not self.current_page:
-            self.current_page = 1
-        else:
-            self.current_page = int(self.current_page)
-
-        if self.current_page > max_page:
-            url = reverse('search')
-            url += f'?q={self.query}&page={max_page}'
-            return redirect(url)
-
-        context = self.get_context_data(**kwargs)
-
-        return self.render_to_response(context)
-
     def get_context_data(self, **kwargs):
-
-        context = {
-            'query': self.query,
-            'courses': self.results,
-            'current_page': self.current_page,
-        }
-
-        if self.results_count > self.per_page:
-            paginator = Paginator(self.results, self.per_page)
-            context['paginator'] = paginator
-            context['page_obj'] = paginator.page(self.current_page)
-        else:
-            context['page_obj'] = self.results
+        context = super().get_context_data()
+        context['query'] = self.query
+        context['cnt_courses'] = Course.objects.annotate(
+            search=SearchVector('name', 'description'),
+        ).filter(search=self.query).count()
 
         return context

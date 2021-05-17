@@ -11,7 +11,7 @@
         <li class="breadcrumb-item"><a href="{% url 'homepage' %}"><i class="fas fa-home mr-1"></i>Главная</a></li>
         <li class="breadcrumb-item active"><span>Результат по поиску</span></li>
       </ol>
-        <h1 class="mb-3">Найдено {{courses.count}} онлайн {{courses.count|rupluralize:"курс,курса,курсов"}} по запросу <font class="text-success">{{query}}</font></h1>
+        <h1 class="mb-3">{{ courses.count }} онлайн {{ courses.count|rupluralize:"курс,курса,курсов" }} из найденных {{ cnt_courses }} по запросу <font class="text-success">{{ query}}</font></h1>
     </div>
     <div class="row">
       <div class="col-sm-12 mt-5 mt-lg-0">
