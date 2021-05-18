@@ -2,6 +2,17 @@ from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey,TreeManyToManyField
 
 
+class SEOListing(models.Model):
+    title = models.CharField(max_length=80, blank=True, null=True)
+    seo_description = models.CharField(max_length=255, blank=True, null=True)
+    canonical_url = models.URLField(blank=True, null=True)
+    meta_robots = models.CharField(max_length=50, blank=True, null=True)
+    h1 = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        abstract = True
+
+
 class Category(MPTTModel):
     name = models.CharField(max_length=255, verbose_name='Название категории')
     slug = models.SlugField(max_length=255, unique=True)
@@ -25,7 +36,7 @@ class Category(MPTTModel):
         verbose_name_plural = 'Категории'
 
 
-class School(models.Model):
+class School(SEOListing):
     name = models.CharField(max_length=255, verbose_name='Название школы')
     slug = models.SlugField(max_length=255, unique=True)
     description = models.CharField(max_length=255, blank=True, verbose_name='Описание')
@@ -63,7 +74,7 @@ class CourseFormat(models.Model):
         verbose_name_plural = 'Форматы курсов'
 
 
-class Course(models.Model):
+class Course(SEOListing):
     name = models.CharField(max_length=255, verbose_name='Название курса')
     description = models.CharField(blank=True, max_length=255, verbose_name='Описание курса')
     categories = TreeManyToManyField(Category, verbose_name='Категория')

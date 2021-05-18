@@ -37,7 +37,6 @@ class SchoolAdmin(admin.ModelAdmin):
     list_display = ('logo_code', 'name', 'link',)
     list_display_links = ('logo_code', 'name',)
     search_fields = ('name',)
-    inlines = (SchoolCourseInLine,)
 
     def logo_code(self, object):
         return format_html('<img src="{}" style="max-width: 100px" />',

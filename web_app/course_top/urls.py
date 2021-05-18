@@ -34,15 +34,15 @@ urlpatterns = [
                   path('courses/', CourseListView.as_view(), name='course_list'),
                   path('courses/<cat_slug>', CourseListView.as_view(), name='course_list_category'),
 
-                  path('schools/', SchoolListView.as_view(), name='school'),
-                  path('<slug>/', SchoolDetailView.as_view(), name='school_detail'),
-                  path('course_detail/', course_detail_handler, name='course_detail'),
-
                   path('about/', AboutView.as_view(), name='about'),
                   path('contact/', ContactView.as_view(), name='contact'),
                   path('robots.txt', RobotsView.as_view(), name='robots'),
                   path('admin/', admin.site.urls),
                   path('summernote/', include('django_summernote.urls')),
+
+                  path('schools/', SchoolListView.as_view(), name='school'),
+                  path('<slug>/', SchoolDetailView.as_view(), name='school_detail'),
+                  path('course_detail/', course_detail_handler, name='course_detail'),
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:

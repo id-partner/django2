@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% load custom_tags %}
 
+
+{% block title %}{% if school.title %}{{school.title}}{%else%}{{ rating.Cnt }} {{rating.Cnt|rupluralize:"отзыв,отзыва,отзывов"}} учеников о курсах от {{ school.name }}{% endif %}{% endblock %}
+{% block description %}{% if school.seo_description %}{{school.seo_description}}{%else%}{{ rating.Cnt }} {{rating.Cnt|rupluralize:"отзыв,отзыва,отзывов"}} учеников о курсах от {{ school.name }}{% endif %}{% endblock %}
+{% block canonical %}{{ request.scheme }}://{{ request.get_host }}{% url 'school_detail' school.slug %}{% endblock %}
+
 {% block content %}
 
 <section class="space-pb">
@@ -92,53 +97,51 @@
                 <div class="d-flex align-items-center mb-2">
                     <div class="mr-auto">
                         <span>Количество отзывов: {{ rating.Cnt }}</span>
+                        {% spaceless %}
                         <ul class="list-unstyled d-flex">
-                                    <li><i class=
                                         {% if rating.Avg < 0 %}
-                                            "far fa-star text-warning"
+                                            <li><i class="far fa-star text-warning"></i></li>
                                         {% elif rating.Avg >= 1 %}
-                                            "fa fa-star text-warning"
+                                           <li><i class= "fa fa-star text-warning"></i></li>
                                         {% else %}
-                                            "fa fa-star-half-alt text-warning"
-                                        {% endif %}>
-                                    </i></li>
-                                    <li><i class=
+                                            <li><i class="fa fa-star-half-alt text-warning"></i></li>
+                                        {% endif %}
+
                                         {% if rating.Avg < 1 %}
-                                            "far fa-star text-warning"
+                                            <li><i class="far fa-star text-warning"></i></li>
                                         {% elif rating.Avg >= 2 %}
-                                            "fa fa-star text-warning"
+                                            <li><i class="fa fa-star text-warning"></i></li>
                                         {% else %}
-                                            "fa fa-star-half-alt text-warning"
-                                        {% endif %}>
-                                    </i></li>
-                                    <li><i class=
+                                            <li><i class="fa fa-star-half-alt text-warning"></i></li>
+                                        {% endif %}
+
                                         {% if rating.Avg < 2 %}
-                                            "far fa-star text-warning"
+                                            <li><i class="far fa-star text-warning"></i></li>
                                         {% elif rating.Avg >= 3 %}
-                                            "fa fa-star text-warning"
+                                            <li><i class="fa fa-star text-warning"></i></li>
                                         {% else %}
-                                            "fa fa-star-half-alt text-warning"
-                                        {% endif %}>
-                                    </i></li>
-                                    <li><i class=
+                                            <li><i class="fa fa-star-half-alt text-warning"></i></li>
+                                        {% endif %}
+
+
                                         {% if rating.Avg < 3 %}
-                                            "far fa-star text-warning"
+                                             <li><i class="far fa-star text-warning"></i></li>
                                         {% elif rating.Avg >= 4 %}
-                                            "fa fa-star text-warning"
+                                             <li><i class="fa fa-star text-warning"></i></li>
                                         {% else %}
-                                            "fa fa-star-half-alt text-warning"
-                                        {% endif %}>
-                                    </i></li>
-                                    <li><i class=
+                                             <li><i class="fa fa-star-half-alt text-warning"></i></li>
+                                        {% endif %}
+
+
                                         {% if rating.Avg < 4 %}
-                                            "far fa-star text-warning"
+                                             <li><i class="far fa-star text-warning"></i></li>
                                         {% elif rating.Avg >= 5 %}
-                                            "fa fa-star text-warning"
+                                             <li><i class="fa fa-star text-warning"></i></li>
                                         {% else %}
-                                            "fa fa-star-half-alt text-warning"
-                                        {% endif %}>
-                                    </i></li>
-                                </ul>
+                                             <li><i class="fa fa-star-half-alt text-warning"></i></li>
+                                        {% endif %}
+                        </ul>
+                        {% endspaceless %}
                     </div>
                     {% if rating.Avg > 3.5 %}
                     <b class="display-3 text-success font-weight-bold">{{rating.Avg|floatformat}}</b>
@@ -210,51 +213,45 @@
                             <div class="d-flex ml mb-5">
                                 <span class="px-2 border text-success border-radius d-inline-block mr-2">{{ review.rating }}</span>
                                 <ul class="list-unstyled d-flex mb-0">
-                                    <li><i class=
                                         {% if review.rating < 0 %}
-                                            "far fa-star text-warning"
+                                            <li><i class="far fa-star text-warning"></i></li>
                                         {% elif review.rating >= 1 %}
-                                            "fa fa-star text-warning"
+                                            <li><i class="fa fa-star text-warning"></i></li>
                                         {% else %}
-                                            "fa fa-star-half-alt text-warning"
-                                        {% endif %}>
-                                    </i></li>
-                                    <li><i class=
+                                            <li><i class="fa fa-star-half-alt text-warning"></i></li>
+                                        {% endif %}
+
                                         {% if review.rating < 1 %}
-                                            "far fa-star text-warning"
+                                            <li><i class="far fa-star text-warning"></i></li>
                                         {% elif review.rating >= 2 %}
-                                            "fa fa-star text-warning"
+                                            <li><i class="fa fa-star text-warning"></i></li>
                                         {% else %}
-                                            "fa fa-star-half-alt text-warning"
-                                        {% endif %}>
-                                    </i></li>
-                                    <li><i class=
+                                            <li><i class="fa fa-star-half-alt text-warning"></i></li>
+                                        {% endif %}
+
                                         {% if review.rating < 2 %}
-                                            "far fa-star text-warning"
+                                            <li><i class="far fa-star text-warning"></i></li>
                                         {% elif review.rating >= 3 %}
-                                            "fa fa-star text-warning"
+                                            <li><i class="fa fa-star text-warning"></i></li>
                                         {% else %}
-                                            "fa fa-star-half-alt text-warning"
-                                        {% endif %}>
-                                    </i></li>
-                                    <li><i class=
+                                            <li><i class="fa fa-star-half-alt text-warning"></i></li>
+                                        {% endif %}
+
                                         {% if review.rating < 3 %}
-                                            "far fa-star text-warning"
+                                            <li><i class="far fa-star text-warning"></i></li>
                                         {% elif review.rating >= 4 %}
-                                            "fa fa-star text-warning"
+                                            <li><i class="fa fa-star text-warning"></i></li>
                                         {% else %}
-                                            "fa fa-star-half-alt text-warning"
-                                        {% endif %}>
-                                    </i></li>
-                                    <li><i class=
+                                            <li><i class="fa fa-star-half-alt text-warning"></i></li>
+                                        {% endif %}
+
                                         {% if review.rating < 4 %}
-                                            "far fa-star text-warning"
+                                            <li><i class="far fa-star text-warning"></i></li>
                                         {% elif review.rating >= 5 %}
-                                            "fa fa-star text-warning"
+                                            <li><i class="fa fa-star text-warning"></i></li>
                                         {% else %}
-                                            "fa fa-star-half-alt text-warning"
-                                        {% endif %}>
-                                    </i></li>
+                                            <li><i class="fa fa-star-half-alt text-warning"></i></li>
+                                        {% endif %}
                                 </ul>
                             </div>
                         </div>

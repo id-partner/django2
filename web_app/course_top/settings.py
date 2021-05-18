@@ -47,13 +47,6 @@ INSTALLED_APPS = [
 
     'listing.apps.ListingConfig',
     'blog.apps.BlogConfig',
-
-    # 'reviews_author',
-    # 'userena',
-    # 'guardian',
-    # 'easy_thumbnails',
-
-
 ]
 
 MIDDLEWARE = [
@@ -114,6 +107,7 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

@@ -6,12 +6,15 @@ from django.contrib import messages
 from django.views.generic.edit import FormMixin
 
 from django.urls import reverse
-from django.shortcuts import redirect
 from django.views.generic import TemplateView, ListView, DetailView
 
 from django.db.models import Avg, Sum, Min, Max, Count, Q
 from django.contrib.postgres.search import SearchVector
-from django.core.paginator import Paginator
+
+
+# class SEO (TemplateView):
+
+
 
 
 class IndexView(TemplateView):
@@ -68,6 +71,7 @@ class CourseListView(ListView):
         # TODO: получение списка курсов по указанной школе в фильтре доработать
         if self.request.GET.getlist('school'):
             school = self.request.GET.getlist('school')
+            print(school[0])
             qs = qs.filter(school__name__in=school)
         return qs
 
