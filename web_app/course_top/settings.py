@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
     'listing.apps.ListingConfig',
     'blog.apps.BlogConfig',
+    'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [

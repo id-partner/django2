@@ -19,9 +19,19 @@ from django.conf import settings
 from django.conf.urls.static import static
 import debug_toolbar
 
+from django.contrib.sitemaps.views import sitemap, index
 
 from listing.views import *  # импортируем вьюхи из приложения листинга
 from blog import views  # импортируем вьюхи из приложения блога
+
+from listing.sitemap import *
+
+
+sitemaps = {
+    'schools': SchoolSitemap,
+    'categories': CategorySitemap,
+    'static': StaticViewSitemap,
+}
 
 urlpatterns = [
                   path('', IndexView.as_view(), name='homepage'),
@@ -37,6 +47,11 @@ urlpatterns = [
                   path('about/', AboutView.as_view(), name='about'),
                   path('contact/', ContactView.as_view(), name='contact'),
                   path('robots.txt', RobotsView.as_view(), name='robots'),
+
+                  path('sitemap.xml', index, {'sitemaps': sitemaps}),
+                  path('sitemap-<section>.xml', sitemap, {'sitemaps': sitemaps},
+                       name='django.contrib.sitemaps.views.sitemap'),
+
                   path('admin/', admin.site.urls),
                   path('summernote/', include('django_summernote.urls')),
 
@@ -46,7 +61,5 @@ urlpatterns = [
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
-    urlpatterns += [path('__debug__/', include(debug_toolbar.urls)),]
+    urlpatterns += [path('__debug__/', include(debug_toolbar.urls)), ]
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-

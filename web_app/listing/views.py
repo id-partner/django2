@@ -12,11 +12,6 @@ from django.db.models import Avg, Sum, Min, Max, Count, Q
 from django.contrib.postgres.search import SearchVector
 
 
-# class SEO (TemplateView):
-
-
-
-
 class IndexView(TemplateView):
     template_name = 'listing/index.html'
 

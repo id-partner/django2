@@ -1,6 +1,8 @@
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey,TreeManyToManyField
 
+from django.urls import reverse
+
 
 class SEOListing(models.Model):
     title = models.CharField(max_length=80, blank=True, null=True)
@@ -35,6 +37,9 @@ class Category(MPTTModel):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
+    def get_absolute_url(self):
+        return reverse('course_list_category', args=(self.slug,))
+
 
 class School(SEOListing):
     name = models.CharField(max_length=255, verbose_name='Название школы')
@@ -50,6 +55,9 @@ class School(SEOListing):
     class Meta:
         verbose_name = 'Школа'
         verbose_name_plural = 'Школы'
+
+    def get_absolute_url(self):
+        return reverse('school_detail', args=(self.slug, ))
 
 
 class Features(models.Model):
