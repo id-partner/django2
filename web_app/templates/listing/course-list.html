@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
-{% load static %}
 {% load custom_tags %}
+
+{% block title %}{{courses.count}} онлайн-{{courses.count|rupluralize:"курс,курса,курсов"}} в категории {{ category.name }}{% endblock %}
+{% block description %}Выбирайте из {{courses.count}} онлайн-{{courses.count|rupluralize:"курса,курсов,курсов"}} в категории {{ category.name }} по: уровню сложности, цене, длительности, отзывам.{% endblock %}
+{% block canonical %}{{ request.scheme }}://{{ request.get_host }}{% url 'course_list_category' category.slug %}{% endblock %}
+
+
+
+
 {% block content %}
 
 <section class="space-pb">

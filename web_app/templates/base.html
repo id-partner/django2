@@ -4,11 +4,12 @@
 <html lang="ru">
     <head>
         <meta charset="utf-8">
-        {% spaceless %}<meta name="description" content="{% block description %}Мы составили рейтинг онлайн курсов по программированию, дизайну, маркетингу, управлению на основе отзывов реальных учеников. Выбирай курс на Course4You.ru{% endblock %}" />{% endspaceless %}
-        {% spaceless %}<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">{% endspaceless %}
-        {% spaceless %}<link rel=“canonical” href="{% block canonical %}{% endblock %}" />{% endspaceless %}
-        <title>{% block title %}Course4You.ru — выбирай онлайн курсы по отзывами,ценам,акциям{% endblock %}</title>
+        <meta name="description" content="{% block description %}Мы составили рейтинг онлайн курсов по программированию, дизайну, маркетингу, управлению на основе отзывов реальных учеников. Выбирай курс на Course4You.ru{% endblock %}" />
+        <meta name="viewport"content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        {% block robots%}{% endblock %}
+        <link rel=“canonical” href="{% block canonical %}{% endblock %}" />
 
+        <title>{% block title %}Course4You.ru — выбирай онлайн курсы по отзывами,ценам,акциям{% endblock %}</title>
         <!-- Favicon -->
         <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" />
 

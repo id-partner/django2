@@ -66,7 +66,6 @@ class CourseListView(ListView):
         # TODO: получение списка курсов по указанной школе в фильтре доработать
         if self.request.GET.getlist('school'):
             school = self.request.GET.getlist('school')
-            print(school[0])
             qs = qs.filter(school__name__in=school)
         return qs
 

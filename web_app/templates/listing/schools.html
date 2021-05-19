@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
-{% load static %}
 {% load custom_tags %}
+
+{% block title %}Отзывы о {{ schools.count }} онлайн-{{schools.count|rupluralize:"школе,школах,школах"}} в 2021 году {% endblock %}
+{% block description %}Выбрайте онлайн-школы по: отзывам реальный людей, курсам, условиям, ценам. Сервис подбора онлайн-курсов Course4You.ru.{% endblock %}
+{% block canonical %}{{ request.scheme }}://{{ request.get_host }}{% url 'school' %}{% endblock %}
+
 {% block content %}
 
 <section class="space-pb">

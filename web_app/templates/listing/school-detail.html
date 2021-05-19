@@ -1,9 +1,8 @@
 {% extends 'base.html' %}
 {% load custom_tags %}
 
-
-{% block title %}{% if school.title %}{{school.title}}{%else%}{{ rating.Cnt }} {{rating.Cnt|rupluralize:"отзыв,отзыва,отзывов"}} учеников о курсах от {{ school.name }}{% endif %}{% endblock %}
-{% block description %}{% if school.seo_description %}{{school.seo_description}}{%else%}{{ rating.Cnt }} {{rating.Cnt|rupluralize:"отзыв,отзыва,отзывов"}} учеников о курсах от {{ school.name }}{% endif %}{% endblock %}
+{% block title %}{% if school.title %}{{school.title}}{%else%}{% if rating.Cnt > 1 %}{{ rating.Cnt }} {{rating.Cnt|rupluralize:"отзыв,отзыва,отзывов"}} учеников о курсах от {{ school.name }}{% else %}{{ school.name }} — подробная информация, курсы, отзывы{% endif %}{% endif %}{% endblock %}
+{% block description %}{% if school.seo_description %}{{school.seo_description}}{% else %}{% if rating.Cnt > 1 %}{{ school.name }} — Реальные {{ rating.Cnt }} {{rating.Cnt|rupluralize:"отзыв,отзыва,отзывов"}} прошедших обучение: о курсах, ценах, сертификатах, условиях стажировке и трудоустройстве. Сервис подбора онлайн-курсов Course4You.ru.{% else %}{{ school.name }} — Реальные отзывы прошедших обучение: о курсах, ценах, условиях стажировки и трудоустройстве. Сервис подбора онлайн-курсов Course4You.ru.{% endif %}{% endif %}{% endblock %}
 {% block canonical %}{{ request.scheme }}://{{ request.get_host }}{% url 'school_detail' school.slug %}{% endblock %}
 
 {% block content %}
@@ -123,7 +122,6 @@
                                             <li><i class="fa fa-star-half-alt text-warning"></i></li>
                                         {% endif %}
 
-
                                         {% if rating.Avg < 3 %}
                                              <li><i class="far fa-star text-warning"></i></li>
                                         {% elif rating.Avg >= 4 %}
@@ -131,7 +129,6 @@
                                         {% else %}
                                              <li><i class="fa fa-star-half-alt text-warning"></i></li>
                                         {% endif %}
-
 
                                         {% if rating.Avg < 4 %}
                                              <li><i class="far fa-star text-warning"></i></li>

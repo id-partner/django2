@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
-{% load static %}
 {% load custom_tags %}
+
+{% block title %}Результат поиска по запросу {{ query }}{% endblock %}
+{% block description %}Найдено {{ cnt_courses }} онлайн-{{cnt_courses|rupluralize:"курс,курса,курсов"}} по запросу {{ query }}. Выбирайте по: уровню сложности, цене, длительности, отзывам.{% endblock %}
+{% block robots%}<meta name="robots" content="noindex"/>{% endblock %}
 {% block content %}
 
 <section class="space-pb">
