@@ -38,7 +38,7 @@ class Category(MPTTModel):
         verbose_name_plural = 'Категории'
 
     def get_absolute_url(self):
-        return reverse('course_list',  args=[self.slug],)
+        return reverse('course_list_category',  args=(self.slug,))
 
 
 class School(SEOListing):
