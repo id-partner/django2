@@ -54,7 +54,7 @@ class CourseListView(ListView):
                                                                                 'features',
                                                                                 'course_format',
                                                                                 ).select_related(
-                    'school').order_by('-name')
+                                                                                'school').order_by('-name')
 
             else:
                 qs = qs.filter(categories__slug=self.cat_slug).prefetch_related('categories',
@@ -102,15 +102,15 @@ class SchoolListView(ListView):
 class SchoolDetailView(FormMixin, DetailView):
     template_name = 'listing/school-detail.html'
     model = School
-    slug_url_kwarg = 'slug'
+    slug_url_kwarg = 'school_slug'
     form_class = ReviewForm
 
     def get_context_data(self, **kwargs):
         review = Review.objects.filter(
-            school__slug=self.kwargs.get('slug')).values('rating')
+            school__slug=self.kwargs.get('school_slug')).values('rating')
 
         course = Course.objects.filter(
-            school__slug=self.kwargs.get('slug'))
+            school__slug=self.kwargs.get('school_slug'))
 
         context = super().get_context_data(**kwargs)
         context['schools'] = School.objects.all()

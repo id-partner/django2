@@ -3,7 +3,7 @@
 
 {% block title %}{{courses.count}} онлайн-{{courses.count|rupluralize:"курс,курса,курсов"}} в категории {{ category.name }}{% endblock %}
 {% block description %}Выбирайте из {{courses.count}} онлайн-{{courses.count|rupluralize:"курса,курсов,курсов"}} в категории {{ category.name }} по: уровню сложности, цене, длительности, отзывам.{% endblock %}
-{% block canonical %}{{ request.scheme }}://{{ request.get_host }}{% url 'course_list_category' category.slug %}{% endblock %}
+{% block canonical %}{% if category %}{{ request.scheme }}://{{ request.get_host }}{% url 'course_list_category' category.slug %}{% else %}{{ request.scheme }}://{{ request.get_host }}{% url 'course_list' %}{% endif %}{% endblock %}
 
 
 

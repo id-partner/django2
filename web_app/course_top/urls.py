@@ -41,8 +41,10 @@ urlpatterns = [
 
                   path('search/', SearchView.as_view(), name='search'),
 
+
                   path('courses/', CourseListView.as_view(), name='course_list'),
                   path('courses/<cat_slug>', CourseListView.as_view(), name='course_list_category'),
+
 
                   path('about/', AboutView.as_view(), name='about'),
                   path('contact/', ContactView.as_view(), name='contact'),
@@ -56,7 +58,7 @@ urlpatterns = [
                   path('summernote/', include('django_summernote.urls')),
 
                   path('schools/', SchoolListView.as_view(), name='school'),
-                  path('<slug>/', SchoolDetailView.as_view(), name='school_detail'),
+                  path('<school_slug>/', SchoolDetailView.as_view(), name='school_detail'),
                   path('course_detail/', course_detail_handler, name='course_detail'),
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

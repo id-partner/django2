@@ -38,7 +38,7 @@ class Category(MPTTModel):
         verbose_name_plural = 'Категории'
 
     def get_absolute_url(self):
-        return reverse('course_list_category', args=(self.slug,))
+        return reverse('course_list',  args=[self.slug],)
 
 
 class School(SEOListing):
@@ -112,9 +112,16 @@ class Course(SEOListing):
 class Review(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField(verbose_name='Почта')
+    source = models.CharField(max_length=255, verbose_name='Источник', blank=True, null=True)
+    head = models.CharField(max_length=255, verbose_name='Заголовок', blank=True, null=True)
     comment = models.TextField(verbose_name='Комментарий')
-    rating = models.FloatField(verbose_name='Рейтинг')
+    positive = models.TextField(blank=True, null=True, verbose_name='Плюсы')
+    negative = models.TextField(blank=True, null=True, verbose_name='Минусы')
+    pub_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации', blank=True, null=True)
+    rating = models.FloatField(verbose_name='Рейтинг', blank=True, null=True)
     school = models.ForeignKey(School, on_delete=models.CASCADE, verbose_name='Школа')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Курс', blank=True, null=True )
+    is_published = models.BooleanField(default=False, verbose_name='Опубликовать')
 
     def __str__(self):
         return self.comment[:20]
