@@ -44,8 +44,8 @@ urlpatterns = [
                   path('courses/', CourseListView.as_view(), name='course_list'),
                   path('courses/<cat_slug>', CourseListView.as_view(), name='course_list_category'),
 
-                  path('courses_school/<school_slug>', CourseListSchoolView.as_view(), name='course_list_school'),
-                  path('courses_school/<cat_slug>/<school_slug>', CourseListSchoolView.as_view(),
+                  path('school_courses/<school_slug>', CourseListSchoolView.as_view(), name='course_list_school'),
+                  path('school_courses/<cat_slug>/<school_slug>', CourseListSchoolView.as_view(),
                        name='course_list_category_school'),
 
                   path('about/', AboutView.as_view(), name='about'),
