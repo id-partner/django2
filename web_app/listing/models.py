@@ -110,7 +110,7 @@ class Course(SEOListing):
 
 
 class Review(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, verbose_name='Имя')
     email = models.EmailField(verbose_name='Почта')
     source = models.CharField(max_length=255, verbose_name='Источник', blank=True, null=True)
     head = models.CharField(max_length=255, verbose_name='Заголовок', blank=True, null=True)

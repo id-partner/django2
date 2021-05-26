@@ -52,9 +52,11 @@ class CourseAdmin(admin.ModelAdmin):
 
 
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('name', 'school', 'comment')
-    list_filter = ('school',)
+    list_display = ('name', 'school', 'is_published', 'head', 'rating')
+    list_editable = ('is_published',)
+    list_filter = ('school', 'is_published')
     search_fields = ('school',)
+
 
 
 admin.site.register(Category, CategoryAdmin)

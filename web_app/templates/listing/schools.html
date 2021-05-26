@@ -37,7 +37,7 @@
               <a href="https://{{ school.link }}" class="school-link mt-2" target="_blank">Ссылка на сайт школы</a>
             </div>
             <div>
-               <a href="{% url 'school_detail' school.slug %}" class="btn btn-primary">{{ school.review_set.count }} {{ school.review_set.count|rupluralize:"отзыв,отзыва,отзывов"}}</a>
+               <a href="{% url 'school_detail' school.slug %}" class="btn btn-primary">{{ school.Cnt_rating }} {{ school.Cnt_rating|rupluralize:"отзыв,отзыва,отзывов"}}</a>
             </div>
             </div>
               <div class="card-body">

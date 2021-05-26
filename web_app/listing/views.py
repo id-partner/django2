@@ -40,7 +40,7 @@ class CourseListView(ListView):
 
     def get_queryset(self):
         qs = super().get_queryset().annotate(Avg_rating=Avg(
-            'school__review__rating')).prefetch_related('categories',
+            'school__review__rating', filter=Q(school__review__is_published=True))).prefetch_related('categories',
                                                         'features',
                                                         'course_format',
                                                         ).select_related('school')
@@ -148,8 +148,10 @@ class SchoolListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return School.objects.annotate(Avg_rating=Avg('review__rating')).prefetch_related(
-            'review_set', ).order_by('-name')
+        return School.objects.annotate(Cnt_rating=Count('review__rating', filter=Q(review__is_published=True)),
+                                       Avg_rating=Avg('review__rating',filter=Q(review__is_published=True))
+                                       ).prefetch_related(
+                                       'review_set', ).order_by('-Cnt_rating')
 
 
 class SchoolDetailView(FormMixin, DetailView):
@@ -159,14 +161,15 @@ class SchoolDetailView(FormMixin, DetailView):
     form_class = ReviewForm
 
     def get_context_data(self, **kwargs):
-        review = Review.objects.filter(
-            school__slug=self.kwargs.get('school_slug')).values('rating')
+        reviews = Review.objects.filter(
+            school__slug=self.kwargs.get('school_slug'), is_published=True)
 
         course = Course.objects.filter(
             school__slug=self.kwargs.get('school_slug'))
 
         context = super().get_context_data(**kwargs)
         context['schools'] = School.objects.all()
+        context['reviews'] = reviews
 
         context['course'] = course.aggregate(
             Avg_price=Avg('price'),
@@ -175,16 +178,16 @@ class SchoolDetailView(FormMixin, DetailView):
 
         )
 
-        context['rating'] = review.aggregate(
+        context['rating'] = reviews.aggregate(
             Cnt=Count('rating'),
             Avg=Avg('rating'),
             Min=Min('rating'),
             Max=Max('rating'),
-            Cnt_star1=Count('rating', filter=Q(rating__lt=1.5)),
-            Cnt_star2=Count('rating', filter=Q(rating__gte=1.5, rating__lt=2.5)),
-            Cnt_star3=Count('rating', filter=Q(rating__gte=2.5, rating__lt=3.5)),
-            Cnt_star4=Count('rating', filter=Q(rating__gte=3.5, rating__lt=4.5)),
-            Cnt_star5=Count('rating', filter=Q(rating__gte=4.5))
+            Cnt_star1=Count('rating', filter=Q(rating__lt=1.5) & Q(is_published=True)),
+            Cnt_star2=Count('rating', filter=Q(rating__gte=1.5, rating__lt=2.5) & Q(is_published=True)),
+            Cnt_star3=Count('rating', filter=Q(rating__gte=2.5, rating__lt=3.5) & Q(is_published=True)),
+            Cnt_star4=Count('rating', filter=Q(rating__gte=3.5, rating__lt=4.5) & Q(is_published=True)),
+            Cnt_star5=Count('rating', filter=Q(rating__gte=4.5) & Q(is_published=True))
         )
         return context
 
