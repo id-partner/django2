@@ -84,6 +84,59 @@ class CourseListView(ListView):
         return context
 
 
+class CourseListSchoolView(ListView):
+    template_name = 'listing/course-list-school.html'
+    model = Course
+    context_object_name = 'courses'
+
+    # paginate_by = 20
+
+    def get_queryset(self):
+        qs = Course.objects.filter(school__slug=self.kwargs.get('school_slug')).prefetch_related(
+            'categories',
+            'features',
+            'course_format',
+            ).select_related('school')
+
+        self.cat_slug = self.kwargs.get('cat_slug')
+
+        if self.cat_slug:
+            category = Category.objects.get(slug=self.cat_slug)
+            if category.child_category.all().count() > 0:
+                slug_list = category.child_category.all().values_list('slug')
+                qs = qs.filter(categories__slug__in=slug_list).prefetch_related('categories',
+                                                                                'features',
+                                                                                'course_format',
+                                                                                ).select_related(
+                    'school').order_by('-name')
+
+            else:
+                qs = qs.filter(categories__slug=self.cat_slug).prefetch_related('categories',
+                                                                                'features',
+                                                                                'course_format',
+                                                                                ).select_related(
+                    'school').order_by('-name')
+
+
+
+        # # TODO: получение списка курсов по указанной школе в фильтре доработать
+        # if self.request.GET.getlist('school'):
+        #     school = self.request.GET.getlist('school')
+        #     qs = qs.filter(school__name__in=school)
+        # return qs
+
+        return qs
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['school'] = School.objects.get(slug=self.kwargs.get('school_slug'))
+
+        if self.cat_slug:
+            context['category'] = Category.objects.get(slug=self.cat_slug)
+
+        return context
+
+
 def course_detail_handler(request):
     context = {}
     return render(request, 'listing/course-detail.html', context)

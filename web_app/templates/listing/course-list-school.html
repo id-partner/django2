@@ -16,18 +16,16 @@
       <ol class="breadcrumb d-flex justify-content-center justify-content-md-start ml-auto bg-white">
         <li class="breadcrumb-item"><a href="{% url 'homepage' %}"><i class="fas fa-home mr-1"></i>Главная</a></li>
         {% if category.parent %}
-        <li class="breadcrumb-item"><a href="{% url 'course_list_category' category.parent.slug %}"></i>{{ category.parent.name }}</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'course_list_category_school' category.parent.slug school.slug %}"></i>{{ category.parent.name }} от {{ school.name }}</a></li>
         {% endif %}
-        <li class="breadcrumb-item active"><span>{{ category.name }}</span></li>
+        <li class="breadcrumb-item active"><span>Курсы {{ category.name|lower }} от {{ school.name }}</span></li>
       </ol>
         {% if category %}
-            <h1 class="mb-3">{{courses.count}} онлайн {{courses.count|rupluralize:"курс,курса,курсов"}} в категории {{ category.name }}{% if schools_name.count == 1 %} от {{ schools_name.0.name }}{% endif %}</h1>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque, dolores. Quidem deserunt distinctio
-                mollitia dolorem possimus inventore earum laboriosam eum!</p>
+            <h1 class="mb-3">{{courses.count}} онлайн {{courses.count|rupluralize:"курс,курса,курсов"}} в категории {{ category.name }} от {{ school.name }}</h1>
+            <p>{{ school.description }}</p>
         {% else %}
-            <h1 class="mb-3">{{courses.count}} онлайн курсов во всех категориях{% if schools_name.count == 1 %} от {{ schools_name.0.name }}{% endif %}</h1>
-            <p> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque, dolores. Quidem deserunt distinctio
-                mollitia dolorem possimus inventore earum laboriosam eum!</p>
+            <h1 class="mb-3">{{courses.count}} онлайн курсов во всех категориях от {{ school.name }}</h1>
+            <p> {{ school.description }}</p>
         {% endif %}
     </div>
     <div class="row">

@@ -26,25 +26,26 @@ from blog import views  # импортируем вьюхи из приложе�
 
 from listing.sitemap import *
 
-
 sitemaps = {
     'schools': SchoolSitemap,
     'categories': CategorySitemap,
     'static': StaticViewSitemap,
 }
 
+
 urlpatterns = [
                   path('', IndexView.as_view(), name='homepage'),
-                  path('blog/', views.BlogListView.as_view(), name='blog'),
-                  path('blog/<cat_slug>', views.BlogListView.as_view(), name='blog_category'),
-                  path('single_blog/<slug>', views.SinglePost.as_view(), name='single_blog'),
+                  # path('blog/', views.BlogListView.as_view(), name='blog'),
+                  # path('blog/<cat_slug>', views.BlogListView.as_view(), name='blog_category'),
+                  # path('single_blog/<slug>', views.SinglePost.as_view(), name='single_blog'),
 
                   path('search/', SearchView.as_view(), name='search'),
 
-
                   path('courses/', CourseListView.as_view(), name='course_list'),
                   path('courses/<cat_slug>', CourseListView.as_view(), name='course_list_category'),
-
+                  path('courses/<school_slug>', CourseListSchoolView.as_view(), name='course_list_school'),
+                  path('courses/<cat_slug>/<school_slug>', CourseListSchoolView.as_view(),
+                       name='course_list_category_school'),
 
                   path('about/', AboutView.as_view(), name='about'),
                   path('contact/', ContactView.as_view(), name='contact'),
@@ -59,9 +60,8 @@ urlpatterns = [
 
                   path('schools/', SchoolListView.as_view(), name='school'),
                   path('<school_slug>/', SchoolDetailView.as_view(), name='school_detail'),
-                  path('course_detail/', course_detail_handler, name='course_detail'),
+                  # path('course_detail/', course_detail_handler, name='course_detail'),
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
 if settings.DEBUG:
     urlpatterns += [path('__debug__/', include(debug_toolbar.urls)), ]
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

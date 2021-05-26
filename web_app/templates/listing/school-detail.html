@@ -17,6 +17,7 @@
                 <li class="breadcrumb-item active"><span>{{ school.name }}</span></li>
             </ol>
         </div>
+
         {% if messages %}
         {% for message in messages %}
         <p class="alert alert-warning" role="alert">
@@ -24,14 +25,15 @@
         </p>
         {% endfor %}
         {% endif %}
+
         <h1 class="mb-1 text-secondary">{{ school.name }}</h1>
         <div class="school-info d-flex justify-content-between align-items-center">
             <div>
                 <p class="mt-4"><b>Школа: </b> <span class="text-muted mr-4">{{ school.name }}
-                <a href="{% url 'course_list' %}?school={{ school.name }}"></span>{{ school.school_courses.all.count }} {{school.school_courses.all.count|rupluralize:"курс,курса,курсов"}}</a></p>
-                <p><span class="text-muted">Средняя стоимость курса <b>{{ course.Avg_price|floatformat:0 }} рублей</b></span></p>
-                <p><span class="text-muted">Самый дорогой курс <b>{{ course.Max_price|floatformat:0 }} рублей</b></span></p>
-                <p><span class="text-muted">Самый дешевый курс <b>{{ course.Min_price|floatformat:0 }} рублей</b></span></p>
+                <a href="{% url 'course_list_school' school.slug %}"></span>{{ school.school_courses.all.count }} {{school.school_courses.all.count|rupluralize:"курс,курса,курсов"}}</a></p>
+                <p class="text-muted">Средняя стоимость курса <b>{{ course.Avg_price|floatformat:0 }} рублей</b></p>
+                <p class="text-muted">Самый дорогой курс <b>{{ course.Max_price|floatformat:0 }} рублей</b></p>
+                <p class="text-muted">Самый дешевый курс <b>{{ course.Min_price|floatformat:0 }} рублей</b> </p>
             </div>
             <div class="w-50 bg-light p-4 rounded-sm">
                 <p>{{ school.description }}</p>
@@ -89,7 +91,7 @@
     <div class="container">
         {% if rating.Cnt > 0 %}
         <div class="border mb-4">
-            <h6 class="text-dark px-4 py-2 bg-light mb-0">Отзывы о школе {{ school.name }}</h6>
+            <h2 class="text-dark px-4 py-2 bg-light mb-0">Отзывы о школе {{ school.name }}</h2>
             <span class="ml-3"><b>Лучшая оценка школы: </b><span class="p-1 mb-3 mr-3 bg-primary text-white">{{rating.Max}}</span></span>
             <span><b>Худшая оценка школы: </b><span class="p-1 mb-3 bg-danger text-white">{{rating.Min}}</span></span>
             <div class="p-4 border-top">
@@ -204,7 +206,7 @@
                 <div class="mb-5">
                     <div class="px-xl-4 mt-3 mt-xl-0">
                         <div class="d-flex flex-row">
-                            <h6 class="mt-0 mr-4">{{ review.name|title }}</h6>
+                            <h5 class="mt-0 mr-4">{{ review.name|title }}</h5>
                             <div class="mb-2 mr-4">otzovik.com</div>
                             <div class="mb-2 text-primary mr-3">Проверенный</div>
                             <div class="d-flex ml mb-5">
@@ -253,6 +255,24 @@
                             </div>
                         </div>
                         <p>{{ review.comment|linebreaksbr }}</p>
+                        <div id="positivenegative" class="container">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h6>Плюсы</h6>
+                                    <ul class="text-primary">
+                                        <li type="circle">Lorem ipsum.</li>
+                                        <li>Lorem ipsum dolor.</li>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-6">
+                                    <h6>Минусы</h6>
+                                    <ul class="text-danger">
+                                        <li type="circle">Lorem ipsum dolor.</li>
+                                        <li type="circle">Lorem ipsum dolor sit amet, consectetur.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                         {% comment %}
                         <!--TODO: Возможность ответа. Лайк.Дизлайк комментарию-->
                         <div class="d-sm-flex">
@@ -266,7 +286,7 @@
                         {% endcomment %}
                     </div>
                 </div>
-                <hr>
+                {% if not forloop.last %}<hr>{% endif %}
                 {% endfor %}
             </div>
         </div>
