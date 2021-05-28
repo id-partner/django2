@@ -41,13 +41,16 @@ class CourseListView(ListView):
     def get_queryset(self):
         qs = super().get_queryset().annotate(Avg_rating=Avg(
             'school__review__rating', filter=Q(school__review__is_published=True))).prefetch_related('categories',
-                                                        'features',
-                                                        'course_format',
-                                                        ).select_related('school')
+                                                                                                     'features',
+                                                                                                     'course_format',
+                                                                                                     ).select_related(
+                                                                                                    'school')
+
         self.cat_slug = self.kwargs.get('cat_slug')
 
         if self.cat_slug:
             category = Category.objects.get(slug=self.cat_slug)
+
             if category.child_category.all().count() > 0:
                 slug_list = category.child_category.all().values_list('slug')
                 qs = qs.filter(categories__slug__in=slug_list).prefetch_related('categories',
@@ -64,23 +67,32 @@ class CourseListView(ListView):
                     'school').order_by('-name')
 
         # TODO: получение списка курсов по указанной школе в фильтре доработать
-        if self.request.GET.getlist('school'):
-            school = self.request.GET.getlist('school')
-            qs = qs.filter(school__name__in=school)
+        if self.request.GET.dict():
+            schools = self.request.GET.getlist('school')
+            qs = qs.filter(school__name__in=schools)
         return qs
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['schools_name'] = School.objects.all().values('name', 'id').distinct()
-
-        if len(self.request.GET.getlist('school')) == 1:
-            context['schools_name'] = School.objects.filter(
-                school_courses__in=self.object_list).values('name', 'id').distinct()
+        context['schools_name'] = School.objects.annotate(
+            Cnt=Count('school_courses', distinct=True)
+            ).filter(Cnt__gt=0).values('name', 'id', 'Cnt').distinct()
 
         if self.cat_slug:
-            context['category'] = Category.objects.get(slug=self.cat_slug)
+            category = Category.objects.get(slug=self.cat_slug)
+            context['category'] = category
             context['schools_name'] = School.objects.filter(
-                school_courses__in=self.object_list).values('name', 'id').distinct()
+                school_courses__categories__slug=self.cat_slug).annotate(
+                Cnt=Count('school_courses', distinct=True)
+                ).filter(Cnt__gt=0).values('name', 'id', 'Cnt').distinct()
+
+            if category.child_category.all().count() > 0:
+                slug_list = category.child_category.all().values_list('slug')
+                context['schools_name'] = School.objects.filter(
+                    school_courses__categories__slug__in=slug_list).annotate(
+                    Cnt=Count('school_courses', distinct=True)
+                    ).filter(Cnt__gt=0).values('name', 'id', 'Cnt').distinct()
+
         return context
 
 
@@ -149,7 +161,7 @@ class SchoolListView(ListView):
 
     def get_queryset(self):
         return School.objects.annotate(Cnt_rating=Count('review__rating', filter=Q(review__is_published=True)),
-                                       Avg_rating=Avg('review__rating',filter=Q(review__is_published=True))
+                                       Avg_rating=Avg('review__rating', filter=Q(review__is_published=True))
                                        ).prefetch_related(
                                        'review_set', ).order_by('-Cnt_rating')
 

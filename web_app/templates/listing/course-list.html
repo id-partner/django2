@@ -42,7 +42,7 @@
                     {% for school in schools_name %}
                     <div class="custom-control custom-checkbox mb-3">
                       <input type="checkbox" class="custom-control-input" id="checkbox{{school.id}}" name = "school" value="{{school.name}}">
-                      <label class="custom-control-label" for="checkbox{{school.id}}">{{school.name}}</label>
+                        <label class="custom-control-label" for="checkbox{{school.id}}">{{school.name}} <b class="text-success">({{school.Cnt}})</b></label>
                     </div>
                     {% endfor %}
                   </div>
