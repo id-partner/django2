@@ -44,7 +44,7 @@ class CourseListView(ListView):
                                                                                                      'features',
                                                                                                      'course_format',
                                                                                                      ).select_related(
-                                                                                                    'school')
+            'school')
 
         self.cat_slug = self.kwargs.get('cat_slug')
 
@@ -57,7 +57,7 @@ class CourseListView(ListView):
                                                                                 'features',
                                                                                 'course_format',
                                                                                 ).select_related(
-                                                                                'school').order_by('-name')
+                    'school').order_by('-name')
 
             else:
                 qs = qs.filter(categories__slug=self.cat_slug).prefetch_related('categories',
@@ -68,15 +68,26 @@ class CourseListView(ListView):
 
         # TODO: получение списка курсов по указанной школе в фильтре доработать
         if self.request.GET.dict():
-            schools = self.request.GET.getlist('school')
-            qs = qs.filter(school__name__in=schools)
+            if self.request.GET.getlist('school'):
+                '''фильтрация по школам '''
+                schools = self.request.GET.getlist('school')
+                qs = qs.filter(school__name__in=schools)
+
+            if self.request.GET.get('price_sort'):
+                '''сортировка по цене'''
+                price_sort = self.request.GET.get('price_sort')
+                if int(price_sort) == 1:
+                    qs = qs.all().order_by('price')
+                elif int(price_sort) == 2:
+                    qs = qs.all().order_by('-price')
+
         return qs
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['schools_name'] = School.objects.annotate(
             Cnt=Count('school_courses', distinct=True)
-            ).filter(Cnt__gt=0).values('name', 'id', 'Cnt').distinct()
+        ).filter(Cnt__gt=0).values('name', 'id', 'Cnt').distinct().order_by('Cnt')
 
         if self.cat_slug:
             category = Category.objects.get(slug=self.cat_slug)
@@ -84,14 +95,18 @@ class CourseListView(ListView):
             context['schools_name'] = School.objects.filter(
                 school_courses__categories__slug=self.cat_slug).annotate(
                 Cnt=Count('school_courses', distinct=True)
-                ).filter(Cnt__gt=0).values('name', 'id', 'Cnt').distinct()
+            ).filter(Cnt__gt=0).values('name', 'id', 'Cnt').distinct().order_by('-Cnt')
 
             if category.child_category.all().count() > 0:
                 slug_list = category.child_category.all().values_list('slug')
                 context['schools_name'] = School.objects.filter(
                     school_courses__categories__slug__in=slug_list).annotate(
                     Cnt=Count('school_courses', distinct=True)
-                    ).filter(Cnt__gt=0).values('name', 'id', 'Cnt').distinct()
+                ).filter(Cnt__gt=0).values('name', 'id', 'Cnt').distinct().order_by('-Cnt')
+
+        if self.request.GET.dict():
+            context['price_sort'] = self.request.GET.get('price_sort')
+            context['schools_selected'] = self.request.GET.getlist('school')
 
         return context
 
@@ -108,7 +123,7 @@ class CourseListSchoolView(ListView):
             'categories',
             'features',
             'course_format',
-            ).select_related('school')
+        ).select_related('school')
 
         self.cat_slug = self.kwargs.get('cat_slug')
 
@@ -128,8 +143,6 @@ class CourseListSchoolView(ListView):
                                                                                 'course_format',
                                                                                 ).select_related(
                     'school').order_by('-name')
-
-
 
         # # TODO: получение списка курсов по указанной школе в фильтре доработать
         # if self.request.GET.getlist('school'):
@@ -163,7 +176,7 @@ class SchoolListView(ListView):
         return School.objects.annotate(Cnt_rating=Count('review__rating', filter=Q(review__is_published=True)),
                                        Avg_rating=Avg('review__rating', filter=Q(review__is_published=True))
                                        ).prefetch_related(
-                                       'review_set', ).order_by('-Cnt_rating')
+            'review_set', ).order_by('-Cnt_rating')
 
 
 class SchoolDetailView(FormMixin, DetailView):
@@ -176,14 +189,14 @@ class SchoolDetailView(FormMixin, DetailView):
         reviews = Review.objects.filter(
             school__slug=self.kwargs.get('school_slug'), is_published=True)
 
-        course = Course.objects.filter(
+        courses = Course.objects.filter(
             school__slug=self.kwargs.get('school_slug'))
 
         context = super().get_context_data(**kwargs)
         context['schools'] = School.objects.all()
         context['reviews'] = reviews
 
-        context['course'] = course.aggregate(
+        context['courses'] = courses.aggregate(
             Avg_price=Avg('price'),
             Max_price=Max('price'),
             Min_price=Min('price'),
@@ -218,6 +231,10 @@ class SchoolDetailView(FormMixin, DetailView):
     def form_valid(self, form):
         data = form.cleaned_data
         data['school'] = self.object
+        try:
+            data['course'] = Course.objects.get(id=form.data['course'])
+        except:
+            pass
         Review.objects.create(**data)
         return super().form_valid(form)
 

@@ -31,9 +31,9 @@
             <div>
                 <p class="mt-4"><b>Школа: </b> <span class="text-muted mr-4">{{ school.name }}
                 <a href="{% url 'course_list_school' school.slug %}"></span>{{ school.school_courses.all.count }} {{school.school_courses.all.count|rupluralize:"курс,курса,курсов"}}</a></p>
-                <p class="text-muted">Средняя стоимость курса <b>{{ course.Avg_price|floatformat:0 }} рублей</b></p>
-                <p class="text-muted">Самый дорогой курс <b>{{ course.Max_price|floatformat:0 }} рублей</b></p>
-                <p class="text-muted">Самый дешевый курс <b>{{ course.Min_price|floatformat:0 }} рублей</b> </p>
+                <p class="text-muted">Средняя стоимость курса <b>{{ courses.Avg_price|floatformat:0 }} рублей</b></p>
+                <p class="text-muted">Самый дорогой курс <b>{{ courses.Max_price|floatformat:0 }} рублей</b></p>
+                <p class="text-muted">Самый дешевый курс <b>{{ courses.Min_price|floatformat:0 }} рублей</b> </p>
             </div>
             <div class="w-50 bg-light p-4 rounded-sm">
                 <p>{{ school.description }}</p>
@@ -329,11 +329,20 @@
                                                                                                     title="Sucks big time - 0.5 stars"></label>
                             </div>
                         </div>
+                        <div class="form-group col-lg-12">
+                            <label>Заголовок</label>
+                            {{ form.head.errors }}
+                            <input type="text" name="head" class="form-control" placeholder="Опишите кратко свое впечатление об обучении"
+                                   {% if form.head.value %}
+                                   value="{{ form.head.value }}"
+                                   {% endif %}
+                            >
+                        </div>
                         <div class="form-group col-lg-4">
                             <label>Имя</label>
                             {{ form.name.errors }}
                             <input type="text" name="name" class="form-control" placeholder="Введите ваше имя"
-                                   {% if form.name.value%}
+                                   {% if form.name.value %}
                                    value="{{ form.name.value }}"
                                    {% endif %}
                             >
@@ -353,6 +362,30 @@
                             <textarea class="form-control" id="comment" name="comment" rows="4"
                                       placeholder="Опишите коротко впечатления от школы"
                             >{% if form.comment.value%}{{ form.comment.value }}{% endif %}</textarea>
+                        </div>
+                        <div class="form-group col-6">
+                            <label>Плюсы</label>
+                            {{ form.positive.errors }}
+                            <textarea class="form-control" id="positive" name="positive" rows="4"
+                                      placeholder="Опишите плюсы. Каждый с новой строки"
+                            >{% if form.positive.value%}{{ form.positive.value }}{% endif %}</textarea>
+                        </div>
+                        <div class="form-group col-6">
+                            <label>Минусы</label>
+                            {{ form.negative.errors }}
+                            <textarea class="form-control" id="negative" name="negative" rows="4"
+                                      placeholder="Опишите минусы. Каждый с новой строки"
+                            >{% if form.negative.value%}{{ form.negative.value }}{% endif %}</textarea>
+                        </div>
+                        <div class="col-12 mb-5">
+                            <div class="short-by">
+                            <select class="form-control basic-select" name ="course">
+                                <option >----------------</option>
+                                {% for course in school.school_courses.all %}
+                                <option value="{{ course.id }}" >{{ course.name }}</option>
+                                {% endfor %}
+                            </select>
+                            </div>
                         </div>
 
                         <div class="form-group col-lg-4">

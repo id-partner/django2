@@ -34,14 +34,14 @@
       <div class="col-sm-3">
           <div class="widgets">
             <div class="widget">
-                <form action="{{request.path}}" method="get">
+                <form action="{{request.path}}" method="get" id="filter-course">
                   <div class="widget-title">
                     <h6>Школы</h6>
                   </div>
                   <div class="widget-content">
                     {% for school in schools_name %}
                     <div class="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" class="custom-control-input" id="checkbox{{school.id}}" name = "school" value="{{school.name}}">
+                      <input type="checkbox" {%if school.name in schools_selected %}checked{% endif %} class="custom-control-input" id="checkbox{{school.id}}" name = "school" value="{{school.name}}">
                         <label class="custom-control-label" for="checkbox{{school.id}}">{{school.name}} <b class="text-success">({{school.Cnt}})</b></label>
                     </div>
                     {% endfor %}
@@ -62,7 +62,54 @@
             </div>
           </div>
         </div>
-      <div class="col-sm-9 mt-5 mt-lg-0">
+     <div class="col-sm-9 mt-5 mt-lg-0">
+        <div class="course-filter d-sm-flex mb-4">
+            <ul class="course-short list-unstyled d-sm-flex mb-0">
+              <li>
+                <div class="form-inline">
+                  <div class="form-group d-sm-flex d-block">
+                    <label class="justify-content-start">Сортировать:</label>
+                    <div class="short-by">
+                      <select form="filter-course" class="form-control basic-select" name ="price_sort" onchange="this.form.submit()">
+                        <option value="0" >Выберете значение</option>
+                        <option value="1" {%if price_sort == "1" %}selected{% endif %}>По возрастанию цены</option>
+                        <option value="2" {%if price_sort == "2" %}selected{% endif %}>По убыванию цены</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+             {% comment %}
+<!--            TODO:  вывод /пагинация /разные шаблоны-->
+            <ul class="course-view-list list-unstyled d-flex mb-0">
+              <li>
+                <form class="form-inline">
+                  <div class="form-group d-sm-flex d-block">
+                    <label class="justify-content-start pr-4">Выводить по: </label>
+                    <div class="short-by">
+                      <select class="form-control basic-select">
+                        <option>20</option>
+                        <option>30</option>
+                      </select>
+                    </div>
+                  </div>
+                </form>
+              </li>
+              <li><a class="course-list-icon active" href="course-list.html">
+                <span></span>
+                <span></span>
+                <span></span>
+              </a></li>
+              <li><a class="course-grid-icon" href="course-grid.html">
+                <span></span>
+                <span></span>
+                <span></span>
+              </a></li>
+            </ul>
+            {% endcomment %}
+        </div>
+
         <div class="table-responsive">
           <table class="table table-striped">
             <thead>
