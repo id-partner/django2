@@ -66,8 +66,8 @@ class CourseListView(ListView):
                                                                                 ).select_related(
                     'school').order_by('-name')
 
-        # TODO: получение списка курсов по указанной школе в фильтре доработать
         if self.request.GET.dict():
+            '''сортировка и фильтрация'''
             if self.request.GET.getlist('school'):
                 '''фильтрация по школам '''
                 schools = self.request.GET.getlist('school')
@@ -81,6 +81,20 @@ class CourseListView(ListView):
                 elif int(price_sort) == 2:
                     qs = qs.all().order_by('-price')
 
+            if self.request.GET.get('duration_sort'):
+                '''фильтрация по продолжительности'''
+                price_sort = self.request.GET.get('duration_sort')
+                if int(price_sort) == 1:
+                    qs = qs.filter(duration__lte=3)
+                elif int(price_sort) == 2:
+                    qs = qs.filter(duration__lte=6)
+                elif int(price_sort) == 3:
+                    qs = qs.filter(duration__lte=9)
+                elif int(price_sort) == 4:
+                    qs = qs.filter(duration__lte=12)
+                elif int(price_sort) == 5:
+                    qs = qs.filter(duration__gte=11)
+
         return qs
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -89,6 +103,8 @@ class CourseListView(ListView):
             Cnt=Count('school_courses', distinct=True)
         ).filter(Cnt__gt=0).values('name', 'id', 'Cnt').distinct().order_by('Cnt')
 
+        context['course_categories'] = Category.objects.all().annotate(Cnt=Count('child_category__course'))
+
         if self.cat_slug:
             category = Category.objects.get(slug=self.cat_slug)
             context['category'] = category
@@ -96,6 +112,10 @@ class CourseListView(ListView):
                 school_courses__categories__slug=self.cat_slug).annotate(
                 Cnt=Count('school_courses', distinct=True)
             ).filter(Cnt__gt=0).values('name', 'id', 'Cnt').distinct().order_by('-Cnt')
+
+            context['course_categories'] = Category.objects.filter(
+                parent__slug=self.cat_slug
+            ).annotate(Cnt=Count('course'))
 
             if category.child_category.all().count() > 0:
                 slug_list = category.child_category.all().values_list('slug')
@@ -107,16 +127,17 @@ class CourseListView(ListView):
         if self.request.GET.dict():
             context['price_sort'] = self.request.GET.get('price_sort')
             context['schools_selected'] = self.request.GET.getlist('school')
+            context['duration_sort'] = self.request.GET.get('duration_sort')
 
         return context
 
 
 class CourseListSchoolView(ListView):
-    template_name = 'listing/course-list-school.html'
+    template_name = 'listing/course-list-school-2.html'
     model = Course
     context_object_name = 'courses'
 
-    # paginate_by = 20
+    # paginate_by = 2
 
     def get_queryset(self):
         qs = Course.objects.filter(school__slug=self.kwargs.get('school_slug')).prefetch_related(
@@ -144,20 +165,76 @@ class CourseListSchoolView(ListView):
                                                                                 ).select_related(
                     'school').order_by('-name')
 
-        # # TODO: получение списка курсов по указанной школе в фильтре доработать
-        # if self.request.GET.getlist('school'):
-        #     school = self.request.GET.getlist('school')
-        #     qs = qs.filter(school__name__in=school)
-        # return qs
+        if self.request.GET.dict():
+            '''сортировка и фильтрация'''
+
+            if self.request.GET.get('price_sort'):
+                '''сортировка по цене'''
+                price_sort = self.request.GET.get('price_sort')
+                if int(price_sort) == 1:
+                    qs = qs.all().order_by('price')
+                elif int(price_sort) == 2:
+                    qs = qs.all().order_by('-price')
+
+            if self.request.GET.get('duration_sort'):
+                '''фильтрация по продолжительности'''
+                price_sort = self.request.GET.get('duration_sort')
+                if int(price_sort) == 1:
+                    qs = qs.filter(duration__lte=3)
+                elif int(price_sort) == 2:
+                    qs = qs.filter(duration__lte=6)
+                elif int(price_sort) == 3:
+                    qs = qs.filter(duration__lte=9)
+                elif int(price_sort) == 4:
+                    qs = qs.filter(duration__lte=12)
+                elif int(price_sort) == 5:
+                    qs = qs.filter(duration__gte=11)
 
         return qs
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        reviews = Review.objects.filter(
+            school__slug=self.kwargs.get('school_slug'), is_published=True)
         context['school'] = School.objects.get(slug=self.kwargs.get('school_slug'))
+        context['last_reviews'] = reviews.order_by('-id')[:4]
+
+        context['rating'] = reviews.aggregate(
+            Cnt=Count('rating'),
+            Avg=Avg('rating'),
+            Min=Min('rating'),
+            Max=Max('rating'),
+            Cnt_star1=Count('rating', filter=Q(rating__lt=1.5) & Q(is_published=True)),
+            Cnt_star2=Count('rating', filter=Q(rating__gte=1.5, rating__lt=2.5) & Q(is_published=True)),
+            Cnt_star3=Count('rating', filter=Q(rating__gte=2.5, rating__lt=3.5) & Q(is_published=True)),
+            Cnt_star4=Count('rating', filter=Q(rating__gte=3.5, rating__lt=4.5) & Q(is_published=True)),
+            Cnt_star5=Count('rating', filter=Q(rating__gte=4.5) & Q(is_published=True))
+        )
+
+        context['course_info'] = self.object_list.aggregate(
+            Avg_price=Avg('price'),
+            Max_price=Max('price'),
+            Min_price=Min('price'),
+            Avg_duration=Avg('duration'),
+            Max_duration=Max('duration'),
+            Min_duration=Min('duration'),
+
+        )
+        context['school_categories'] = Category.objects.filter(
+            child_category__course__school__slug=self.kwargs.get('school_slug')
+        ).annotate(Cnt=Count('child_category__course'))
 
         if self.cat_slug:
             context['category'] = Category.objects.get(slug=self.cat_slug)
+
+            context['school_categories'] = Category.objects.filter(
+                parent__slug=self.cat_slug,
+                course__school__slug=self.kwargs.get('school_slug')
+            ).annotate(Cnt=Count('course'))
+
+        if self.request.GET.dict():
+            context['price_sort'] = self.request.GET.get('price_sort')
+            context['duration_sort'] = self.request.GET.get('duration_sort')
 
         return context
 
@@ -177,6 +254,11 @@ class SchoolListView(ListView):
                                        Avg_rating=Avg('review__rating', filter=Q(review__is_published=True))
                                        ).prefetch_related(
             'review_set', ).order_by('-Cnt_rating')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['school_cnt'] = School.objects.count()
+        return context
 
 
 class SchoolDetailView(FormMixin, DetailView):
@@ -200,7 +282,6 @@ class SchoolDetailView(FormMixin, DetailView):
             Avg_price=Avg('price'),
             Max_price=Max('price'),
             Min_price=Min('price'),
-
         )
 
         context['rating'] = reviews.aggregate(
@@ -214,6 +295,11 @@ class SchoolDetailView(FormMixin, DetailView):
             Cnt_star4=Count('rating', filter=Q(rating__gte=3.5, rating__lt=4.5) & Q(is_published=True)),
             Cnt_star5=Count('rating', filter=Q(rating__gte=4.5) & Q(is_published=True))
         )
+
+        context['school_categories'] = Category.objects.filter(
+            child_category__course__school__slug=self.kwargs.get('school_slug')
+            ).annotate(Cnt_parent=Count('child_category__course'))
+
         return context
 
     def get_success_url(self):

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load custom_tags %}
 
-{% block title %}Отзывы о {{ schools.count }} онлайн-{{schools.count|rupluralize:"школе,школах,школах"}} в 2021 году {% endblock %}
+{% block title %}Отзывы о {{ school_cnt }} онлайн-{{ school_cnt|rupluralize:"школе,школах,школах" }} в 2021 году {% endblock %}
 {% block description %}Выбрайте онлайн-школы по: отзывам реальный людей, курсам, условиям, ценам. Сервис подбора онлайн-курсов Course4You.ru.{% endblock %}
 {% block canonical %}{{ request.scheme }}://{{ request.get_host }}{% url 'school' %}{% endblock %}
 
@@ -14,12 +14,13 @@
         <li class="breadcrumb-item"><a href="{% url 'homepage' %}"><i class="fas fa-home mr-1"></i>Главная</a></li>
         <li class="breadcrumb-item active"><span>Список школ</span></li>
       </ol>
-      <h2 class="mb-6">Онлайн школы</h2>
-      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque, dolores. Quidem deserunt distinctio mollitia dolorem possimus inventore earum laboriosam eum!</p>
+      <h2 class="mb-6">Онлайн-школы</h2>
+      <p>Мы собрали для вас {{ school_cnt }} школ. Выбрайте подходящую вам по: курсам, отзывам, ценам.</p>
     </div>
 
     <div class="row schools-list">
       <div class="col-md-12 pb-4">
+        <p>Показано {{ schools.count }} из {{ school_cnt }} онлайн-школ</p>
         {%for school in schools %}
         <div class="card bg-light mb-4">
           <div class="card-body d-flex justify-content-between border-bottom">

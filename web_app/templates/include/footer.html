@@ -9,13 +9,13 @@ footer-->
         <div class="col-3">
           <div class="footer-contact-info">
             <div class="footer-logo mb-2">
-              <a href="index.html"><img class="img-fluid" src="{% static 'images/logo-dark.svg' %}" alt=""></a>
+              <a href="{% url 'homepage' %}"><img class="img-fluid" src="{% static 'images/logo-dark.svg' %}" alt=""></a>
             </div>
           </div>
         </div>
         <div class="col-9  text-right">
-              <a class="mr-2" href="#">Школы</a>
-              <a class="mr-2" href="#">Все курсы</a>
+              <a class="mr-2" href="{% url 'school' %}">Школы</a>
+              <a class="mr-2" href="{% url 'course_list' %}">Все курсы</a>
               <a class="mr-2" href="#">Политика кондифициальности</a>
               <a href="#">О нас</a>
         </div>
@@ -38,7 +38,7 @@ footer-->
         </div>
         <div class="col-md-6">
           <div class="copyright text-md-right text-center">
-            <p class="mb-0 small">© Copyright 2020 <a href="">Guruma</a> All Rights Reserved.</p>
+            <p class="mb-0 small">© Copyright {% now "Y" %} <a href="{% url 'homepage' %}">Course4you</a> Все права защищены.</p>
           </div>
         </div>
       </div>

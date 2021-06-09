@@ -21,15 +21,30 @@
         <li class="breadcrumb-item active"><span>{{ category.name }}</span></li>
       </ol>
         {% if category %}
-            <h1 class="mb-3">{{courses.count}} онлайн {{courses.count|rupluralize:"курс,курса,курсов"}} в категории {{ category.name }}{% if schools_name.count == 1 %} от {{ schools_name.0.name }}{% endif %}</h1>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque, dolores. Quidem deserunt distinctio
-                mollitia dolorem possimus inventore earum laboriosam eum!</p>
+            <h1 class="mb-3">{{courses.count}} онлайн-{{courses.count|rupluralize:"курс,курса,курсов"}} в категории {{ category.name }}</h1>
+            <p>Мы собрали для вас курсы в категории {{ category.name }} от {{ schools_name.count }} онлайн-школ. Выбирайте по: ценам, длительности обучения, отзывам.</p>
         {% else %}
-            <h1 class="mb-3">{{courses.count}} онлайн курсов во всех категориях{% if schools_name.count == 1 %} от {{ schools_name.0.name }}{% endif %}</h1>
-            <p> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque, dolores. Quidem deserunt distinctio
-                mollitia dolorem possimus inventore earum laboriosam eum!</p>
+            <h1 class="mb-3">{{courses.count}} онлайн-курсов во всех категориях</h1>
+            <p> Мы собрали для вас курсы от {{ schools_name.count }} онлайн-школ. Выбирайте по: ценам, длительности обучения, отзывам.</p>
+        {% endif %}
+
+        {% if course_categories %}
+        <div class="widget widget-tag">
+            <h6 class="widget-title ml-3">Направление курсов</h6>
+            <div class="widget-content">
+              <ul class="list">
+                {% for cat in course_categories %}
+                  {% if cat.Cnt > 0 %}
+                <li><a href="{% url 'course_list_category' cat.slug %}">{{ cat.name }} <b class="text-success">({{ cat.Cnt }})</b></a></li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+        </div>
         {% endif %}
     </div>
+
+
     <div class="row">
       <div class="col-sm-3">
           <div class="widgets">
@@ -46,15 +61,6 @@
                     </div>
                     {% endfor %}
                   </div>
-                 {% comment %}
-<!--TODO: Доработать фильтрацию-->
-                  <div class="widget-title">
-                    <h6>Стоимость</h6>
-                  </div>
-                  <div class="widget-content">
-                    Тут контент
-                  </div>
-                  {% endcomment%}
                   <div class="pl-3 pr-3 pb-2">
                   <button type="submit" class="btn btn-primary w-100">Фильтровать</button>
                   </div>
@@ -68,14 +74,26 @@
               <li>
                 <div class="form-inline">
                   <div class="form-group d-sm-flex d-block">
-                    <label class="justify-content-start">Сортировать:</label>
+
                     <div class="short-by">
                       <select form="filter-course" class="form-control basic-select" name ="price_sort" onchange="this.form.submit()">
-                        <option value="0" >Выберете значение</option>
+                        <option value="0" >Сортировать по стоимости</option>
                         <option value="1" {%if price_sort == "1" %}selected{% endif %}>По возрастанию цены</option>
                         <option value="2" {%if price_sort == "2" %}selected{% endif %}>По убыванию цены</option>
                       </select>
                     </div>
+
+                    <div class="short-by">
+                      <select form="filter-course" class="form-control basic-select" name ="duration_sort" onchange="this.form.submit()">
+                        <option value="0" >Фильтровать по сроку обучения</option>
+                        <option value="1" {%if duration_sort == "1" %}selected{% endif %}>Курсы до 3 месяцев</option>
+                        <option value="2" {%if duration_sort == "2" %}selected{% endif %}>Курсы до 6 месяцев</option>
+                        <option value="3" {%if duration_sort == "3" %}selected{% endif %}>Курсы до 9 месяцев</option>
+                        <option value="4" {%if duration_sort == "4" %}selected{% endif %}>Курсы до 12 месяцев</option>
+                        <option value="5" {%if duration_sort == "5" %}selected{% endif %}>Больше 12 месяцев</option>
+                      </select>
+                    </div>
+
                   </div>
                 </div>
               </li>
@@ -140,8 +158,8 @@
                   <p><a href="{% url 'school_detail' course.school.slug %}">Отзывы о школе</a></p>
                 </td>
                 <td>{{ course.price|floatformat}} ₽</td>
-                <td>От 4900 ₽</td>
-                <td>{{ course.duration }} мес</td>
+                <td>{% if course.deferred_price %}От {{ course.deferred_price }} ₽{% else %}Нет{% endif %}</td>
+                <td>{{ course.duration|floatformat }} мес</td>
                 <td><a href="{{ course.link }}" class="btn btn-outline-success" target="_blank">Подробнее</a></td>
               </tr>
             {% endfor %}
@@ -159,8 +177,6 @@
     <div class="section-title">
     {% if category %}
       <h2 class="mb-6">Те же курсы в категории {{ category.name|lower }} с подробным описанием</h2>
-      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque, dolores. Quidem deserunt distinctio mollitia
-          dolorem possimus inventore earum laboriosam eum!</p>
     {% else %}
         <h2 class="mb-6">Те же курсы с подробным описанием</h2>
     {% endif%}
@@ -168,7 +184,7 @@
     <div class="row">
         {% for course in courses %}
         <div class="col-md-4">
-            <div class="card bg-light mb-4">
+            <div class="card bg-light mb-4 ">
               <div class="card-body">
                 <h5 class="card-title text-xl-center">{{ course.name }}</h5>
                 <div class="card-desc text-center mb-2">
@@ -187,13 +203,11 @@
                   <p> <a href="{% url 'school_detail' course.school.slug %}">Отзывы о школе</a>
                 </div>
                 <div class="card-price d-flex justify-content-between border-bottom mb-2 pb-2">
-                  <div><span class="text-primary">{{ course.price}} ₽</span>/курс</div>
-                  <div><span class="text-primary">4900</span>/месяц <i
-                          class="flaticon-idea cursor" role="button" data-toggle="tooltip"
-                          data-placement="top" title="Lorem ipsum dolor sit amet"></i></div>
+                  <div><span class="text-primary">{{ course.price }} ₽</span>/курс</div>
+                  {% if course.deferred_price %}<div><span class="text-primary">От {{ course.deferred_price }} ₽</span>/месяц</div>{% endif %}
                 </div>
                 <div class="card-text mb-4">
-                  <b>Начало:</b> {{ course.start_date }}, <b>длительность:</b> {{ course.duration }} мес.
+                  <b>Начало:</b> {{ course.start_date }}, <b>длительность:</b> {{ course.duration|floatformat }} мес.
                 </div>
                 <div class="card-text mb-4">
                   <b>Формат:</b>

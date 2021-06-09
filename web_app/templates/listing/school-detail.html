@@ -17,7 +17,6 @@
                 <li class="breadcrumb-item active"><span>{{ school.name }}</span></li>
             </ol>
         </div>
-
         {% if messages %}
         {% for message in messages %}
         <p class="alert alert-warning" role="alert">
@@ -27,66 +26,57 @@
         {% endif %}
 
         <h1 class="mb-1 text-secondary">{{ school.name }}</h1>
-        <div class="school-info d-flex justify-content-between align-items-center">
-            <div>
+        <div class="row">
+            <div class="col-4 ">
                 <p class="mt-4"><b>Школа: </b> <span class="text-muted mr-4">{{ school.name }}
                 <a href="{% url 'course_list_school' school.slug %}"></span>{{ school.school_courses.all.count }} {{school.school_courses.all.count|rupluralize:"курс,курса,курсов"}}</a></p>
                 <p class="text-muted">Средняя стоимость курса <b>{{ courses.Avg_price|floatformat:0 }} рублей</b></p>
                 <p class="text-muted">Самый дорогой курс <b>{{ courses.Max_price|floatformat:0 }} рублей</b></p>
                 <p class="text-muted">Самый дешевый курс <b>{{ courses.Min_price|floatformat:0 }} рублей</b> </p>
             </div>
-            <div class="w-50 bg-light p-4 rounded-sm">
+            <div class="col-8 bg-light p-4">
                 <p>{{ school.description }}</p>
             </div>
         </div>
-    </div>
 </section>
-{% comment %}
-<!--TODO: сделать вывод категорий по отдельной школе-->
-<!--=================================
-Сategories block -->
-<section class="space-ptb">
-    <div class="container">
-        <div class="section-title text-center">
-            <h2>Категории школы</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt culpa sequi delectus laboriosam
-                incidunt repellendus?</p>
-        </div>
-        <div class="row no-gutters">
-            {% for cat in school.categories.all %}
-            <div class="col-md-4 px-5 py-4 py-md-5">
-                <div class="d-flex align-items-center mb-4">
-                    <i class="{{ cat.flaticon }} fa-3x text-primary mr-4"></i>
-                    <h5 class="font-weight-bold mb-0 mt-0 text-dark">{{ cat.name }}</h5>
-                </div>
-                <div class="load-more-container{{ forloop.counter }}">
-                    <input type="checkbox" id="load-more{{ forloop.counter }}"/>
-                    <ul class="category__list">
-                        <li class="category__list-item"><a href="{% url 'course_list_category' cat.slug %}">Все курсы в
-                            {{ cat.name }}</a></li>
-                        {% if cat.parent_category.all %}
-                        {% for subcat in cat.parent_category.all %}
-                        <li class="category__list-item"><a href="{% url 'course_list_category' subcat.slug %}">{{
-                            subcat.name }}</a></li>
-                        {% endfor %}
-                        {% endif %}
-                    </ul>
-                    {% if cat.parent_category.count > 3 %}
-                    <label class="load-more-btn" for="load-more{{ forloop.counter }}">
-                        <span class="unloaded">Показать все</span>
-                        <span class="loaded">Свернуть</span>
-                    </label>
-                    {% endif %}
-                </div>
-            </div>
-            {% endfor %}
-        </div>
 
+<!--=================================
+      Category -->
+<section class="space-pt">
+    <div class="bg-primary bg-overlay-theme-97 space-ptb" style="background-image: url('images/bg/04.jpg'); background-position: center;">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="section-title text-center mb-5 mb-xl-4">
+              <h2 class="text-white">Направления обучения от {{ school.name }}</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="bg-white e-mt-sm-n4 e-mt-md-n5 e-mt-lg-n6 position-relative z-index-1 rounded-sm">
+        <div class="row mb-3">
+          <div class="col-sm-12">
+            <div class="categories categories-style-02">
+            {% for cat in school_categories %}
+              <div class="categories-item col-md-4 col-xs-6">
+                <div class="categories-icon">
+                  <i class="{{ cat.flaticon }} fa-1x mt-3"></i>
+                </div>
+                <a href="{% url 'course_list_category_school' cat.slug school.slug %}" class="categories-title">{{cat.name}}</a>
+                  <p>{{cat.Cnt_parent}} онлайн-курсов</p>
+              </div>
+            {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 </section>
 <!--=================================
-Сategories block -->
-{% endcomment %}
+      Category -->
+
 <section class="space-pb">
     <div class="container">
         {% if rating.Cnt > 0 %}
@@ -202,7 +192,7 @@
         </div>
             <div class="p-2">
                 {% for review in reviews %}
-                <div class="bg-light mb-4 rounded-bottom rounded-top">
+                <div class="bg-light mb-4 rounded-bottom rounded-top" id="{{ review.id }}">
                     <div class="px-4 pt-4">
                         {% if review.head %}
                         <h5 class="mt-3">{{ review.head }}</h5>
@@ -258,7 +248,7 @@
                             </div>
                         </div>
                         <p>{{ review.comment|linebreaksbr }}</p>
-                        <div id="positivenegative" class="container">
+                        <div class="container">
                             <div class="row">
                                 {% if review.positive %}
                                 <div class="col-sm-6">

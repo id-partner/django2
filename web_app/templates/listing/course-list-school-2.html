@@ -2,8 +2,8 @@
 {% load custom_tags %}
 {% load static %}
 
-{% block title %}Курсы от {{school.name}}{%if not category%} | Course4You.ru{% endif %}{% if category %} в категории {{ category.name }}{% endif %}{% endblock %}
-{% block description %}Выбирайте из {{courses.count}} онлайн-{{courses.count|rupluralize:"курса,курсов,курсов"}} в категории {{ category.name }} по: уровню сложности, цене, длительности, отзывам.{% endblock %}
+{% block title %}Курсы от {{ school.name }}{%if not category%} | Course4You.ru{% endif %}{% if category %} в категории {{ category.name }}{% endif %}{% endblock %}
+{% block description %}Выбирайте из {{ courses.count }} онлайн-{{courses.count|rupluralize:"курса,курсов,курсов"}} в категории {{ category.name }} от {{ school.name }} по: уровню сложности, цене, длительности{% endblock %}
 {% block canonical %}{% if category %}{{ request.scheme }}://{{ request.get_host }}{% url 'course_list_category_school' category.slug school.slug%}{% else %}{{ request.scheme }}://{{ request.get_host }}{% url 'course_list_school' school.slug %}{% endif %}{% endblock %}
 
 
@@ -75,34 +75,58 @@
               </li>
             </ul>
         </form>
-
-        <div class="table-responsive">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">Название курса</th>
-                <th scope="col">Стоимость</th>
-                <th scope="col">Рассрочка</th>
-                <th scope="col">Длительность</th>
-                <th scope="col">Ссылка на курс</th>
-              </tr>
-           </thead>
-            <tbody>
-            {% for course in courses %}
-              <tr >
-                  <th><a href="{{ course.link }}" target="_blank">{{ course.name }}</a></th>
-                <td>{{ course.price|floatformat}} ₽</td>
-                <td>От 4900 ₽</td>
-                <td>{{ course.duration|floatformat }} мес</td>
-                <td><a href="{{ course.link }}" class="btn btn-outline-success" target="_blank">Подробнее</a></td>
-              </tr>
-            {% endfor %}
-        </tbody>
-          </table>
-        </div>
       </div>
     </div>
-  {% include 'include/paginator.html' %}
+
+    <div class="course">
+          {% for course in courses %}
+          <div class="row no-gutters box-shadow mb-4">
+              <div class="col-12 course-info p-0 h-100">
+                <div class="px-4 pt-4">
+                  <div class="mb-4">
+                    <a class="font-weight-bold" href="{{ course.link }}" target="_blank">{{ course.name }}</a>
+                    <hr class="border-primary">
+                    <div class="card-text mb-2">
+                      {{ course.description }}
+                    </div>
+                  </div>
+                  <div class="card-text mb-2">
+                    <i class="flaticon-clock-1 mt-3 text-success"></i>
+                    <b>Длительность:</b> {{ course.duration|floatformat }} мес.
+                  </div>
+                  <div class="card-text mb-2">
+                    <i class="flaticon-book-2 mt-3 text-success"></i>
+                    <b>Формат:</b>
+                      {% for format in course.course_format.all %}
+                      {{ format }}.
+                      {% endfor %}
+                  </div>
+                  <div class="card-text mb-2">
+                      <i class="flaticon-course mt-3 text-success"></i>
+                    <b>Особенности:</b>
+                      {% for feature in course.features.all %}
+                      {{ feature }}.
+                      {% endfor %}
+                  </div>
+                </div>
+                <div class="course-rate-price px-4 pb-3">
+                  <div class="price">
+                    <p>
+                      <i class="flaticon-money mt-3 text-success"></i>
+                      Стоимость: {{ course.price|floatformat }} рублей
+                    </p>
+                    {% if course.discounted_price %}
+                    <p><i class="flaticon-sales mt-3 text-success"></i>Стоимость со скидкой: {{ course.discounted_price|floatformat }} рублей</p>
+                    {% endif %}
+                  </div>
+                  <div class="price"><i class="flaticon-sales mt-3 text-success"></i>Рассрочка: {{ course.price|floatformat }}</div>
+                  <div> <a href="{{ course.link }}" class="btn btn-outline-success ml-2" target="_blank">Подробнее</a> </div>
+                </div>
+              </div>
+          </div>
+          {% endfor %}
+    </div>
+    {% include 'include/paginator.html' %}
   </div>
 </section>
 {%if last_reviews.count > 1 %}
@@ -113,7 +137,6 @@
           <div class="col-lg-8 col-md-10 text-center">
             <div class="section-title">
               <h2 class="text-white">Последние отзывы о {{ school.name }}</h2>
-              <p class="mb-0 text-white">It is truly amazing the damage that we, as parents, can inflict on our children. So why do we do it? For the most part, we don’t do it intentionally or with malice.</p>
             </div>
           </div>
         </div>
@@ -134,11 +157,6 @@
                       {% endif %}
                       <p class="pb-2">{{ review.comment|truncatechars:200 }}</p>
                       <p class="pb-5"><a href="{%url 'school_detail' school.slug %}#{{ review.id }}"> Перейти к отзыву </a></p>
-                    </div>
-                    <div class="testimonial-author">
-                      <div class="testimonial-name">
-                        <h6 class="text-white">{{ review.name|upper }}</h6>
-                      </div>
                     </div>
                   </div>
                 </div>

@@ -90,11 +90,14 @@ class Course(SEOListing):
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='school_courses', verbose_name='Школа')
     price = models.DecimalField(max_digits=19, decimal_places=2, verbose_name='Базовая стоимость')
     deferred_payment = models.BooleanField(default=True, verbose_name='Есть ли рассрочка?')
+    deferred_price = models.DecimalField(null=True, max_digits=19, decimal_places=2, blank=True,
+                                           verbose_name='Стоимость в рассрочку')
     discount = models.BooleanField(default=False, verbose_name='Есть ли скидка?')
     discount_amount = models.IntegerField(null=True, blank=True, verbose_name='Размер скидки')
     discounted_price = models.DecimalField(null=True, max_digits=19, decimal_places=2, blank=True,
                                            verbose_name='Стоимость по скидке')
-    duration = models.CharField(max_length=255, verbose_name='Продолжительность')
+    duration = models.DecimalField(max_length=255, max_digits=19, decimal_places=2, null=True, blank=True,
+                                   verbose_name='Продолжительность')
     start_date = models.DateField(null=True, blank=True, verbose_name='Дата старта')
     features = models.ManyToManyField(Features, blank=True, verbose_name='Особенности')
     course_format = models.ManyToManyField(CourseFormat, blank=True, verbose_name='Формат курса')
