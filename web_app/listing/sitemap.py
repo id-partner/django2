@@ -28,3 +28,15 @@ class StaticViewSitemap(Sitemap):
 
     def location(self, item):
         return reverse(item)
+
+
+class SchoolCoursesSitemap(Sitemap):
+    changefreq = "daily"
+    priority = 0.7
+
+    def items(self):
+        return School.objects.all()
+
+    def location(self, item):
+        return reverse('course_list_school', args=(item.slug,))
+
