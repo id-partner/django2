@@ -80,6 +80,13 @@ TEMPLATES = [
     },
 ]
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'django_cache'),
+    }
+}
+
 WSGI_APPLICATION = 'course_top.wsgi.application'
 
 # Аунтефикация. Пока не делаю.

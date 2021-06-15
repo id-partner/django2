@@ -1,4 +1,5 @@
 {% load static %}
+{%load cache%}
 
 <!--=================================
 Header -->
@@ -13,6 +14,7 @@ Header -->
         <img class="img-fluid" src="{% static 'images/logo.svg' %}" alt="logo">
       </a>
       <div class="navbar-collapse collapse">
+        {%cache 500 menu %}
         <ul class="nav navbar-nav">
           <li class="dropdown nav-item">
             <a class="nav-link" href="{% url 'course_list' %}" data-toggle="dropdown">Курсы по категориям<i class="fas fa-chevron-down fa-xs"></i></a>
@@ -40,6 +42,7 @@ Header -->
           </li>
           <li><a class="nav-link" href="{% url 'school' %}">Школы</a></li>
         </ul>
+        {% endcache %}
       </div>
     </div>
   </nav>

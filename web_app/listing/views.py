@@ -11,6 +11,9 @@ from django.views.generic import TemplateView, ListView, DetailView
 from django.db.models import Avg, Sum, Min, Max, Count, Q
 from django.contrib.postgres.search import SearchVector
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
+
 
 class IndexView(TemplateView):
     template_name = 'listing/index.html'
@@ -261,6 +264,7 @@ class SchoolListView(ListView):
         return context
 
 
+@method_decorator(csrf_protect, name='dispatch')
 class SchoolDetailView(FormMixin, DetailView):
     template_name = 'listing/school-detail.html'
     model = School

@@ -26,6 +26,8 @@ from blog import views  # импортируем вьюхи из приложе�
 
 from listing.sitemap import *
 
+from django.views.decorators.cache import cache_page
+
 sitemaps = {
     'schools': SchoolSitemap,
     'categories': CategorySitemap,
@@ -35,18 +37,18 @@ sitemaps = {
 
 
 urlpatterns = [
-                  path('', IndexView.as_view(), name='homepage'),
+                  path('', cache_page(60*60)(IndexView.as_view()), name='homepage'),
                   # path('blog/', views.BlogListView.as_view(), name='blog'),
                   # path('blog/<cat_slug>', views.BlogListView.as_view(), name='blog_category'),
                   # path('single_blog/<slug>', views.SinglePost.as_view(), name='single_blog'),
 
                   path('search/', SearchView.as_view(), name='search'),
 
-                  path('courses/', CourseListView.as_view(), name='course_list'),
-                  path('courses/<cat_slug>', CourseListView.as_view(), name='course_list_category'),
+                  path('courses/', cache_page(60*60)(CourseListView.as_view()), name='course_list'),
+                  path('courses/<cat_slug>', cache_page(60*60)(CourseListView.as_view()), name='course_list_category'),
 
-                  path('school_courses/<school_slug>', CourseListSchoolView.as_view(), name='course_list_school'),
-                  path('school_courses/<cat_slug>/<school_slug>', CourseListSchoolView.as_view(),
+                  path('school_courses/<school_slug>', cache_page(60*60)(CourseListSchoolView.as_view()), name='course_list_school'),
+                  path('school_courses/<cat_slug>/<school_slug>', cache_page(60*60)(CourseListSchoolView.as_view()),
                        name='course_list_category_school'),
 
                   path('about/', AboutView.as_view(), name='about'),
@@ -54,14 +56,14 @@ urlpatterns = [
                   path('robots.txt', RobotsView.as_view(), name='robots'),
 
                   path('sitemap.xml', index, {'sitemaps': sitemaps}),
-                  path('sitemap-<section>.xml', sitemap, {'sitemaps': sitemaps},
+                  path('sitemap-<section>.xml', cache_page(86400)(sitemap), {'sitemaps': sitemaps},
                        name='django.contrib.sitemaps.views.sitemap'),
 
                   path('admin/', admin.site.urls),
                   path('summernote/', include('django_summernote.urls')),
 
-                  path('schools/', SchoolListView.as_view(), name='school'),
-                  path('<school_slug>/', SchoolDetailView.as_view(), name='school_detail'),
+                  path('schools/', cache_page(60*60)(SchoolListView.as_view()), name='school'),
+                  path('<school_slug>/', cache_page(60*60)(SchoolDetailView.as_view()), name='school_detail'),
                   # path('course_detail/', course_detail_handler, name='course_detail'),
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 if settings.DEBUG:
