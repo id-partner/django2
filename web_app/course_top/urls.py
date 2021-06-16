@@ -33,6 +33,7 @@ sitemaps = {
     'categories': CategorySitemap,
     'static': StaticViewSitemap,
     'schools-courses': SchoolCoursesSitemap,
+    'schools-courses-categories': SchoolCoursesCategoriesSitemap
 }
 
 

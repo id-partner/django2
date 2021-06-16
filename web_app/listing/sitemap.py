@@ -1,4 +1,4 @@
-from listing.models import School, Category
+from listing.models import School, Category, Course
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 
@@ -40,3 +40,14 @@ class SchoolCoursesSitemap(Sitemap):
     def location(self, item):
         return reverse('course_list_school', args=(item.slug,))
 
+
+class SchoolCoursesCategoriesSitemap(Sitemap):
+    changefreq = "daily"
+    priority = 0.7
+
+    def items(self):
+        return Course.objects.all()
+
+    def location(self, item):
+        for cat in item.categories.all():
+            return reverse('course_list_category_school', args=(cat.slug, item.school.slug))
