@@ -46,6 +46,7 @@ class CourseListView(ListView):
             'school__review__rating', filter=Q(school__review__is_published=True))).prefetch_related('categories',
                                                                                                      'features',
                                                                                                      'course_format',
+                                                                                                     'school__features',
                                                                                                      ).select_related(
             'school')
 
@@ -59,6 +60,7 @@ class CourseListView(ListView):
                 qs = qs.filter(categories__slug__in=slug_list).prefetch_related('categories',
                                                                                 'features',
                                                                                 'course_format',
+                                                                                'school__features',
                                                                                 ).select_related(
                     'school').order_by('-name')
 
@@ -66,6 +68,7 @@ class CourseListView(ListView):
                 qs = qs.filter(categories__slug=self.cat_slug).prefetch_related('categories',
                                                                                 'features',
                                                                                 'course_format',
+                                                                                'school__features',
                                                                                 ).select_related(
                     'school').order_by('-name')
 
@@ -250,7 +253,7 @@ def course_detail_handler(request):
 class SchoolListView(ListView):
     template_name = 'listing/schools.html'
     context_object_name = 'schools'
-    paginate_by = 10
+    paginate_by = 25
 
     def get_queryset(self):
         return School.objects.annotate(Cnt_rating=Count('review__rating', filter=Q(review__is_published=True)),

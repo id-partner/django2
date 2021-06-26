@@ -25,7 +25,7 @@
         <div class="card bg-light mb-4">
           <div class="card-body d-flex justify-content-between border-bottom">
             <div class="school-info d-flex-column align-items-center ">
-              <a href="https://{{ school.link }}" class="mr-4" target="_blank"><img class="img-fluid" src="{{ school.logo.url }}" alt=""></a>
+              <a href="{% if school.partner_link %}{{school.partner_link}}{% else %}https://{{ school.link }}{% endif %}" class="mr-4" target="_blank"><img class="img-fluid" src="{{ school.logo.url }}" alt=""></a>
               {% if school.Avg_rating %}
                 {%  if school.Avg_rating >= 3.5 %}
                   Рейтинг: <span class="px-2 border text-success bg-white border-radius d-inline-block mr-2"><b>{{school.Avg_rating|floatformat:1}}</b></span>
@@ -35,7 +35,7 @@
                   Рейтинг: <span class="px-2 border text-danger bg-white border-radius d-inline-block mr-2"><b>{{school.Avg_rating|floatformat:1}}</b></span>
                 {% endif %}
               {% endif %}
-              <a href="https://{{ school.link }}" class="school-link mt-2" target="_blank">Ссылка на сайт школы</a>
+              <a href="{% if school.partner_link %}{{school.partner_link}}{% else %}https://{{ school.link }}{% endif %}" class="school-link mt-2" target="_blank">Ссылка на сайт школы</a>
             </div>
             <div>
                <a href="{% url 'school_detail' school.slug %}" class="btn btn-primary">{{ school.Cnt_rating }} {{ school.Cnt_rating|rupluralize:"отзыв,отзыва,отзывов"}}</a>

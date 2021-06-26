@@ -58,10 +58,10 @@ class ReviewAdmin(admin.ModelAdmin):
     search_fields = ('school',)
 
 
-
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(School, SchoolAdmin)
 admin.site.register(Features)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(CourseFormat)
+admin.site.register(SchoolFeatures)

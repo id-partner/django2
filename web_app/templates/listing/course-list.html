@@ -133,10 +133,10 @@
             <thead>
               <tr>
                 <th scope="col">Название курса</th>
-                <th scope="col">Школа курса</th>
-                <th scope="col">Стоимость</th>
+                <th scope="col">Онлайн-школа</th>
+                <th scope="col">Цена</th>
                 <th scope="col">Рассрочка</th>
-                <th scope="col">Длительность</th>
+                <th scope="col">Продолжительность</th>
                 <th scope="col">Ссылка на курс</th>
               </tr>
            </thead>
@@ -145,7 +145,7 @@
               <tr >
                   <th><a href="{{ course.link }}" target="_blank">{{ course.name }}</a></th>
                 <td>
-                  <b class="text-nowrap">{{ course.school.name }}</b>
+                  <b>{{ course.school.name }}</b>
                   {% if course.Avg_rating %}
                     {%  if course.Avg_rating >= 3.5 %}
                      <p> Рейтинг: <span class="px-1 border text-success bg-white border-radius d-inline-block mr-2"><b>{{course.Avg_rating|floatformat:1}}</b></span>
@@ -158,9 +158,9 @@
                   <p><a href="{% url 'school_detail' course.school.slug %}">Отзывы о школе</a></p>
                 </td>
                 <td>{{ course.price|floatformat}} ₽</td>
-                <td>{% if course.deferred_price %}От {{ course.deferred_price }} ₽{% else %}Нет{% endif %}</td>
+                <td>{% if course.deferred_price %}От {{ course.deferred_price|floatformat }} ₽{% else %}Нет{% endif %}</td>
                 <td>{{ course.duration|floatformat }} мес</td>
-                <td><a href="{{ course.link }}" class="btn btn-outline-success" target="_blank">Подробнее</a></td>
+                <td><a href="{% if course.partner_link %}{{course.partner_link}}{% else %}{{ course.link }}{% endif %}" class="btn btn-outline-success" target="_blank">Подробнее</a></td>
               </tr>
             {% endfor %}
         </tbody>
@@ -203,25 +203,44 @@
                   <p> <a href="{% url 'school_detail' course.school.slug %}">Отзывы о школе</a>
                 </div>
                 <div class="card-price d-flex justify-content-between border-bottom mb-2 pb-2">
-                  <div><span class="text-primary">{{ course.price }} ₽</span>/курс</div>
-                  {% if course.deferred_price %}<div><span class="text-primary">От {{ course.deferred_price }} ₽</span>/месяц</div>{% endif %}
+                  <div>
+                      <i class="flaticon-money mt-3 text-success"></i>
+                      <span class="text-primary">{{ course.price|floatformat }} ₽</span>/курс
+                  </div>
+                  {% if course.deferred_price %}
+                    <div>
+                        <i class="flaticon-sales mt-3 text-success"></i>
+                        <span class="text-primary">От {{ course.deferred_price|floatformat }} ₽</span>/месяц
+                    </div>
+                    {% endif %}
                 </div>
                 <div class="card-text mb-4">
-                  <b>Начало:</b> {{ course.start_date }}, <b>длительность:</b> {{ course.duration|floatformat }} мес.
+                    <i class="flaticon-clock-1 mt-3 text-success"></i>
+                    <b>Продолжтельность:</b> {{ course.duration|floatformat }} мес.
                 </div>
+                  {% if course.start_date %}
                 <div class="card-text mb-4">
-                  <b>Формат:</b>
-                    {% for format in course.course_format.all %}
-                    {{ format }}.
-                    {% endfor %}
+                    <i class="flaticon-clock mt-3 text-success"></i>
+                    <b>Старт обучения:</b> {{ course.start_date }}.
                 </div>
+                  {% endif %}
                 <div class="card-text mb-4">
-                  <b>Особенности:</b>
-                    {% for feature in course.features.all %}
-                    {{ feature }}.
-                    {% endfor %}
+                    <i class="flaticon-book-2 mt-3 text-success"></i>
+                    <b>Форма обучения:</b>
+                      {% for format in course.course_format.all %}
+                      {{ format }}.
+                      {% endfor %}
                 </div>
-                <a href="{{ course.link }}" class="btn btn-primary w-100" target="_blank">Ссылка на курс</a>
+                {% if course.school.features.count > 0 %}
+                <div class="card-text mb-4">
+                    <i class="flaticon-course mt-3 text-success"></i>
+                    <b>Особенности:</b>
+                      {% for feature in course.school.features.all %}
+                      {{ feature.name }}.
+                      {% endfor %}
+                </div>
+                {% endif %}
+                <a href="{% if course.partner_link %}{{course.partner_link}}{% else %}{{ course.link }}{% endif %}" class="btn btn-primary w-100" target="_blank">Ссылка на курс</a>
               </div>
             </div>
         </div>

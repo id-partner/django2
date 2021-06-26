@@ -33,7 +33,7 @@ Feature Info -->
           <div class="row feature-info-02">
             <div class="col-sm-4 py-4 text-center">
               <i class="flaticon-online-learning-1 fa-3x text-white"></i>
-              <h4 class="fw-5 mt-3 mb-0 text-white">Более {{course.count}} {{course.count|rupluralize:"курс,курса,курсов"}} онлайн</h4>
+              <h4 class="fw-5 mt-3 mb-0 text-white">Более {{course.count}} онлайн-курсов</h4>
             </div>
             <div class="col-sm-4 py-4 text-center">
               <i class="flaticon-lock fa-3x text-white"></i>
@@ -69,9 +69,9 @@ Feature Info -->
                         <li class="category__list-item"><a href="{% url 'course_list_category' cat.slug %}">Все курсы в {{ cat.name }}</a></li>
                         {% if cat.child_category.all %}
                           {% for subcat in cat.child_category.all %}
-                            {% if  subcat.course_set.exists %}
+
                             <li class="category__list-item"><a href="{% url 'course_list_category' subcat.slug %}">{{ subcat.name }}</a></li>
-                            {% endif %}
+
                           {% endfor %}
                         {% endif %}
                       </ul>

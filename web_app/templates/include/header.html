@@ -28,9 +28,7 @@ Header -->
                       <li><a class="dropdown-item" href="{% url 'course_list_category' cat.slug %}"><span>Все курсы в {{ cat.name }}</span></a></li>
                       {% if cat.child_category.all %}
                         {% for subcat in cat.child_category.all %}
-                          {% if  subcat.course_set.exists %}
                             <li><a class="dropdown-item" href="{% url 'course_list_category' subcat.slug %}"><span> {{ subcat.name }}</span></a></li>
-                          {% endif %}
                         {% endfor %}
                       {% endif %}
                     </ul>

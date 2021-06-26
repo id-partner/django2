@@ -48,7 +48,8 @@ urlpatterns = [
                   path('courses/', cache_page(60*60)(CourseListView.as_view()), name='course_list'),
                   path('courses/<cat_slug>', cache_page(60*60)(CourseListView.as_view()), name='course_list_category'),
 
-                  path('school_courses/<school_slug>', cache_page(60*60)(CourseListSchoolView.as_view()), name='course_list_school'),
+                  path('school_courses/<school_slug>', cache_page(60*60)(
+                      CourseListSchoolView.as_view()), name='course_list_school'),
                   path('school_courses/<cat_slug>/<school_slug>', cache_page(60*60)(CourseListSchoolView.as_view()),
                        name='course_list_category_school'),
 

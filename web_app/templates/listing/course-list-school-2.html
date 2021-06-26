@@ -92,15 +92,22 @@
                   </div>
                   <div class="card-text mb-2">
                     <i class="flaticon-clock-1 mt-3 text-success"></i>
-                    <b>Длительность:</b> {{ course.duration|floatformat }} мес.
+                    <b>Продолжительность:</b> {{ course.duration|floatformat }} мес.
                   </div>
+                  {% if course.start_date %}
+                  <div class="card-text mb-2">
+                    <i class="flaticon-clock mt-3 text-success"></i>
+                    <b>Старт обучения:</b> {{ course.start_date }}</p>
+                  </div>
+                  {% endif %}
                   <div class="card-text mb-2">
                     <i class="flaticon-book-2 mt-3 text-success"></i>
-                    <b>Формат:</b>
+                    <b>Форма обучения:</b>
                       {% for format in course.course_format.all %}
                       {{ format }}.
                       {% endfor %}
                   </div>
+                  {% comment %}
                   <div class="card-text mb-2">
                       <i class="flaticon-course mt-3 text-success"></i>
                     <b>Особенности:</b>
@@ -108,19 +115,22 @@
                       {{ feature }}.
                       {% endfor %}
                   </div>
+                  {% endcomment %}
                 </div>
                 <div class="course-rate-price px-4 pb-3">
                   <div class="price">
                     <p>
                       <i class="flaticon-money mt-3 text-success"></i>
-                      Стоимость: {{ course.price|floatformat }} рублей
+                      Цена курса: {{ course.price|floatformat }} ₽
                     </p>
                     {% if course.discounted_price %}
-                    <p><i class="flaticon-sales mt-3 text-success"></i>Стоимость со скидкой: {{ course.discounted_price|floatformat }} рублей</p>
+                    <p><i class="flaticon-sales mt-3 text-success"></i>Стоимость со скидкой: {{ course.discounted_price|floatformat }} ₽</p>
                     {% endif %}
                   </div>
-                  <div class="price"><i class="flaticon-sales mt-3 text-success"></i>Рассрочка: {{ course.price|floatformat }}</div>
-                  <div> <a href="{{ course.link }}" class="btn btn-outline-success ml-2" target="_blank">Подробнее</a> </div>
+                  {% if course.deferred_price %}
+                  <div class="price"><i class="flaticon-sales mt-3 text-success"></i>Рассрочка: от {{ course.deferred_price|floatformat }} ₽/мес</div>
+                  {% endif %}
+                  <div> <a href="{% if course.partner_link %}{{course.partner_link}}{% else %}{{ course.link }}{% endif %}" class="btn btn-outline-success ml-2" target="_blank">Подробнее</a> </div>
                 </div>
               </div>
           </div>

@@ -41,13 +41,26 @@ class Category(MPTTModel):
         return reverse('course_list_category',  args=(self.slug,))
 
 
+class SchoolFeatures(models.Model):
+    name = models.CharField(max_length=255, verbose_name='Особенности школы')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Особенность школы'
+        verbose_name_plural = 'Особенности школы'
+
+
 class School(SEOListing):
     name = models.CharField(max_length=255, verbose_name='Название школы')
     slug = models.SlugField(max_length=255, unique=True)
     description = models.CharField(max_length=255, blank=True, verbose_name='Описание')
     categories = models.ManyToManyField(Category, blank=True, verbose_name='Категория')
     logo = models.ImageField(upload_to='images/school/%Y/%m/%d/', blank=True, verbose_name='Логотип')
-    link = models.URLField(blank=True, verbose_name='Ссылка на школу')
+    link = models.CharField(blank=True, verbose_name='Ссылка на школу', max_length=255)
+    partner_link = models.URLField(null=True, blank=True, verbose_name='Партнерская ссылка на школу')
+    features = models.ManyToManyField(SchoolFeatures, blank=True, verbose_name='Особенности')
 
     def __str__(self):
         return self.name
@@ -67,8 +80,8 @@ class Features(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = 'Особенность'
-        verbose_name_plural = 'Особенности'
+        verbose_name = 'Особенность курса'
+        verbose_name_plural = 'Особенности курса'
 
 
 class CourseFormat(models.Model):
@@ -87,6 +100,7 @@ class Course(SEOListing):
     description = models.CharField(blank=True, max_length=255, verbose_name='Описание курса')
     categories = TreeManyToManyField(Category, verbose_name='Категория')
     link = models.URLField(verbose_name='Ссылка на страницу курса')
+    partner_link = models.URLField(null=True, blank=True, verbose_name='Партнерская ссылка на страницу курса')
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='school_courses', verbose_name='Школа')
     price = models.DecimalField(max_digits=19, decimal_places=2, verbose_name='Базовая стоимость')
     deferred_payment = models.BooleanField(default=True, verbose_name='Есть ли рассрочка?')
