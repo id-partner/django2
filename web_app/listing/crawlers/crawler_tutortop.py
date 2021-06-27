@@ -18,9 +18,9 @@ def get_link_course(url):
     link = r.html.xpath('//script')[2].text
 
     try:
-        link = 'https://' + link.split("https://" | "http:")[-1].split("&")[0].split("'")[0].split("?")[0]
+        link = 'https://' + link.split("https://|http/:/")[-1].split("&")[0].split("'")[0].split("?")[0]
     except:
-        link = 'https://' + link.split("https://" | "http:")[-1].split("'")[0].split("?")[0]
+        link = 'https://' + link.split("https://|http://")[-1].split("'")[0].split("?")[0]
 
     return link
 
@@ -43,12 +43,14 @@ def crawl_course(url):
             'name': categories[0],
             'slug': slugify(categories[0])
         }
+        print('first')
         category, created = Category.objects.get_or_create(**category)
     elif len(categories) == 2:
         parent_category = {
             'name': categories[0],
             'slug': slugify(categories[0])
         }
+        print('second parent')
         parent_category, created = Category.objects.get_or_create(**parent_category)
 
         category = {
@@ -57,6 +59,7 @@ def crawl_course(url):
             'parent':  parent_category,
             'order': 2
         }
+        print('second category')
         category, created = Category.objects.get_or_create(**category)
 
     count = len(content.xpath("//div[@class='course']//div[contains(@class, 'course__wrap__box post')]"))
