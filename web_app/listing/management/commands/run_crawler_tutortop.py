@@ -137,4 +137,5 @@ class Command(BaseCommand):
         ]
 
         for url in url_cat:
+            print(url)
             crawl_course(url)
