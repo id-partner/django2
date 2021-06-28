@@ -1,6 +1,7 @@
 from requests_html import HTMLSession
 from datetime import datetime
 from slugify import slugify
+import time
 
 from listing.models import School, Course, Category, CourseFormat
 
@@ -81,6 +82,7 @@ def get_link_course(url):
     :param url: Ссылка на курс на сайте
     :return: Ссылка на курс на сайте школы
     """
+    time.sleep(3)
     with HTMLSession() as session:
         r = session.get(url)
 
@@ -145,12 +147,9 @@ def crawl_course(url):
             school,  created = School.objects.get_or_create(**school)
 
         name = content.xpath("//div[@class='course']//h2")[i].text
-        try:
-            link = get_link_course(
-                content.xpath("//div[@class='course']//div[@class='course__wrap__box__btn']//a/@href")[i]
-            )
-        except:
-            link = None
+        link = get_link_course(
+            content.xpath("//div[@class='course']//div[@class='course__wrap__box__btn']//a/@href")[i]
+        )
 
         price = content.xpath("//div[contains(@class,'course__wrap__box post')]/@data-price")[i]
         deferred_price = content.xpath("//div[contains(@class,'course__wrap__box post')]/@data-rassrochka")[i]
