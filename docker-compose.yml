@@ -20,9 +20,9 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - db_pg
 
-  db:
+  db_pg:
     image: postgres
     env_file: ./my.env
     ports:
