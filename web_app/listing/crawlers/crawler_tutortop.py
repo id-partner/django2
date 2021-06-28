@@ -5,6 +5,76 @@ from slugify import slugify
 from listing.models import School, Course, Category, CourseFormat
 
 
+def crawl_school(url):
+    """
+    Парсинг школ
+    :param url: сслыка на страницу со школами
+    """
+
+    with HTMLSession() as session:
+        response = session.get(url)
+
+    content = response.html
+
+    count = len(content.xpath('//div[@class="list-item-content-text"]'))
+    i = 0
+
+    while i < count:
+        print(i)
+
+        description = content.xpath('//div[@class="list-item-content-text"]')[i].text
+        logo = content.xpath('//div[contains(@class, "reviews-list-item-header")]//img/@src')[i]
+        link = content.xpath('//div[@class="list-item-header-left"]/a[@class="list-item-url"]')[i].text
+        review_page = content.xpath('//div[@class="list-item-header-right"]/a[@class="open-review-page"]/@href')[i]
+        name = name_school(review_page)
+
+        image_name = slugify(name)
+        img_type = logo.split('.')[-1]
+
+        img_path = f'images/school/{image_name}.{img_type}'
+
+        with open(f'media/{img_path}', 'wb') as f:
+            with HTMLSession() as session:
+                response = session.get(logo)
+                f.write(response.content)
+
+        school = {
+            'description': description,
+            'link': link,
+            'name': name,
+            'slug': slugify(name),
+            'logo': img_path
+        }
+        try:
+            school = School.objects.get(slug=slugify(name))
+            school.description = description
+            school.link = link
+            school.logo = img_path
+            school.save()
+            print(f'Обновили данные {school}')
+        except:
+            school, created = School.objects.get_or_create(**school)
+            print(f'Добавили новую школу {school}')
+
+
+        i += 1
+
+
+def name_school(url):
+    """
+
+    :param url: сслыка на страницу со школой
+    :return: Имя школы
+    """
+
+    with HTMLSession() as session:
+        response = session.get(url)
+
+    name = response.html.xpath('//h1')[0].text
+
+    return name
+
+
 def get_link_course(url):
     """
     Получаем ссылку на курс на сайте школы
@@ -132,7 +202,6 @@ def crawl_course(url):
 
 
         print(course)
-        print(url)
 
         i += 1
         i_format += 1

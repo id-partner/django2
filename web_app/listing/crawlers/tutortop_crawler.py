@@ -47,12 +47,9 @@ def crawl_school(url):
             'logo': img_path
         }
 
-        school = School(**school)
-        schools.append(school)
+        school, created = School.objects.get_or_create(**school)
 
         i += 1
-
-    School.objects.bulk_create(schools)
 
 
 def name_school(url):
