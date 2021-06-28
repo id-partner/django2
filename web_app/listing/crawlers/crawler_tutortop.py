@@ -145,11 +145,12 @@ def crawl_course(url):
             school,  created = School.objects.get_or_create(**school)
 
         name = content.xpath("//div[@class='course']//h2")[i].text
-
-        link = get_link_course(
-            content.xpath("//div[@class='course']//div[@class='course__wrap__box__btn']//a/@href")[i]
-        )
-        print(link)
+        try:
+            link = get_link_course(
+                content.xpath("//div[@class='course']//div[@class='course__wrap__box__btn']//a/@href")[i]
+            )
+        except:
+            link = None
 
         price = content.xpath("//div[contains(@class,'course__wrap__box post')]/@data-price")[i]
         deferred_price = content.xpath("//div[contains(@class,'course__wrap__box post')]/@data-rassrochka")[i]
