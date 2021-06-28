@@ -1,7 +1,6 @@
 from requests_html import HTMLSession
 from datetime import datetime
 from slugify import slugify
-from django.core.exceptions import ObjectDoesNotExist
 
 from listing.models import School, Course, Category, CourseFormat
 
@@ -43,14 +42,12 @@ def crawl_course(url):
             'name': categories[0],
             'slug': slugify(categories[0])
         }
-        print('first')
         category, created = Category.objects.get_or_create(**category)
     elif len(categories) == 2:
         parent_category = {
             'name': categories[0],
             'slug': slugify(categories[0])
         }
-        print('second parent')
         parent_category, created = Category.objects.get_or_create(**parent_category)
 
         category = {
@@ -59,7 +56,6 @@ def crawl_course(url):
             'parent':  parent_category,
             'order': 2
         }
-        print('second category')
         category, created = Category.objects.get_or_create(**category)
 
     count = len(content.xpath("//div[@class='course']//div[contains(@class, 'course__wrap__box post')]"))
@@ -133,7 +129,7 @@ def crawl_course(url):
 
 
         print(course)
-        print(course_format_list)
-        print(school_name)
+        print(url)
+
         i += 1
         i_format += 1
