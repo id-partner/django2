@@ -87,9 +87,9 @@ def get_link_course(url):
     link = r.html.xpath('//script')[2].text
 
     try:
-        link = 'https://' + link.split("https://|http/:/")[-1].split("&")[0].split("'")[0].split("?")[0]
+        link = 'https://' + link.split("https://")[-1].split("http://")[-1].split("&")[0].split("'")[0].split("?")[0]
     except:
-        link = 'https://' + link.split("https://|http://")[-1].split("'")[0].split("?")[0]
+        link = 'https://' + link.split("https://")[-1].split("http://")[-1].split("'")[0].split("?")[0]
 
     return link
 
@@ -145,12 +145,12 @@ def crawl_course(url):
             school,  created = School.objects.get_or_create(**school)
 
         name = content.xpath("//div[@class='course']//h2")[i].text
-        try:
-            link = get_link_course(
-                content.xpath("//div[@class='course']//div[@class='course__wrap__box__btn']//a/@href")[i]
-            )
-        except:
-            link = None
+
+        link = get_link_course(
+            content.xpath("//div[@class='course']//div[@class='course__wrap__box__btn']//a/@href")[i]
+        )
+        print(link)
+
         price = content.xpath("//div[contains(@class,'course__wrap__box post')]/@data-price")[i]
         deferred_price = content.xpath("//div[contains(@class,'course__wrap__box post')]/@data-rassrochka")[i]
         if int(deferred_price) == 1:
@@ -186,6 +186,7 @@ def crawl_course(url):
             course.price = price
             course.start_date = start_date
             course.deferred_price = deferred_price
+            course.link = link
             course.save()
         except Course.DoesNotExist:
             course, created = Course.objects.get_or_create(**course)
