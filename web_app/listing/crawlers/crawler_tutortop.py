@@ -82,16 +82,20 @@ def get_link_course(url):
     :param url: Ссылка на курс на сайте
     :return: Ссылка на курс на сайте школы
     """
-    time.sleep(3)
+
     with HTMLSession() as session:
         r = session.get(url)
-
-    link = r.html.xpath('//script')[2].text
-
     try:
-        link = 'https://' + link.split("https://")[-1].split("http://")[-1].split("&")[0].split("'")[0].split("?")[0]
+        link = r.html.xpath('//script')[2].text
+
+        try:
+            link = 'https://' + link.split("https://")[-1].split("http://")[-1].split("&")[0].split("'")[0].split("?")[0]
+        except:
+            link = 'https://' + link.split("https://")[-1].split("http://")[-1].split("'")[0].split("?")[0]
     except:
-        link = 'https://' + link.split("https://")[-1].split("http://")[-1].split("'")[0].split("?")[0]
+        print(r)
+        link = 'https://course4you.ru'
+        print(f'Не получилось взять ссылку {url}')
 
     return link
 
